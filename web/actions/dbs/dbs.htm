@@ -1,0 +1,33 @@
+<?php
+	
+	if ( IS_LOCALHOST || session_is_admin() || IS_ADMIN_IP )
+	{
+	
+		$my_tables = $db->get_results("SHOW TABLES",ARRAY_N);
+
+		foreach ( $my_tables as $table )
+		{
+
+			if ( ! preg_match('/(dictionary)/',$table[0]) )
+			{
+				$db->get_results("DESC $table[0]");
+				$db->debug();
+	
+				$db->get_results("select * from $table[0] LIMIT 10");	
+				$db->debug();
+			}
+
+		}
+		
+		foreach ( array('_SESSION','_GET','_COOKIE','_POST') as $superglobal )
+	 	{
+	 		print "<hr /><br />";
+	 		print "<b>\$$superglobal</b>";
+	 		print_ar(${$superglobal	});
+	 	} 
+	
+	}
+
+exit;
+
+?>

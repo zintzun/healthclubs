@@ -1,0 +1,14 @@
+<?php
+
+	function create_stars($idPrefix, $rating = 0, $disabled = true)
+	{
+		$html = "\n".'<input type="hidden" name="value-'.$idPrefix.'" id="value-'.$idPrefix.'" value="'.$rating.'" />'."\n";
+
+		for ($i=1;$i<=5;$i++)
+		{
+			$html .= '<div id="'.$idPrefix.'-'.$i.'" class="my-stars star-grey'.($i<=$rating?' star-red':'').'"></div>'."\n";
+		}
+		return $html;
+	}
+
+?>

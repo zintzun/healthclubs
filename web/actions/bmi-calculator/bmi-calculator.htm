@@ -1,0 +1,148 @@
+
+<h1 style="text-align: center;">BMI Calculator - Measure Your Body Mass Index</h1>
+
+<?php
+if(!empty($_POST['calc_ok']))
+{
+	$height=$_POST['height'];
+	$bmi=($_POST['weight']*703) / ($height*$height);
+	$bmi=number_format($bmi,1,".","");
+	
+	// prepare message for the user
+	if($bmi<=18.5)
+	{
+		$bmimsg="Underweight";
+	}
+	
+	if($bmi>18.5 and $bmi<=24.9)
+	{
+		$bmimsg="Normal";	
+	}
+	
+	if($bmi>=25 and $bmi<=29.9)
+	{
+		$bmimsg="Overweight";			
+	}
+	
+	if($bmi>=30)
+	{
+		$bmimsg="Obese";		
+	}
+	
+	// what is the weight range?
+	if($bmimsg!='Normal')
+	{
+		$lowerlimit=number_format(( 18.5 * ($height*$height) ) / 703);
+		//$lowerlimitkg=number_format($lowerlimit*0.453,1,".","");
+		
+		$upperlimit=number_format(( 24.9 * ($height*$height) ) / 703);
+		//$upperlimitkg=number_format($upperlimit*0.453,1,".","");
+	}
+	
+	//prepare texts
+	$firsttext=str_replace("<BMI>",$bmi,$firsttext);
+	$firsttext=str_replace("<BMIMSG>",$bmimsg,$firsttext);
+	$lowertext=str_replace("<LOWERLIMIT>",$lowerlimit,$lowertext);
+	$lowertext=str_replace("<LOWERLIMITKG>",$lowerlimitkg,$lowertext);
+	$lowertext=str_replace("<UPPERLIMIT>",$upperlimit,$lowertext);
+	$lowertext=str_replace("<UPPERLIMITKG>",$upperlimitkg,$lowertext);
+	$uppertext=str_replace("<LOWERLIMIT>",$lowerlimit,$uppertext);
+	$uppertext=str_replace("<LOWERLIMITKG>",$lowerlimitkg,$uppertext);
+	$uppertext=str_replace("<UPPERLIMIT>",$upperlimit,$uppertext);
+	$uppertext=str_replace("<UPPERLIMITKG>",$upperlimitkg,$uppertext);
+		
+	//the result is here
+	?>
+	<div class="wrapper">
+	
+	<div class="left-side">
+	<p><?=$firsttext?></p>
+	<?php	
+	switch($bmimsg)
+    {	
+       case 'Normal':
+     		// you can echo here if you want for normal weight people
+       break;
+       
+       case 'Underweight':       		
+       		echo $lowertext;
+       break;
+                                         	
+       default:
+       		echo $uppertext;
+        break;                              
+      }
+      ?>
+      
+<p align="center"><a href="/bmi-calculator" onclick="javascript:history.back();">Calculate Your BMI Again</a></p>     
+
+      </div>
+      
+      	<div class="right-side">
+      		<script type="text/javascript" language="javascript" src="http://www.kqzyfj.com/placeholder-4255284?sid=listing-page&target=_top&mouseover=N"></script>	
+		</div>
+
+      
+      </div>
+      
+      <?php
+}
+else
+{
+	//the calculator comes here
+	?>
+	
+	<div class="wrapper">
+	
+	<div class="left-side">Body mass index (BMI), is a measurement that compares a person's weight and height to determaine the overall fitness of the individual. BMI calculation does not actually measure percentage of total body fat, but it is a tool used to estimate what is considered a healthy weight based on a persons height.</p>
+
+	
+	<div class="get-started-block">
+	<form method="post">
+	<table align="center" style="padding-top:20px">
+	<tr><td style="padding-bottom:5px">Your Weight:</td>
+	<td style="padding-bottom:5px">
+	<select name="weight">
+     <?php
+     for($i=50;$i<=600;$i++)
+     {
+	    //$kg=number_format($i*0.453,1,".","");
+	    echo "<option value='$i'>$i lbs</option>";
+     }
+     ?>                                                        
+     </select></td></tr>
+    
+	<tr><td style="padding-bottom:10px">Your Height:</td>
+	<td style="padding-bottom:10px"><select name="height">
+	<?php
+     for($i=50;$i<=88;$i++)
+     {
+	    $feets=floor($i/12);
+	    $in=$i%12;
+	    //$cm=number_format($i*2.54);
+	    echo "<option value='$i'>$feets ft $in in</option>";
+     }
+     ?>                                                        
+	</select></td></tr>
+	
+	<tr><td colspan="2" align="center">
+	<input type="hidden" name="calc_ok" value="ok">
+	<input type="submit" value="Calculate Your BMI">
+	</td></tr>	
+	<tr><td align="center" colspan="2"></td></tr>
+	</table>
+	</form>	
+	</div>
+	
+	</div>
+
+		
+	<div class="right-side">
+	<img src="/template/gfx/bmi-calculator-image.jpg" alt="BMI Body Mass Index">
+	</div>
+	
+	</div>
+	
+	<?php
+}
+?>

@@ -1,0 +1,38 @@
+<h1>Login</h1>
+
+<div class="login-explain">
+	Please login using the form below.
+</div>
+
+<div class="login-form">
+<form method="post" action="/<?= $TARGET->action_orig; ?>">
+
+	<div class="label">
+		Username / Email:
+	</div>
+	<div class="input username">
+		<input type="text" name="username" value="" id="username" autocomplete="on"/>
+	</div>
+	
+	<div class="label">
+		Password:
+	</div>
+	<div class="input password">
+		<input type="password" name="password" value="" id="password" autocomplete="off"/>
+	</div>
+	
+	<div class="remember_me">
+		<input type="checkbox" name="remember_me" value="1" id="remember_me" /> <label for="remember_me">Remember Me</label>
+	</div>
+
+	<input type="submit" name="do_login" value="Login" />
+
+
+	<div class="forgot-password">
+		<a href="/biz/reset-password">Forgot password?</a> <a href="/biz/join">Register</a>
+	</div>
+
+	
+	
+</form>
+</div>

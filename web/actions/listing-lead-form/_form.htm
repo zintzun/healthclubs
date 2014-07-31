@@ -1,0 +1,61 @@
+<div class="lead-header">
+
+	<h1><?=$__biz->name ?></h1>
+	<h2><?=$__coupon->value ?></h2>
+</div>	
+	<div style="margin:auto;width:500px;text-align:justify;">
+<p>
+	Please fill out the form below to claim your <b><?=$__coupon->value ?></b>. Your coupon will be activated upon receiving a confirmation call from <b><?=$__biz->name ?></b>.
+	</p>
+	
+</div>
+
+<form method="post" action="/<?=$TARGET->action_orig ?>" id="coupon-form" >
+	<input type="hidden" name="biz_id"   value="<?=$__biz->biz_id ?>"/>
+	<input type="hidden" name="type" value="<?=$__biz->type ?>" />
+	<input type="hidden" name="coupon"   value="<?=$__coupon->value ?>" />
+	<div class="lead-container">
+		<?
+			foreach (array ('first_name','last_name','email','zip') as $field)
+			{
+		?>
+			<div class="label"><?= ucwords(str_replace('_',' ',$field)) ?></div>
+			<div class="input">
+				<input type="text" style="width: 200px;"  name="<?=$field ?>" value="<?=(isset($_POST[$field])?$_POST[$field]:'')?>" />
+			</div>
+		<?
+			} //foreach
+		?>
+			<div class="label">
+				Phone</div>
+			<div class="input">
+				<input type="text" style="width: 45px;" name="area_code" value="<?=(isset($_POST['area_code'])?$_POST['area_code']:'')?>" /><input type="text"  style="margin-left: 8px;width: 45px;" name="phone_first_3" value="<?=(isset($_POST['phone_first_3'])?$_POST['phone_first_3']:'')?>" /><input type="text"  style="margin-left: 8px;Width: 82px;" name="phone_last_4" value="<?=(isset($_POST['phone_last_4'])?$_POST['phone_last_4']:'')?>" />
+			</div>
+			<br clear="all" />
+			<p style="text-align:center;color:#FF0000;">* You must be 18 years or older to participate.</p>
+			<div style="margin-left:100px">
+				<div style="margin-bottom: 5px;">I am 18 years or older.</div>
+				<input type="radio" name="i_am_18" id="yes" value="1"
+					<?=(isset($_POST['i_am_18']) && $_POST['i_am_18'])?'checked':'' ?> 
+				/> 
+				<label for="hc-radio">Yes</label>
+				<br /> 
+				<input type="radio" name="i_am_18" id="no" value="0"
+					<?=(isset($_POST['i_am_18']) && ! $_POST['i_am_18'])?'checked':'' ?> 
+				/> 
+				<label for="pc-radio">No</label>
+				</div>
+	
+			<br clear="left" />	
+	</div>
+	
+	<div style="margin:auto;width:400px;text-align:left;">
+		<div class="fine_print" style="padding-left: 10px; margin-bottom: 20px;">
+			By clicking below, you represent that you are at least 18 years of age and have read and agree to our Terms and Conditions and Privacy Policy.  
+		</div>
+	</div>
+	<div style="text-align: center;">
+		<input type="submit" name="do_coupon" id="id-do_contact_us" class="input-submit id-do_contact_us" value="Submit" />
+	</div>
+</form>
+

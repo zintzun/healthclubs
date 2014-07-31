@@ -1,0 +1,13 @@
+From: Healthclubs.net <service@healthclubs.net>
+Subject: About your request for {club}
+
+Hello {name},
+
+
+{club} will contact you shortly regarding your request. 
+
+Thank you for visiting Healthclubs.net
+
+
+Regards,
+Healthclubs.net

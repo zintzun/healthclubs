@@ -1,0 +1,99 @@
+<?php 
+
+	if ( ! $TARGET->content_title )
+	{
+		$TARGET->content_title = ucwords(preg_replace('([\-\_])',' ',$TARGET->action));
+		$TARGET->page_title   .= " - {$TARGET->content_title}";
+	}
+
+	if ( USE_GZHANDLER ) { ob_start("ob_gzhandler"); } 
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title><?= $TARGET->page_title; ?></title>
+<meta name="description" content="<?= ($TARGET->meta_desc?$TARGET->meta_desc:META_DESC) ?>" />
+<meta name="keywords" content="<?= ($TARGET->meta_keys?$TARGET->meta_keys:META_KEYS) ?>" />
+<?php if ( preg_match(LISTING_ROOTS,$TARGET->action_orig) && isset($TARGET->arg3) && $TARGET->action != 'listing-lead-form' && $TARGET->action != 'listing-claim-biz' ) { ?>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?= GMAPS_API_KEY ?>" type="text/javascript"></script>
+<?php } ?>
+
+
+<?php if( $_SERVER['HTTPS'] != "on" ) 
+		{
+			?>
+
+			<script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js">
+			</script>
+			<script type="text/javascript">
+			  GS_googleAddAdSenseService("ca-pub-7983650511129492");
+			  GS_googleEnableAllServices();
+			</script>
+			<script type="text/javascript">
+			  GA_googleAddSlot("ca-pub-7983650511129492", "Healthclubsnet_ListingPage_AboveReviewSection_728x90");
+			  GA_googleAddSlot("ca-pub-7983650511129492", "Healthclubsnet_ListingPage_BeneathBizAddress_234x60");
+			</script>
+			<script type="text/javascript">
+			  GA_googleFetchAds();
+			</script>
+			
+			<?
+		}
+?>
+
+
+
+<?php
+// TARGET->js_files is an array containing a list of javascript files to be included.
+if ($TARGET->js_files)
+{
+	foreach ($TARGET->js_files as $js_file)
+	{
+		print '<script src="'. $js_file .'" type="text/javascript"></script>'."\n";
+	}
+}
+?>
+<?php if ( ( ! IS_LOCALHOST && ! session_is_admin() ) || (CACHE_FULL_PAGES && preg_match(CACHE_THIS_ACTION,$TARGET->action)) ) { ?>
+
+
+<?php /*
+
+//remove GA
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("<?= ANALYTICS_ID ?>");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+*/ ?>
+
+
+<?php } /* IS_LOCALHOST */ ?>
+<style type="text/css">
+<?php
+/*
+* TARGET->css_files is an array containing a list of CSS files to be included.
+* Files are added using the function use_css() in file common.inc which 
+* removes the first / of path (if given).
+*/
+if ($TARGET->css_files)
+{
+	foreach ($TARGET->css_files as $css_file)
+	{
+		print '@import url("/' . $css_file . '?' . filemtime($css_file) . '");'. "\n";
+	}
+}
+?>
+</style>
+</head>
+<body>
+	<div id="container" class="<?= strtolower($TARGET->action) ?>">
+	<?php include "template/top_nav.htm"; ?>
+	<?php include "template/breadcrumbs.htm"; ?>

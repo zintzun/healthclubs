@@ -1,0 +1,82 @@
+<?= html_tabs($ADMIN_NAV) ?>
+<h1>
+	<img src='/template/gfx/icons/image_edit.png' style='vertical-align: middle; border: 0;'> 
+	Reviews &#9658;
+	
+	<select name="reviews-set" id="reviews-set" onChange="window.location='/admin/reviews/'+$('#reviews-set').val()">
+	<?
+		print '<option value="'.$TARGET->arg3.'">'.ucfirst($TARGET->arg3).'</option>';
+		print '<option>---</option>';
+		
+		foreach (array('all','unapproved') as $set)
+		{
+			print '<option value="'.$set.'">'.ucfirst($set).'</option>';
+		}
+	?>
+	</select>
+</h1>
+
+<div style="margin: 10px 0 0 0;">
+
+<?
+ 
+	if (isset($__edit))
+	{
+		$FORM = new form('/'.$TARGET->action_orig,'my-form-id','Edit Review');
+	
+		foreach ( (array) $__edit as $k => $v )
+		{
+			if ($k == 'review')
+			{
+				$FORM->add('textarea',$k,$v,array('rows'=>"8" ,'cols'=>"60"),'',$k);
+			}
+			else if ( $k == 'rating')
+			{
+				$FORM->add('select','rating',$__edit->rating,'',array (0,1,2,3,4,5),'Rating');
+			}
+			else if( $k == 'is_approved')
+			{
+				$FORM->add('select','is_approved',$__edit->is_approved,'',array ('No','Yes'),'Approved?');
+			}
+			else if ( $k == 'review_id')
+			{
+				continue;
+			}
+			else
+			{
+				$FORM->add('text',$k,$v,'','',ucwords(str_replace('_',' ',$k)));
+			}
+		}
+
+		$FORM->add('submit','do_update','Update');
+	
+		print $FORM->render();
+		print "<br />";
+	}
+
+	if ( isset($__reviews) )
+	{
+		
+		foreach ( $__reviews as $item )
+		{
+			print 
+			"<div style='margin: 5px 0 5px 0;'>" .
+			(
+				$item->is_approved ? '':
+				"<a href=\"/admin/reviews/".$TARGET->arg3."/{$item->review_id}?approved=true\" title='Approve review'>"
+					."<img src='/template/gfx/icons/accept.png' style='vertical-align: middle; border: 0;'></a> "
+			).
+			"<a href=\"javascript:ezAjax.tools.confirm('Sure?','/admin/reviews/".$__review_type."?delete={$item->review_id}')\" title='Delete review'>".
+				"<img src='/template/gfx/icons/delete.png' style='vertical-align: middle; border: 0;'></a> ".
+			"<a href='/admin/reviews/".$__review_type."/{$item->review_id}' title='Edit this review.'>".
+				"<img src='/template/gfx/icons/image_edit.png' style='vertical-align: middle; border: 0;'></a>" .
+			" {$item->name}, {$item->email}, {$item->rating}, ". substr($item->review,0,80) ."</div>";
+		}
+		
+	}
+	else
+	{
+		print "No reviews";	
+	}
+
+?>

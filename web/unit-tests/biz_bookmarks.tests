@@ -1,0 +1,196 @@
+<?php
+
+	/*
+	* Tests for biz_bookmarks.inc
+	*/		
+
+	include "interfaces/biz/biz_bookmarks.inc";
+
+	class biz_bookmarks_tests extends UnitTestCase
+	{
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* This makes it easy to access the classes withotu having to re 
+		* initialise them in every test function
+		*/
+
+		function __construct()
+		{
+			$this->b = new biz_bookmark();
+		}
+	
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* These tests prove that all the functions exist in the loaded class
+		*/	
+	
+		function test_functions_exist()
+		{
+			
+			// TEST FUNCS EXIST IN biz_bookmark CLASS
+			$functions = array
+			(
+				'add',
+				'remove',
+				'get',
+				'get_by_user',
+			);
+		
+			$biz_bookmark = new biz_bookmark();
+		
+			foreach ($functions as $function) 
+			{
+				$this->assertTrue( method_exists($biz_bookmark, $function), "biz_bookmark function ($function) does not exist" );
+			}
+		
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_table_exist()
+		*/	
+
+		function test_table_exist()
+		{
+			global $db;
+			$this->assertEqual( $db->get_var("SHOW TABLES LIKE 'biz_bookmarks'"), 'biz_bookmarks');
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_bookmark_store()
+		*/
+
+		function test_biz_bookmark_add()
+		{
+			global $db;
+			
+			// $user_id must be number
+			$this->assertEqual(is_error($this->b->add('bad user id',1)), 'invalid_user_id');
+
+			// $biz_id must be number
+			$this->assertEqual(is_error($this->b->add(1,'bad biz id')), 'invalid_biz_id');
+
+			// Test adding a bookmark
+			$this->assertEqual(is_error($this->b->add(0,0)), false);
+
+			// Remove bookmark
+			$this->assertEqual($db->query("DELETE FROM biz_bookmarks WHERE user_id = 0 AND biz_id = 0"),true);
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_bookmark_remove()
+		*/	
+	
+		function test_biz_bookmark_remove()
+		{
+			global $db;
+
+			// $user_id must be number
+			$this->assertEqual(is_error($this->b->add('bad user id',1)), 'invalid_user_id');
+
+			// $biz_id must be number
+			$this->assertEqual(is_error($this->b->add(1,'bad biz id')), 'invalid_biz_id');
+
+			// Add a test record
+			$this->assertEqual(is_error($this->b->add(0,0)), false);
+
+			// Remove bookmark
+			$this->assertEqual(is_error($this->b->remove(0,0)), false);
+			
+			// We shouldn't be able to get record
+			$this->assertEqual($this->b->get(0,0), false);
+
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_bookmark_get()
+		*/	
+	
+		function test_biz_bookmark_get()
+		{
+			global $db;
+			$user_id = 1111111;
+			$biz_id = 1111111;
+
+			// $user_id must be number
+			$this->assertEqual(is_error($this->b->add('bad user id',1)), 'invalid_user_id');
+
+			// Add a test record
+			$this->assertEqual(is_error($this->b->add($user_id,$biz_id)), false);
+
+			// Test getting the record
+			$this->assertEqual(is_error($bookmark=$this->b->get($user_id,$biz_id)), false);
+			$this->assertEqual($bookmark->user_id, $user_id);
+			$this->assertEqual($bookmark->biz_id, $biz_id);
+			
+			// Remove test record
+			$this->assertEqual(is_error($this->b->remove($user_id,$biz_id)), false);
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_bookmark_get_bookmarks()
+		*/	
+	
+		function test_biz_bookmark_get_by_user()
+		{
+			global $db;
+			$user_id = 1111111;
+			$biz_list = array (2,16,33,34);
+			
+			// $user_id must be number
+			$this->assertEqual(is_error($this->b->get_by_user('bad user id')), 'invalid_user_id');
+
+			// Add a test records
+			foreach ($biz_list as $biz_id)
+			{
+				$this->assertEqual(is_error($this->b->add($user_id,$biz_id)), false);
+			}
+
+			// test it works!
+			$this->assertEqual(is_error($bookmarks = $this->b->get_by_user($user_id)), false);
+			
+			// Verify test records were returned
+			$this->assertEqual(count($bookmarks), count($biz_list));
+			foreach($bookmarks as $bookmark)
+			{
+				$this->assertEqual(in_array($bookmark->biz_id,$biz_list),true);
+			}
+
+			// Remove test records
+			foreach ($biz_list as $biz_id)
+			{
+				$this->assertEqual(is_error($this->b->remove($user_id,$biz_id)), false);
+			}
+		}
+
+	}
+	
+/*
+
+assertTrue($x)	Fail if $x is false
+assertFalse($x)	Fail if $x is true
+assertNull($x)	Fail if $x is set
+assertNotNull($x)	Fail if $x not set
+assertIsA($x, $t)	Fail if $x is not the class or type $t
+assertNotA($x, $t)	Fail if $x is of the class or type $t
+assertEqual($x, $y)	Fail if $x == $y is false
+assertNotEqual($x, $y)	Fail if $x == $y is true
+assertWithinMargin($x, $y, $m)	Fail if abs($x - $y) < $m is false
+assertOutsideMargin($x, $y, $m)	Fail if abs($x - $y) < $m is true
+assertIdentical($x, $y)	Fail if $x == $y is false or a type mismatch
+assertNotIdentical($x, $y)	Fail if $x == $y is true and types match
+assertReference($x, $y)	Fail unless $x and $y are the same variable
+assertClone($x, $y)	Fail unless $x and $y are identical copies
+assertPattern($p, $x)	Fail unless the regex $p matches $x
+assertNoPattern($p, $x)	Fail if the regex $p matches $x
+expectError($x)	Swallows any upcoming matching error
+assert($e)	Fail on failed expectation object $e
+
+*/
+	
+?>

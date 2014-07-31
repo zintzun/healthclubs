@@ -1,0 +1,352 @@
+<?= html_tabs($BIZ_NAV) ?>
+<h1><?= ( isset($_SESSION['BIZ_LISTING']['biz_id']) && $_SESSION['BIZ_LISTING']['biz_id'] != 1) ? 'Edit Listing': 'Add a Listing' ?></h1>
+<?= html_tabs($BIZ_LISTING_NAV) ?>
+<link href="/third_party/swfupload/default.css" rel="stylesheet" type="text/css" />
+<script src="/third_party/jquery/jquery.MetaData.js" type="text/javascript" language="javascript"></script>
+<script src="/third_party/jquery/jquery.MultiFile.js" type="text/javascript" language="javascript"></script>
+<script src="/third_party/jquery/jquery.blockUI.js" type="text/javascript" language="javascript"></script>
+<script src="/third_party/swfupload/handlers.js" type="text/javascript" language="javascript"></script>
+<script src="/third_party/swfupload/js/handlers.js" type="text/javascript" language="javascript"></script>
+<script src="/third_party/swfupload/js/fileprogress.js" type="text/javascript" language="javascript"></script>
+<script src="/third_party/swfupload/js/swfupload.queue.js" type="text/javascript" language="javascript"></script>
+<script src="/third_party/swfupload/swfupload.js" type="text/javascript" language="javascript"></script>
+<script type="text/javascript">
+		var swfu;
+		var swfu_logo;
+		var numImagesToUpload = <?= $num_images_to_upload = isset($__biz_pics) ? (BIZ_PICS_MAX_NUM_PER_LISTING - 1) - count($__biz_pics) : BIZ_PICS_MAX_NUM_PER_LISTING - 1 ?>;
+		var maxUploadSize = <?= BIZ_PICS_MAX_UPLOAD_SIZE ?> + " MB";
+		window.onload = function () {
+			swfu_logo = new SWFUpload({
+				// Backend Settings
+				upload_url: "/ajax/upload_logo",
+				post_params: {"PHPSESSID" : "<?php echo session_id(); ?>"},
+
+				// File Upload Settings
+				file_size_limit : maxUploadSize,
+				file_types : "*.gif;*.jpg;*.jpeg,*.png",
+				file_types_description : "Image Files",
+				file_upload_limit : "1",
+				file_queue_limit : "0",
+
+				// Event Handler Settings (all my handlers are in the Handler.js file)
+				file_dialog_start_handler : fileDialogStart,
+				file_queued_handler : fileQueued,
+				file_queue_error_handler : fileQueueError1,
+				file_dialog_complete_handler : fileDialogComplete1,
+				upload_start_handler : uploadStart,
+				upload_progress_handler : uploadProgress1,
+				upload_error_handler : uploadError1,
+				upload_success_handler : uploadSuccess1,
+				upload_complete_handler : uploadComplete1,
+
+				// Button Settings
+				//button_image_url : "XPButtonUploadText_61x22.png",
+				//button_image_url : "/template/gfx/swfupload/XPButtonUploadText_61x22.png",
+				button_image_url : "/template/gfx/swfupload/SmallSpyGlassWithTransperancy_17x18.png",
+				button_placeholder_id : "spanButtonPlaceholderlogo",
+				button_width: 180,
+				button_height: 18,
+				button_text : '<span class="button">Select Logo Image <span class="buttonSmall">(<?= BIZ_PICS_MAX_UPLOAD_SIZE ?> MB Max)</span></span>',
+				button_text_style : '.button { font-family: Helvetica, Arial, sans-serif; font-size: 12pt; } .buttonSmall { font-size: 10pt; }',
+				button_text_top_padding: 0,
+				button_text_left_padding: 18,
+				button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+				button_cursor: SWFUpload.CURSOR.HAND,
+				//button_width: 61,
+				//button_height: 22,
+				
+				// Flash Settings
+				flash_url : "/third_party/swfupload/swfupload.swf",
+				
+
+				custom_settings : {
+					progressTarget : "fsUploadProgress1",
+					cancelButtonId : "btnCancel1"
+				},
+				
+				// Debug Settings
+				debug: false
+			});
+			<?
+				if ($num_images_to_upload)
+				{
+					?>
+						swfu = new SWFUpload({
+							// Backend Settings
+							upload_url: "/ajax/upload",
+							post_params: {"PHPSESSID": "<?php echo session_id(); ?>"},
+
+							// File Upload Settings
+							file_size_limit : maxUploadSize,
+							file_types : "*.gif;*.jpg;*.jpeg,*.png",
+							file_types_description : "Image Files",
+							file_upload_limit : numImagesToUpload,
+
+							// Event Handler Settings - these functions as defined in Handlers.js
+							//  The handlers are not part of SWFUpload but are part of my website and control how
+							//  my website reacts to the SWFUpload events.
+							file_queue_error_handler : fileQueueError,
+							file_dialog_complete_handler : fileDialogComplete,
+							upload_progress_handler : uploadProgress,
+							upload_error_handler : uploadError,
+							upload_success_handler : uploadSuccess,
+							upload_complete_handler : uploadComplete,
+
+							// Button Settings
+							button_image_url : "/template/gfx/swfupload/SmallSpyGlassWithTransperancy_17x18.png",
+							button_placeholder_id : "spanButtonPlaceholder",
+							button_width: 180,
+							button_height: 18,
+							button_text : '<span class="button">Select Images <span class="buttonSmall">(<?= BIZ_PICS_MAX_UPLOAD_SIZE ?> MB Max)</span></span>',
+							button_text_style : '.button { font-family: Helvetica, Arial, sans-serif; font-size: 12pt; } .buttonSmall { font-size: 10pt; }',
+							button_text_top_padding: 0,
+							button_text_left_padding: 18,
+							button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+							button_cursor: SWFUpload.CURSOR.HAND,
+							
+							// Flash Settings
+							flash_url : "/third_party/swfupload/swfupload.swf",
+
+							custom_settings : {
+								upload_target : "divFileProgressContainer"
+							},
+							
+							// Debug Settings
+							debug: false
+					});
+				<?
+			}
+		?>
+
+		};
+	</script>
+<div class="add-photos" style="border: solid #BBBBBB 1px; margin-top: -11px; border-top: none; padding: 10px;">
+
+	<h2>Photos of Your Business</h2>
+	<br>
+<!--	<div class="biz_note">
+		Choose a logo or upload your own. Image size is limited to 1mb (1000k). Only Gif and JPG's are allowed.<br>Our staff may resize the images for better display on your listing page. 
+	</div> -->
+
+	<form name="biz-details-form" method=post action="/<?= $TARGET->action_orig?>" enctype="multipart/form-data">
+
+		<input type="hidden" name="stock-pic" id="stock-pic" value="" />
+
+		<div class="logo">
+			<fieldset>
+				<legend>Your Logo</legend>
+				
+					<div class="biz_note" style="margin-bottom:10px;">
+		Choose a logo or upload your own. Image size is limited to 1mb (1000k). Only Gif and JPG's are allowed.<br>Our staff may resize the images for better display on your listing page. 
+	</div>
+
+					<div class="left-container">
+					
+						<div class="select-desc-container">
+						
+							<h2>Select A Logo</h2>
+							<div class="text" style="margin:5px 5px 0 0">
+								Scroll to find your logo.
+								If it is not listed, you
+								can upload one below.
+							</div>
+						
+						</div>
+						
+						<div class="select-list-container">
+						
+							<div class="logo-list">
+								<?
+									foreach ( $__logos as $logo )
+									{
+										?><div><img src="<?= $logo ?>" onClick="ezAjax.photos.selectStocPick(this)" /></div><?
+									}
+								?>
+							</div>
+						
+						</div>
+						
+						<div class="upload-label">
+							<h2>Upload Logo</h2>
+						</div>
+						<!--<div class="upload-input"> <input class="file-input" type="file" name="logo-up-file" value="" onClick="ezAjax.photos.unselectStocPick()"/> </div>-->
+						<br clear="left">
+						<!-- /////////////////////////////////////////////////////////// -->
+						<div>
+							<div id="content_logo">
+								<div class="biz_note">
+									<div>
+										<div style="padding-left: 5px;">
+											<span id="spanButtonPlaceholderlogo"></span>
+											<div style="display:none"> <input id="btnCancel1" type="button" value="Cancel Uploads" onclick="cancelQueue(upload1);" disabled="disabled" style="margin-left: 2px; height: 22px; font-size: 8pt;" /> </div>
+										</div>
+									</div>
+										<?
+											//if ($num_images_to_upload)
+											{
+												if( !function_exists("imagecopyresampled") )
+												{
+													?>
+														<div class="message">
+															<h4><strong>Error:</strong> </h4>
+														</div>
+													<?php
+												}
+												else
+												{
+													?>
+																<span id="spanButtonPlaceholder0"></span>
+													<?php
+												}
+											}
+										?>
+								</div>
+								<!--<div id="divFileProgressContainerLogo" style="height: 45px;"></div>-->
+								<div id="fsUploadProgress1"> </div>
+							</div>
+						</div>
+						<!-- /////////////////////////////////////////////////////////// -->
+						<br clear="left">
+					</div>
+					
+					<div class="right-container">
+					
+						<fieldset>
+							<legend>Currently Using</legend>
+							  <!-- ///////////////////////////////////////////////////// -->
+								<div id="thumbnail-logo" class="thumbnails">
+									<div id="current-pic"><img src="<?= $__logo_path ? $__logo_path : '/template/gfx/no-image.jpg' ?>" /></div>
+								</div>
+							  <!-- ///////////////////////////////////////////////////// -->
+						</fieldset>
+					
+						<br clear="left">
+					</div>
+	
+				<br clear="left">
+			</fieldset>
+		</div><!-- div class="logo" -->
+
+		<br clear="left">
+		
+		<div class="photo-bar">
+			<fieldset>
+				<legend>Your Photos</legend>
+				<div>
+					<div id="content_photos">
+					
+						<div class="biz_note">
+							You can add up to <?= (BIZ_PICS_MAX_NUM_PER_LISTING - 1) ?> photos of your business. You can select multiple images at once when uploading. Image size is limited to 1mb (1000k) per image. Only Gif and JPG's are allowed. Our staff may resize the images for better display on your listing page.
+							</div>	
+							
+							<div style="margin:20px 0 0 10px;width: 140px;">
+							<h2>Upload Photos</h2>
+						</div>
+							
+								<div class="biz_note" style="width:390px">
+								<?php
+									if ($num_images_to_upload)
+									{
+										if( !function_exists("imagecopyresampled") )
+										{
+											?>
+												<div class="message">
+													<h4><strong>Error:</strong> </h4>
+												</div>
+											<?php
+										}
+										else
+										{
+											?>
+														<span id="spanButtonPlaceholder"></span>
+											<?php
+										}
+									}
+								?>
+						</div>
+						<div id="divFileProgressContainer" style="height: 45px;"></div>
+						<div id="thumbnails" class="thumbnails">
+							<table>
+								<tr id="table-row">
+									<?
+										if ( isset($__biz_pics) )
+										{
+											foreach ( $__biz_pics as $pic )
+											{
+												?>
+													<td>
+														<img src="<?= $pic['thumb'] ?>" />
+														<br />
+														<a href="?delete_pic=<?= $pic['pic_id'] ?>" class="small">Delete</a>
+													</td>
+												<?
+											}
+										}
+									?>
+								</tr>
+							</table>
+						</div>
+						<br clear="all" />
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		
+		
+		<br clear="left">
+		
+		<div class="amenities-container">
+			<fieldset>
+				<legend>Your Amenities</legend>
+
+					<h2>Amenities Offered</h2>
+				
+					<div class="biz_note">
+						Select the amenities that your business offers. If you have an amenity suggestion that is not listed below contact our customer support group.
+					</div>
+				
+					<? 
+					$k = 0;
+					for ($i=0;$i<4;$i++)
+					{
+						?>
+							<div class="amenities">
+								<table>
+									<?
+										for ($j=0;$j<$__rows[$i];$j++)
+										{
+											?>
+											<tr>
+												<td>
+													<input style="vertical-align: top;" class="checkbox" type="checkbox" id="amenity-<?= $__amenities[$k]->pick_val_id ?>"  name="amenity[<?= $__amenities[$k]->pick_val_id ?>]" value="1" <?= isset($__my_picks[$__amenities[$k]->pick_val_id])?'checked':'' ?>/>
+													<label style="vertical-align: top;" for="amenity-<?= $__amenities[$k]->pick_val_id ?>" >
+														<?= $__amenities[$k++]->value ?>
+													</label>
+												</td>
+											</tr>
+											<?
+										}
+									?>
+								</table>
+							</div>
+							<?
+					}
+				?>
+				
+
+			</fieldset>
+		</div>
+
+
+		<div class="submit-buttons">
+				<input type=submit name="do_previous" value="&laquo; Previous" />
+		<? /*  <input type=submit name="do_save" value="Save" />  */ ?>
+				<input type=submit name="do_next" value="Next &raquo;" />
+		</div>
+
+
+	</form>
+
+
+</div>
+

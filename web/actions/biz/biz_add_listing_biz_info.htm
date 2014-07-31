@@ -1,0 +1,298 @@
+<?= html_tabs($BIZ_NAV) ?>
+<h1><?= ( isset($_SESSION['BIZ_LISTING']['biz_id']) && $_SESSION['BIZ_LISTING']['biz_id'] != 1) ? 'Edit Listing': 'Add a Listing' ?></h1>
+<?= html_tabs($BIZ_LISTING_NAV) ?>
+<div style="border: solid #BBBBBB 1px; margin-top: -11px; border-top: none; padding: 10px;">
+
+	<h2>About Your Listing</h2>
+
+	<div class="biz_note">
+		This information <b>will</b> be included in your listing on the site.
+	</div>
+
+	<form name="biz-details-form" method=post action="/<?= $TARGET->action_orig?>">
+		<input type="hidden" name="is_premium" value="1" />
+
+		<div class="biz-details">
+
+			<fieldset>
+				<legend>Basic Info</legend>
+
+				<!-- BIZ-DETAILS-LEFT -->
+				<div class="biz-details-left">
+					<div class="label">Listing Type: </div>
+					<div class="input">
+						<select type="select" name="type" class="select">
+							<option value="">Select Business type</option>
+							<option value="">---</option>
+							<?
+								foreach ($LISTING_TYPES as $type)
+								{
+									?>
+									<option value="<?= $type ?>" <?= ($__type==$type)?'selected':'' ?> ><?= ucfirst($type) ?></option>
+									<?
+								}
+							?>
+						</select>
+					</div>
+					<br clear="left" />
+	
+					<div class="label">Listing Name: </div>
+					<div class="input">
+						<input type="text" name="biz_name" value="<?= $__name ?>" />
+					</div>
+					<br clear="left" />
+	
+					<div class="label"><span>Street:</span> </div>
+					<div class="input">
+						<input type=text name="street" value="<?= $__street ?>" />
+					</div>
+					<br clear="left" />
+	
+					<div class="label">Street 2: </div>
+					<div class="input">
+						<input type=text name="street2" value="<?= $__street2 ?>" />
+					</div>
+					<br clear="left" />
+	
+					<div class="label">City: </div>
+					<div class="input">
+						<input type=text name="city" value="<?= $__city ?>" />
+					</div>
+					<br clear="left" />
+					
+					<div class="label">State: </div>
+					<div class="input">
+						<select type="select" name="state" class="select">
+							<option value="">Please Select</option>
+							<option value="">---</option>
+							<?
+								include "lib/state_utils.inc";
+								foreach ($GLOBALS['STATES_CAPITALISED'] as $state_short => $state_long)
+								{
+									?>
+									<option value="<?= $state_short ?>" <?= ($__state == $state_short)?'selected':'' ?> ><?= $state_long ?></option>
+									<?
+								}
+							?>
+						</select>
+					</div>
+					<br clear="left" />
+					
+					
+					<div class="label">Zip: </div>
+					<div class="input">
+						<input type=text name="zip" value="<?= $__zip ?>" />
+					</div>
+					<br clear="left" />
+					
+				</div>
+				
+				<!-- BIZ-DETAILS-RIGHT -->
+				<div class="biz-details-right">
+
+					<div class="label-right">Email: </div>
+					<div class="input">
+						<input type=text name="email" value="<?= $__email ?>" />
+					</div>
+					<br clear="left" />
+	
+					<div class="label-right">Phone: </div>
+					<div class="input">
+						<input type=text name="phone" value="<?= $__phone ?>" />
+					</div>
+					<br clear="left" />
+	
+					<div class="label-right">Fax: </div>
+					<div class="input">
+						<input type=text name="fax" value="<?= $__fax ?>" />
+					</div>
+					<br clear="left" />
+	
+					<div class="label-right">Website: </div>
+					<div class="input">
+						<input type=text name="homepage" value="<?= $__homepage ?>" />
+					</div>
+
+					<br clear="left" />
+				</div>
+
+				<br clear="all" />
+
+				<div class="biz-description">
+					<div class="c">
+						<script>
+							function textCounter(limit)
+							{
+								if ($('#text-description').val().length > limit)
+								{
+									$('#text-description').val( $('#text-description').val().substring(0,limit) );
+								}
+								else
+								{	
+									$('#remaining').text( limit - $('#text-description').val().length);
+								}
+							}
+						</script>
+
+						<div class="description-text">
+							Enter a description of your business: Writing a good description will enhance your listing and improve your listing page's search engine visibility.
+						</div>
+		
+						<textarea id="text-description" name="description" class="description" onKeyUp="textCounter(450);" ><?= $__description ?></textarea>
+						<span id="remaining"> 450</span><span> characters left.</span>
+					</div>
+				
+				</div>
+
+
+			</fieldset>
+
+		</div><!-- biz-details -->
+
+		<br clear="all" />
+
+		<div class="biz-hours-pricing">
+
+		<fieldset>
+			<legend>Hours & Pricing</legend>
+
+			<!-- BIZ-HOURS -->
+			<div class="biz-hours">
+			
+				<h2>Hours of Operation</h2>
+				<table class="tabla">
+					<tr>
+						<td> </td>
+						<td> Sunday </td>
+						<td> Mon-Thurs </td>
+						<td> Friday </td>
+						<td> Saturday </td>
+					</tr>
+					<?
+						foreach (array('open','close') as $open_close)
+						{
+							print "<tr><td>".ucfirst($open_close)."</td>";
+
+							foreach (array('sunday','monday','friday','saturday') as $day)
+							{
+								$day_open_close= '__'.substr($day,0,3).'_'.$open_close;
+
+								?>
+								<td>
+									<select type="select" name="<?= substr($day_open_close,2) ?>" class="select">
+										<?
+											for ($hour=1;$hour<=12;$hour++)
+											{
+												$selected = false;
+												
+												if ($hour == ${$day_open_close})
+												{
+													$selected = true;
+												}
+												else if ( ! ${$day_open_close} )
+												{
+													$selected = ( ($hour == 6 && $open_close == 'open') || ($hour == 10 && $open_close == 'close') )?true:false;
+												}
+												?>
+												<option value="<?= $hour ?>" <?= ($selected?'selected="selected"':'') ?> > <? printf("%02d:00",$hour) ?></option>
+												<?
+											}
+										?>
+									</select>
+								</td>
+							<?
+							}
+							print "</tr>";
+						}
+					?>
+				</table>
+
+				<div class="radios">
+
+					<input type="checkbox" id="cb_is_24_hour" <?= $__is_24_hour?'checked':''?> onClick="ezAjax.tools.toggleRadioBoolean('.radios',0)" /><label for="cb_is_24_hour">Open 24 Hours</label>
+					<input type="hidden" name="is_24_hour" id="is_24_hour" value="<?= $__is_24_hour ?>" />
+				&nbsp;
+
+					<input type="checkbox" id="cb_is_appointment_only" <?=  ($__is_appointment_only)?'checked':''?> onClick="ezAjax.tools.toggleRadioBoolean('.radios',1)" /><label for="cb_is_appointment_only">By Appointment Only</label>
+					<input type="hidden" name="is_appointment_only" id="is_appointment_only" value="<?= $__is_appointment_only ?>" />
+				</div>
+			
+			</div>
+
+
+			<!-- BIZ-PRICING -->
+			<div class="biz-pricing">
+	
+				<h2>Pricing Information</h2>
+				<table>
+					<tr>
+						<td> <div class="label-pricing"> Basic Membership: $</div> </td>
+						<td> <input class="input" type="text" name="cost_membership" value="<?= $__cost_membership ?>" /> </td>
+						<td> per </td>
+						<td>
+							<select type="select" name="cost_membership_timeframe">
+								<option value="<?= $__cost_membership_timeframe ?>"><?= ucfirst($__cost_membership_timeframe) ?></option>
+								<option value="">----</option>
+									<?
+										foreach (array('day','week','month','year') as $timeframe)
+										{
+											?>
+											<option value="<?= $timeframe ?>"><?= ucfirst($timeframe) ?> </option>
+											<?
+										}
+									?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td> <div class="label-pricing">Guest Fee: $</div> </td>
+						<td> <input class="input" type="text" name="cost_guest" value="<?= $__cost_guest ?>" /> </td>
+						<td> per </td>
+						<td>
+							<select type="select" name="cost_guest_timeframe">
+								<option value="<?= $__cost_guest_timeframe ?>"><?= ucfirst($__cost_guest_timeframe) ?></option>
+								<option value="">----</option>
+									<?
+										foreach (array('day','week','month') as $timeframe)
+										{
+											?>
+											<option value="<?= $timeframe ?>"><?= ucfirst($timeframe) ?> </option>
+											<?
+										}
+									?>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td> <div class="label-pricing">Initiation Fee: $</div> </td>
+						<td> <input class="input" type="text" name="cost_to_join" value="<?= $__cost_to_join ?>" /> </td>
+						<td> </td>
+						<td> </td>
+					</tr>
+				</table>
+
+				<div class="ihrsa">
+					<input type="checkbox" class="checkbox" id="cb_is_ihrsa" <?=$__is_ihrsa?'checked':''?> onClick="ezAjax.tools.toggleHiddenBoolean('#is_ihrsa')"/>
+					<input type="hidden" name="is_ihrsa" id="is_ihrsa" value="<?= $__is_ihrsa ?>" />
+					<label for="cb_is_ihrsa"> IHRSA Passport Program Participant ?  </label>
+				</div>
+	
+	
+			</div>
+
+			</fieldset>
+
+		</div> <!-- biz-hours-pricing -->
+
+
+		<div class="submit-buttons">
+			<? /*	<input type=submit name="do_save" value="Save" /> */ ?>
+				<input type=submit name="do_next" value="Next &raquo;" />
+		</div>
+
+
+
+	</form>
+
+
+</div>

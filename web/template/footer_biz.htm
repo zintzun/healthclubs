@@ -1,0 +1,43 @@
+
+			<div id="footer">
+			
+				<div class="nav">
+			
+					<? /* <a href="/"><?= APP_TITLE ?></a><span class="pipe"> - </span> */ ?>
+					 <a href="/biz/home">Home</a><span class="pipe"> - </span>
+					<a href="/biz/account-info">Account Info</a><span class="pipe"> - </span>
+					<a href="/biz/listings">My Listings</a><span class="pipe"> - </span>
+					<a href="/biz/leads">Leads</a><span class="pipe"> - </span>
+					<a href="/biz/billing">Billing &Invoices</a><span class="pipe"> - </span>
+					<a href="/biz/password">Change Password</a><span class="pipe"> - </span>
+					<a href="/biz/faq">Help & FAQs</a><span class="pipe"> - </span>
+					<a href="/biz/customer-support">Customer Support</a><span class="pipe"> - </span>
+					<a href="/logout">Logout</a>
+					<br /><br />
+				</div>
+					
+					<div class="copyright">Copyright &copy; <?= date('Y') ?> <?= APP_TITLE ?> - All rights reserved - <a href="/privacy">Privacy Policy</a>  - <a href="/terms">Terms of Service</a> - <a href="/site-map">Sitemap</a>  <?= (CACHE_FULL_PAGES && preg_match(CACHE_THIS_ACTION,$TARGET->action)) ? '' : '- Dynamic' ?></div>
+			
+				</div>
+			</div>
+
+<?php
+
+	 if ( DEBUG ) 
+	 {
+	 	foreach ( array('_SESSION','_GET','_COOKIE','_POST') as $superglobal )
+	 	{
+	 		print "<hr /><br />";
+	 		print "<b>\$$superglobal</b>";
+	 		print_ar(${$superglobal	});
+	 	} 
+	 } 
+
+?>
+
+		</div>
+
+		<? include "template/analytics.htm"; ?>
+		
+	</body>
+</html>

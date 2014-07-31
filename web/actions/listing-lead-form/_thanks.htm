@@ -1,0 +1,26 @@
+<div class="thanks-text">
+	Thanks for claiming your "<?=$__coupon->value ?>" to "<?=$__biz->name ?>". 
+	It will be activated once you have received a confirmation call to verify your submission. 
+</div>
+
+<div class="coupon">
+	<div>
+		<img height="41" width="138" border="0" src="/template/gfx/healthclubs-logo.jpg" style="margin-top: -8px;"/>
+	</div>
+	<br clear="left" />	
+		
+		<h2><?=$__coupon->value ?></h2>
+	
+		<h3>at</h3>
+		<h2><?=$__biz->name ?></h2>
+		<h2>for <?=$__parms['first_name'].' '.$__parms['last_name'] ?></h2>
+
+		<div class="fine_print">
+			This coupon has no monetary value and cannot be exchanged for cash. Coupon will be activated after receiving a confirmation call to verify your submission.
+	</div>
+</div>
+
+<div class="print-button">
+	<input type="button" onClick="window.print()" value="Print" />
+</div>
+

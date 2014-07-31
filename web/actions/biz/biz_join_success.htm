@@ -1,0 +1,26 @@
+<h1>Almost There!</h1>
+<br />
+<p>We have just sent a validation link to your email address in order to verify your account creation. <? /* <b><?= $_SESSION['MAILED_USER']->email  */ ?></b></p>
+<br />
+<ul>
+	<li>Click the validation link in the email to activate your account</li>
+	<li>Please allow up to 30 minutes for the email to arrive</li>
+	<li>If you don't receive the email, check your spam folder</li>
+</ul>
+
+<br />
+
+<p>If the validation email email doesn't arrive within 30 minutes, you can click the link below to resend it.</p>
+
+<p>
+	<a href="/biz/resend-validation"><u>Re-send validation email</u></a>
+</p>
+
+<?
+
+	if ( IS_LOCALHOST && isset($_SESSION['LAST_MAIL_DEBUG']) )
+	{
+		print_ar($_SESSION['LAST_MAIL_DEBUG']);
+	}
+
+?>

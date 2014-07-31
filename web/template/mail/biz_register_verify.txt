@@ -1,0 +1,14 @@
+From: Healthclubs.net <service@healthclubs.net>
+Subject: Please Validate Your Account
+
+Hello,
+
+
+Thanks for registering at Healthclubs.net. Please click the below link to confirm your email address and activate your account.
+
+
+	{link}
+
+
+Regards,
+Healthclubs.net

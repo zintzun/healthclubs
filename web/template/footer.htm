@@ -1,0 +1,17 @@
+<?
+
+	// if ( preg_match('/^(biz)/i',$TARGET->action) )
+	
+	if ( session_is_active() && preg_match('/^(biz)/i',$TARGET->action) )
+	{
+		include "template/footer_biz.htm";
+	}
+	else if ( preg_match('/^(admin)/i',$TARGET->action) )
+	{
+		include "template/footer_admin.htm";
+	}
+	else
+	{
+		include "template/footer_public.htm";
+	}
+	

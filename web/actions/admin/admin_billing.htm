@@ -1,0 +1,81 @@
+<?= html_tabs($ADMIN_NAV); ?>
+<form method="get" action="/<?= $TARGET->action_orig ?>">
+<h1>
+	Billing &#9658; 
+	<? $title = billing_date_select() ?> 
+	<input type="text" name="bill-search" value="<?= $__bill_search ?>" /><input type="submit" value="search" /><input type="submit" value="clear" name="clear-search"/>
+	<input type="hidden" name="show-custom" value="<?= $__show_custom ?>" />
+	&nbsp;&nbsp;&nbsp;<input type="text" size="4" name="global-rate" value="<?= $__global_rate ?>"/><input type="submit" name="set-global-rate" value="set global rate" />
+</h1>
+</form>
+
+<div id="admin-billing">
+
+	<div class="actions">
+		<a href="/admin/billing-show-custom-rate-users">Show Businesses With Custom Rates</a><br />
+		<a href="/admin/billing-errors">View Unresolved Billing Issues</a><br />
+		<a href="/admin/billing?export=true&letter=<?= $__letter ?>&range=<?= $__range ?>&bill-search=<?= $__bill_search ?>" target="_blank">Export Current View</a>
+	</div>
+
+<? 
+
+	if ( $__leads )
+	{
+		
+		?>
+			<div class="letterbar">
+				<?= $__letter_bar ?>
+			</div>
+			<div class="title">
+				<?= $title ?>
+			</div>
+			<div class="results">
+				<table>
+					<tr>
+						<th>Account Id</th>
+						<th>Business Name</th>
+						<th>Leads</th>
+						<th>Amount</th>
+						<th>Cur. Lead Rate</th>
+						<th></th>
+					</tr>
+					<?
+
+						$ttl_leads   = 0;
+						$ttl_revenue = 0;
+						
+						foreach ( $__leads as $lead )
+						{
+							$ttl_leads++;
+							$ttl_revenue+=$lead->amount;
+							
+							?>
+								<tr>
+									<td><?= $lead->user_id ?></td>
+									<td><?= $lead->biz_name ?></td>
+									<td><?= $lead->num_leads ?></td>
+									<td>$<?= number_format($lead->amount,2) ?></td>
+									<td><?=  '$'.number_format(get_lead_rate($lead->user_id),2) ?> <span style="font-size: 10px;">(<a href="/admin/billing-detail/<?= $lead->user_id ?>?range=<?= $__range ?>">change</a>)</span></td>
+									<td><a href="/admin/billing-detail/<?= $lead->user_id ?>?range=<?= $__range ?>">More info &raquo;</a></td>
+								</tr>
+							<?
+						}
+						
+					?>
+				</table>
+			</div>
+			<div class="totals">
+				<span class="label">Total Leads:</span> <?= $ttl_leads ?> - <span class="label">Total Revenue:</span> $<?= number_format($ttl_revenue,2) ?>
+			</div>
+		<?
+
+	}
+	else
+	{
+		?>
+			<div class="fade" style="padding: 50px 0; font-size: 20px;">No Leads</div>
+		<?
+	}
+
+?>
+</div>

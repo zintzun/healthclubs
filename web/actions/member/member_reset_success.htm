@@ -1,0 +1,22 @@
+<h1>Almost Done!</h1>
+
+<p>We just sent a password reset link to <b><?= $_SESSION['MAILED_USER']->email ?></b></p>
+
+<ul>
+	<li>Please click the password reset link in the email</li>
+	<li>Please allow up to 30 minutes for the email to arrive</li>
+	<li>Please be sure to check your spam folder</li>
+</ul>
+
+<p>
+	<a href="/member/reset-password"><u>Re-send email</u></a>
+</p>
+
+<?
+
+	if ( IS_LOCALHOST && isset($_SESSION['LAST_MAIL_DEBUG']) )
+	{
+		print_ar($_SESSION['LAST_MAIL_DEBUG']);
+	}
+
+?>

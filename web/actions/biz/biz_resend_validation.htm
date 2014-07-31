@@ -1,0 +1,21 @@
+<h1>Reset Password</h1>
+
+<div class="reset-explain">
+	Please enter your username or email to re-send your validation email.
+</div>
+
+<div class="reset-form">
+<form method="post" action="/<?= $TARGET->action_orig; ?>">
+
+	<div class="label">
+		Username / Email:
+	</div>
+	<div class="input username">
+		<input type="text" name="username" value="" id="username" autocomplete="on"/>
+	</div>
+	
+	<input type="submit" name="do_resend_validation" value="Re-send Validation" />
+	
+	
+</form>
+</div>

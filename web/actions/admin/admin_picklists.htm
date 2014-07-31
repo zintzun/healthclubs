@@ -1,0 +1,48 @@
+<?= html_tabs($ADMIN_NAV) ?>
+
+
+	<h1>Edit Picklists &#9658;
+	<select name="picklist" id="picklist" onChange="window.location='/admin/picklists/'+this.value;">
+	<?
+		print '<option value="'.$__picklist.'">'.$__picklist.'</option>';
+		print '<option>---</option>';
+		
+		foreach ($PICKLISTS as $picklist)
+		{
+			print "<option value=\"$picklist\">$picklist</option>";
+		}
+	?>
+	</select>
+	</h1>
+
+	<form method="post" action="/<?= $TARGET->action_orig ?>" id="my-form-id">
+	<table>
+		<tr>
+			<td><input type="text" name="item_value" class="input-text	" value="<?=(isset($__edit)?$__edit->value:'')?>" /></td>
+			<td><input type="submit" name="do_add_or_edit" id="do_add_or_edit" class="input-submit" value="Edit / Add" /></td>
+		</tr>
+	</table>
+</form>
+
+<?
+
+	if ( isset($__picklist_items) )
+	{
+		
+		foreach ($__picklist_items as $item_id => $value)
+		{
+			print
+			"<div style='margin: 5px 0 5px 0;'>" .
+			"<a href=\"javascript:ezAjax.tools.confirm('Sure you want to remove this?','/admin/picklists/".$__picklist."?delete={$item_id}')\" title='Delete item'>".
+				"<img src='/template/gfx/icons/delete.png' style='vertical-align: middle; border: 0;'></a> ".
+			"<a href='/admin/picklists/".$__picklist."/{$item_id}' title='Edit this review.'>".
+				"<img src='/template/gfx/icons/image_edit.png' style='vertical-align: middle; border: 0;'></a>" .
+			"<a href='/admin/picklists/".$__picklist."?bump_down={$item_id}' title='Bump down.'>".
+				"<img src='/template/gfx/icons/arrow_down.png' style='vertical-align: middle; border: 0;'></a>" .
+			"<a href='/admin/picklists/".$__picklist."?bump_up={$item_id}' title='Bump up.'>".
+				"<img src='/template/gfx/icons/arrow_up.png' style='vertical-align: middle; border: 0;'></a>" .
+			" {$value}"."</div>";
+		}
+		
+	}
+?>

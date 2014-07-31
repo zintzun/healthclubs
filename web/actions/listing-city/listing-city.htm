@@ -1,0 +1,101 @@
+<?
+
+	if ( isset($FORCE_ERROR_PAGE) )
+	{
+		include "actions/page-not-found/page-not-found.proc";
+		include "actions/page-not-found/page-not-found.htm";
+		return;
+	}
+
+?>
+<h1><?= $TARGET->content_title ?></h1>
+
+<div class="listing-block">
+<?php
+
+	/*
+	* Print out business listings
+	*/
+
+	$letters    = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$cur_letter = 1;
+
+	if ( $BUSINESSES )
+	{
+		foreach ( $BUSINESSES as $idx => $biz )
+		{
+		
+			$jump_to = '';
+			if ( $biz->geocode_status == 'retrieve_success' )
+			{
+				$jump_to = "<a href=\"javascript:;\" class=\"marker$idx\"><img src=\"/template/gfx/pins/f{$cur_letter}.gif\" border=\"0\"/></a>";
+				$cur_letter++;
+				if ( $cur_letter == 99 ) $cur_letter = 1;
+			}
+
+			$logo = '';
+			$restrict_address_width = '';
+			if ($biz->is_premium && $biz->logo)
+			{
+				$restrict_address_width = 'restrict';
+				$logo = "<div class=\"logo\"><img src=\"{$biz->logo}\" /></div>";
+			}
+
+print <<<END
+<div class="item">
+	<div class="pin">$jump_to</div>
+	$logo
+	<div class="address $restrict_address_width">
+		<a href="{$biz->link}">{$biz->name}</a><br>
+		{$biz->street}<br>
+		{$biz->city}, {$biz->state} {$biz->zip}
+END;
+
+if ( ! $biz->is_premium )
+{
+
+print <<<END
+		<br>
+		<a href="{$biz->link}" class="more">More Info &raquo;</a>
+END;
+
+}
+
+print <<<END
+	</div>
+<br clear="all" />	
+END;
+
+if ( $biz->is_premium )
+{
+	?><div class="coupon"><a href="<?= $biz->link ?>"><img src="/template/gfx/icons/coupon.gif" border="0"/></a></div><?
+}
+
+print <<<END
+</div>
+END;
+		}
+	}
+
+?>
+</div>
+
+
+<div class="map-block">
+<?php
+
+	/*
+	* Print out Google map with pins
+	*/
+
+	if ( $BUSINESSES && $GMAP_MARKER_JS )
+	{
+		print "<div id='map' style='width:570px;height:350px'></div>\n";
+		print "<script>\n";
+		print "ezAjax.gmaps.init($MAP_CENTER_JS_ARGS);\n";
+		print $GMAP_MARKER_JS;
+		print "</script>\n";
+	}
+
+?>
+</div>

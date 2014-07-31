@@ -1,0 +1,10 @@
+From: HealthClubs.net <service@healthclubs.net>
+Subject: Welcome to Healthclubs.net
+
+Hello {name},
+
+This email confirms that you have successfully created your account at Healthclubs.net
+
+
+Regards,
+Healthclubs.net

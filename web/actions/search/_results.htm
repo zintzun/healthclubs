@@ -1,0 +1,50 @@
+<h1><?= $TARGET->content_title ?></h1>
+<div class="search-info">
+	<b class="cur-num"><?= ($START_ROW+1) ?> - <?= ($START_ROW+1)+(count($BUSINESSES)-1) ?></b> of <b class="amount"><?= number_format($NUM_RESULTS) ?></b> for <b class="query"><?= $_REQUEST['q'] ?></b>
+</div>
+<br />
+<div class="results">
+<?php
+
+	/*
+	* Print out business listings
+	*/
+
+		foreach ( $BUSINESSES as $idx => $biz )
+		{
+
+			$admin_icons = '';
+			if ( isset($SHOW_ADMIN_CONTROLS) )
+			{
+				$admin_icons = "<div style='float: left; height: 100px; margin-right: 5px;'><a href=\"javascript:ezAjax.tools.confirm('Are you sure you want to delete this business ?','/admin/business?delete={$biz->biz_id}')\" title='Delete business'><img src='/template/gfx/icons/delete.png' style='vertical-align: middle; border: 0;'></a> <a href='/admin/business/{$biz->biz_id}' title='Full edit (main edit page)'><img src='/template/gfx/icons/application_form_edit.png' style='vertical-align: middle; border: 0;'></a></div>";
+			}
+			
+				$logo = '';
+			/*
+				if ( $biz->logo )
+				{
+					$logo = "<div class=\"logo\"><img src=\"{$biz->logo}\" /></div>";
+				}
+			*/
+			
+print <<<END
+<div class="item" style="clear: both;">
+	$admin_icons 
+	$logo
+	<div class="address">
+		<a href="{$biz->link}">{$biz->name}</a><br>
+		{$biz->street}<br>
+		{$biz->city}, {$biz->state} {$biz->zip}<br>
+		{$biz->phone}<br>
+		<a href="{$biz->link}" rel="nofollow" class="more">More Info &raquo;</a>
+		<hr>
+	</div>
+</div>
+END;
+		}
+	
+		// Set up the paging
+		print "<div class='pager'><b class='title'>Page:</b> ".simple_pager($NUM_RESULTS,$CUR_PAGE,'<b>Pages:</b>',"/{$TARGET->action_orig}",'&q='.urlencode($_REQUEST['q'])).'</div>';
+	
+?>
+</div>

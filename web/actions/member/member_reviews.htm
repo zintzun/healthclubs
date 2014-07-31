@@ -1,0 +1,20 @@
+<?= html_tabs($MEMBER_NAV) ?>
+<h1><?= $__title ?></h1>
+<? if ( ! $__reviews ) { ?>
+	<p>No reviews written just yet!</p>
+<? } else { ?>
+	<p>Please click one of your reviews if you would like to view, edit or delete it:</p>
+	<?
+	
+		foreach ( $__reviews as $review )
+		{
+			
+			$link = "/".$review->type."/".get_long_state($review->state)."/".format_link_subject($review->city)."/{$review->biz_id}/".format_link_subject($review->name);			
+			$submitted = format_submit_time($review->last_updated)
+			?><a href="<?=$link?>#r<?=$review->review_id?>" target="_blank">
+				<?="{$review->name}, {$review->city}, {$review->state}"?>
+				</a>, <span class="small fade"><?= $submitted?></span><br /><?
+		}
+	
+	?>
+<? } ?>

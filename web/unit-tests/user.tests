@@ -1,0 +1,338 @@
+<?php
+
+	/*
+	* Tests for user.inc
+	*/		
+
+
+	class user_tests extends UnitTestCase
+	{
+		// A valid input array with required parms to create anew user record;
+
+		// Required parameters
+		var $parms = array
+		(
+			'email'     => 'testname@test.com',
+			'login'     => 'test_update_login_1',
+			'password'  => 'password',
+		);
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* This makes it easy to access the classes withotu having to re 
+		* initialise them in every test function
+		*/
+
+		function __construct()
+		{
+			$this->u = new user();
+		}
+
+	
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* These tests prove that all the functions exist in the loaded class
+		*/	
+
+		function test_functions_exist()
+		{
+			
+			// TEST FUNCS EXIST IN user CLASS
+			$functions = array
+			(
+				'add',
+				'remove',
+				'update',
+				'update_value',
+				'update_email',
+				'update_login',
+			);
+		
+			$user = new user();
+		
+			foreach ($functions as $function) 
+			{
+				$this->assertTrue( method_exists($user, $function), "user function ($function) does not exist" );
+			}
+		}
+
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_table_exist()
+		*/	
+
+		function test_table_exist()
+		{
+			global $db;
+			$this->assertEqual( $db->get_var("SHOW TABLES LIKE 'users'"), 'users');
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_user_add_for_test()
+		*/	
+
+		function test_user_add_for_test()
+		{
+			global $db;
+			return;
+			$parms = array
+			(
+				'email'     => 'ian@test.com',
+				'login'     => 'zintzun',
+				'password'  => 'password',
+				'first_name' => 'Ian',
+				'last_name' => 'Garcia',
+				'is_validated' => 1,
+			);
+			$this->assertEqual( is_error($this->u->add($parms)), false);
+			$parms = array
+			(
+				'email'     => 'igo@test.com',
+				'login'     => 'ianigo',
+				'password'  => 'password',
+				'first_name' => 'Cesar',
+				'last_name'  => 'Chavez',
+
+			);
+
+			$this->assertEqual( is_error($this->u->add($parms)), false);
+
+		}
+
+
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_user_add()
+		*/	
+
+		function test_user_add()
+		{
+			global $db;
+
+			// Test for non-array as a parameter
+			$this->assertEqual( is_error($this->u->add('')), 'require_parms_array');
+			
+			// Test for required parameters
+			foreach ( $this->parms as $parm => $value )
+			{
+				$temp_parms = $this->parms;
+				unset($temp_parms[$parm]);
+				$this->assertEqual( is_error($this->u->add($temp_parms)), "missing_$parm");
+			}
+			
+			// Test for valid email
+			$temp_parms = $this->parms;
+			$temp_parms['email'] = '';
+			$this->assertEqual( is_error($this->u->add($temp_parms)), "bad_email_address");
+						
+			// Insert test record
+			$temp_parms = $this->parms;
+			$temp_parms['login'] = 'testlogintest';
+			$this->assertEqual( is_error($this->u->add($temp_parms)), false);
+			
+			// Test for same email
+			$this->assertEqual( is_error($this->u->add($temp_parms)), 'email_already_in_db');
+			
+			// Test for same login
+			$temp_parms['email'] = 'second_email@test.com';
+			$this->assertEqual( is_error($this->u->add($temp_parms)), 'login_already_exists');
+			
+			// Delete test record
+			$this->assertEqual($db->query("DELETE FROM users WHERE email = '{$this->parms['email']}'"), true);
+			
+		}
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_user_remove()
+		*/	
+	
+		function test_user_remove()
+		{
+			global $db;
+
+			// Test for non existing user
+			$this->assertEqual(is_error($this->u->remove(11111111)),false);
+
+			// Create a test record
+			$this->assertEqual( is_error($user_id=$this->u->add($this->parms)), false);
+
+			// Test remove by user_id
+			$this->assertEqual(is_error($this->u->remove($user_id)),false);
+
+			$test_parms = $this->parms;
+			foreach (array('user_id','email','login') as $field)
+			{
+				// Create a test record
+				$this->assertEqual(is_error($test_parms['user_id']=$this->u->add($this->parms)), false);
+				
+				// Test remove by field
+				$this->assertEqual(is_error($this->u->remove($test_parms[$field])),false);
+				
+				// Verify user was removed;
+				$this->assertEqual(is_error($this->u->get($test_parms[$field])), false);
+			}
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_user_update()
+		*/
+	
+		function test_user_update()
+		{
+			global $db;
+
+			// Array with new values to update
+			$parms = array
+			(
+				'login'        => 'test_login',
+				'first_name'   => 'tesT_first_name',
+				'last_name'    => 'test_last_name',
+				'biz_name'     => 'test_biz_name',
+				'biz_position' => 'test_biz_position',
+				'phone'        => '111-111-11-11',
+				'is_admin'     => '0',
+				'is_validated' => '1',
+			);
+
+			// Test for non existing user
+			$this->assertEqual(is_error($this->u->update('', $this->parms)),'user_does_not_exist');
+			$this->assertEqual(is_error($this->u->update(1111111111, $this->parms)),'user_does_not_exist');
+
+			// Create a test record
+			$this->assertEqual( is_error($user_id=$this->u->add($this->parms)), false);
+			
+			// Test Update user with new parms
+			$this->assertEqual(is_error($this->u->update($user_id, $parms)),false);
+			
+			// Get record just updated
+			$this->assertEqual(is_error($user = $this->u->get($user_id)), false);
+			
+			// Verify fields have new values
+			foreach ($parms as $field => $value)
+			{
+				$this->assertEqual($user->$field,$value);
+			}
+			
+			// Delete test record
+			$this->assertEqual(is_error($this->u->remove($user_id)),false);
+		}
+
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_user_update_login()
+		*/	
+	
+		function test_user_update_login()
+		{
+			global $db;
+
+			// Create test records #1
+			$this->assertEqual( is_error($user_id_1=$this->u->add($this->parms)), false);
+			
+			// Create test records #2
+			$temp_parms = $this->parms;
+			$temp_parms['login'] = 'test_update_login_2';
+			$temp_parms['email'] = 'test_update_2e@test.com';
+			$this->assertEqual( is_error($user_id_2=$this->u->add($temp_parms)), false);
+
+			// Test for update login with previously used login
+			$this->assertEqual(is_error($this->u->update_login($user_id_1,'test_update_login_2')), 'login_already_exists');
+
+			// Test for empty login
+			$this->assertEqual(is_error($this->u->update_login($user_id_1,'')), 'missing_login');
+
+			// Test for successful login update
+			$this->assertEqual(is_error($this->u->update_login($user_id_1,'new_update_login')), false);
+
+			// Get record just updated
+			$this->assertEqual(is_error($user = $this->u->get($user_id_1)), false);
+			
+			// Verify the change
+			$this->assertEqual($user->login,'new_update_login');
+
+			// Delete test records
+			$this->assertEqual(is_error($this->u->remove($user_id_1)),false);
+			$this->assertEqual(is_error($this->u->remove($user_id_2)),false);
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_user_update_email()
+		*/	
+	
+		function test_user_update_email()
+		{
+			global $db;
+			
+			// Create test records #1
+			$this->assertEqual( is_error($user_id_1=$this->u->add($this->parms)), false);
+			
+			// Create test records #2
+			$temp_parms = $this->parms;
+			$temp_parms['login'] = 'test_update_email_2';
+			$temp_parms['email'] = 'test_update_email2@test.com';
+			$this->assertEqual( is_error($user_id_2=$this->u->add($temp_parms)), false);
+
+			// Test for email update with previously used email
+			$this->assertEqual(is_error($this->u->update_email($user_id_1,'test_update_email2@test.com')), 'email_already_in_db');
+
+			// Test for bad email
+			$this->assertEqual(is_error($this->u->update_email($user_id_1, 'bademail@.com')),'bad_email_address');
+
+			// Test for empty email
+			$this->assertEqual(is_error($this->u->update_email($user_id_1,'')), 'bad_email_address');
+
+			// Test for successful email update
+			$this->assertEqual(is_error($this->u->update_email($user_id_1,'new_update_email@test.com')), false);
+
+			// Get record just updated
+			$this->assertEqual(is_error($user = $this->u->get($user_id_1)), false);
+			
+			// Verify the change
+			$this->assertEqual($user->email,'new_update_email@test.com');
+
+			// Delete test records
+			$this->assertEqual(is_error($this->u->remove($user_id_1)),false);
+			$this->assertEqual(is_error($this->u->remove($user_id_2)),false);
+	
+		}
+
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_user_update_value()
+		*/	
+	
+		function test_user_update_value()
+		{
+			global $db;
+
+			// Create test records #1
+			$this->assertEqual( is_error($user_id=$this->u->add($this->parms)), false);
+			
+			foreach (array('url','password') as $field )
+			{
+				$this->assertEqual( is_error($this->u->update_value($user_id, $field, "test_$field")), false);
+			}
+
+			// Get record just updated
+			$this->assertEqual(is_error($user = $this->u->get($user_id)), false);
+
+			// Verify the changes
+			foreach (array('url','password') as $field )
+			{
+				$this->assertEqual($user->$field,"test_$field");
+			}
+
+			// Delete test record
+			$this->assertEqual(is_error($this->u->remove($user_id)),false);
+		}
+
+	}
+
+?>

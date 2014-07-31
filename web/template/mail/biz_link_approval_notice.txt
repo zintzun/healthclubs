@@ -1,0 +1,15 @@
+From: Healthclubs.net <service@healthclubs.net>
+Subject: {biz_name}
+
+Hello {first_name},
+
+We have linked "{biz_name}" to your Healthclubs.net account.
+
+You can login and customize the listing for "{biz_name}" using the link below:
+
+
+	--> {login_link}
+
+
+Regards,
+Healthclubs.net

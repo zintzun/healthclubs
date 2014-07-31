@@ -1,0 +1,24 @@
+<?= html_tabs($BIZ_NAV) ?>
+<h1><?= $__title ?></h1>
+<div style="width: 500px;">
+
+<p>
+If you have a question please fill out the form below and it will be sent to our staff. Our support staff will respond right away.
+</p>
+
+<?
+	$FORM = new form('/'.$TARGET->action_orig,'biz-support-form','Contact Customer Support');
+	$FORM->add('select','topic','','',$__question_topics,'Topic');
+	$FORM->add('textarea','question','','','','Your question');
+	$FORM->add('submit','do_biz_customer_support','Submit');
+	print $FORM->render();
+?>
+
+</div>
+
+<?
+	if ( IS_LOCALHOST && isset($_SESSION['LAST_MAIL_DEBUG']) )
+	{
+		print_ar($_SESSION['LAST_MAIL_DEBUG']);
+	}
+?>

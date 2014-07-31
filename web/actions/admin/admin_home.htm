@@ -1,0 +1,34 @@
+<?= html_tabs($ADMIN_NAV) ?>
+<h1>
+	Welcome Back <?= ucfirst(strtolower( $_SESSION['USER']['login'])) ?>
+</h1>
+
+<h2>To Do</h2>
+
+There are <?=$__stats['todo_leads'] ?> Leads to <a href="/admin/leads/health-clubs/unapproved">moderate</a><br />
+There are <?=$__stats['todo_biz'] ?> new Business Accounts to <a href="/admin/members/new_user/biz">verify</a><br />
+There are <?=$__stats['todo_u_biz'] ?> Businness Accouns that <a href="/admin/members/edited_details/biz">updated their information</a><br />
+There are <?=$__stats['todo_members'] ?> new Member Accounts to <a href="/admin/members/new_user/member">verify</a><br />
+There are <?=$__stats['todo_u_members'] ?> Members who recently <a href="/admin/members/edited_details/member">updated their information</a><br />
+There are <?=$__stats['todo_claims'] ?> Listing Claims to <a href="/admin/listing-claims/new">verify</a><br />
+There are <?=$__stats['todo_reviews'] ?> Reviews to <a href="/admin/reviews/unapproved">moderate</a><br />
+<br />
+
+<h2>Today's Activity</h2>
+
+Leads:             <?=$__stats['todays_leads']   ?><br />
+Business Accounts: <?=$__stats['todays_biz']     ?><br />
+Members:           <?=$__stats['todays_members'] ?><br />
+Claims:            <?=$__stats['todays_claims']  ?><br />
+Reviews:           <?=$__stats['todays_reviews'] ?><br />
+<br />
+
+
+<h2>Lead Counts</h2>
+
+Leads last 7 days:  <?=$__stats['last_weeks_leads']   ?><br />
+Leads this month: <?=$__stats['current_months_leads']   ?><br />
+Leads last month: <?=$__stats['last_months_leads']   ?><br />
+Leads all time: <?=$__stats['all_time']   ?><br />
+
+<br /><br />

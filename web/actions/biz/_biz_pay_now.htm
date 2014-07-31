@@ -1,0 +1,22 @@
+<?= html_tabs($BIZ_NAV) ?>
+
+<div style="width: 500px; margin: auto;">
+
+
+<?
+	$FORM = new form('/'.$TARGET->action_orig,'payment-form','Payment Information');
+	
+	if (isset($suggestion))
+	{
+		$FORM->add('hidden','suggestion',$suggestion[0]);
+	}
+
+	foreach ($__fields as $field)
+	{
+			$FORM->add('text',$field,'','','',ucwords(str_replace('_',' ',$field)));
+	}
+	$FORM->add('submit','do_payment','Submit');
+	print $FORM->render();
+?>
+
+</div>

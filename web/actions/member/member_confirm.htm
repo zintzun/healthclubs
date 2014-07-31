@@ -1,0 +1,17 @@
+<? if ( preg_match('/(success)/',$__confirm_status) ) { ?>
+<h1>Congratulations!</h1>
+<p>You have successfully joined <?= APP_TITLE ?></p>
+<p>To continue please <a href="/member/login">login here</a></p>
+<? } ?>
+
+<? if ( preg_match('/(already_validated)/',$__confirm_status) ) { ?>
+<h1>Oops!</h1>
+<p>It looks like that account is already validated.</p>
+<p>To continue please <a href="/member/login">login here</a></p>
+<? } ?>
+
+<? if ( preg_match('/(invalid_link_format|no_user|bad_secret)/',$__confirm_status) ) { ?>
+<h1>Validation Link Error</h1>
+<p>Oops. We could not recognise that validation link.</p>
+<p>Please be sure to copy/paste it exactly as written in the validation email.</p>
+<? } ?>

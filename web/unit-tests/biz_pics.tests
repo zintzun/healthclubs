@@ -1,0 +1,394 @@
+<?php
+
+	/*
+	* Tests for biz_pics.inc
+	*/		
+
+	include "interfaces/biz/biz_pics.inc";
+
+	class biz_pics_tests extends UnitTestCase
+	{
+		// A valid input array to create anew pic record;
+		var $parms = array
+		(
+			'biz_id'         => 0,
+			'pic_type'       => 'listing',
+			'img_src_path'   => 'unit-tests/gfx/marker.gif',
+			'mime_type'      => 'gif',
+			'width'          => '22',
+			'height'         => '37',
+		);
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* This makes it easy to access the classes withotu having to re 
+		* initialise them in every test function
+		*/
+
+		function __construct()
+		{
+			$this->p = new biz_pic();
+		}
+	
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* These tests prove that all the functions exist in the loaded class
+		*/	
+	
+		function test_functions_exist()
+		{
+			
+			// TEST FUNCS EXIST IN biz_pic CLASS
+			$functions = array
+			(
+				'store',
+				'remove',
+				'publish',
+				'unpublish',
+				'set_order',
+				'bump_up',
+				'bump_down',
+			);
+		
+			$biz_pic = new biz_pic();
+		
+			foreach ($functions as $function) 
+			{
+				$this->assertTrue( method_exists($biz_pic, $function), "biz_pic function ($function) does not exist" );
+			}
+		
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_table_exist()
+		*/	
+
+		function test_table_exist()
+		{
+			global $db;
+			$this->assertEqual( $db->get_var("SHOW TABLES LIKE 'biz_pics'"), 'biz_pics');
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_pic_store()
+		*/
+
+		function test_biz_pic_store()
+		{
+			/*
+			* Order is important!!!
+			*/
+			$field_value_error = array
+			(
+				array('biz_id',        '', 'missing_biz_id'),
+				array('pic_type',      '', 'missing_pic_type'),
+				array('img_src_path',  '', 'missing_src_path'),
+				array('mime_type',     '', 'missing_mime'),
+
+				array('biz_id',        'X', 'invalid_biz_id'),
+				array('pic_type',      'X', 'invalid_pic_type'),
+				array('img_src_path',  'X', 'file_not_found'),
+
+			);
+	
+			foreach ($field_value_error as $temp)
+			{
+				list($field, $value, $error)= $temp;
+				$temp_arr = $this->parms;
+				$temp_arr[$field] = $value;
+				$this->assertEqual(is_error($lead_id = $this->p->store($temp_arr)), $error);
+			}
+
+			// Test for a successful image storage
+			$this->assertEqual(is_error($pic_id = $this->p->store($this->parms)), false);
+
+			// Get the record just created above
+			$this->assertEqual(is_error($pic = $this->p->get($pic_id)), false);
+			
+			// By default is_approved is set to false;
+			$this->assertEqual($pic->is_published, false);
+			
+			// Remove record
+			$this->assertEqual(is_error($this->p->remove(0,$pic_id)), false);
+
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_pic_get()
+		*/	
+	
+		function test_biz_pic_get()
+		{
+			global $db;
+						
+			// $pic_id should be numeric
+			$this->assertEqual(is_error($this->p->get('bad pic id')), 'invalid_pic_id');
+
+			// Create a new pic record
+			$this->assertEqual(is_error($pic_id = $this->p->store($this->parms)), false);
+
+			// test it works!
+			$this->assertEqual(is_error($pic = $this->p->get($pic_id)), false);
+
+			$this->assertEqual($pic->width, $this->parms['width']);
+			
+			// Remove record
+			$this->assertEqual(is_error($this->p->remove(0,$pic_id)), false);
+
+		}
+
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_pic_remove()
+		*/	
+	
+		function test_biz_pic_remove()
+		{
+			global $db;
+
+			// $pic_id must be number
+			$this->assertEqual(is_error($this->p->remove(0,'bad pic id')), 'invalid_pic_id');
+
+			// Create a new pic record
+			$this->assertEqual(is_error($pic_id = $this->p->store($this->parms)), false);
+
+			// Remove record
+			$this->assertEqual(is_error($this->p->remove(0,$pic_id)), false);
+			
+			// We shouln't be able to get record
+			$this->assertEqual($this->p->get($pic_id), false);
+
+			// Verify that file doesn't exist;
+			$this->assertEqual(file_exists(BIZ_PICS_DIR."/0-$pic_id"), false);
+
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_pic_publish()
+		*/
+	
+		function test_biz_pic_publish()
+		{
+			// $pic_id must be number
+			$this->assertEqual($this->p->publish('bad pic id'), 'invalid_pic_id');
+			
+			// $pic_id must exist
+			$this->assertEqual($this->p->publish('10000000'), 'error: pic_id_not_found');
+			
+			// Create a new pic record, is_published is set to false by default
+			$this->assertEqual(is_error($pic_id = $this->p->store($this->parms)), false);
+			
+			// Set is_published to true;
+			$this->assertEqual(is_error($this->p->publish($pic_id)), false);
+			
+			// Get the record just created above
+			$this->assertEqual(is_error($pic = $this->p->get($pic_id)), false);
+			
+			// is_published should be true
+			$this->assertEqual($pic->is_published, true);
+			
+			// Remove record
+			$this->assertEqual(is_error($this->p->remove(0,$pic_id)), false);
+		}
+
+		function test_biz_pic_unpublish()
+		{
+			// $pic_id must be number
+			$this->assertEqual($this->p->unpublish('bad pic id'), 'invalid_pic_id');
+			
+			// $pic_id must exist
+			$this->assertEqual($this->p->unpublish('10000000'), 'error: pic_id_not_found');
+			
+			// Create a new pic record, set is_published = true;
+			$temp_array= $this->parms;
+			$temp_array['is_published'] = true;
+			$this->assertEqual(is_error($pic_id = $this->p->store($temp_array)), false);
+			
+			// Get the record just created above
+			$this->assertEqual(is_error($pic = $this->p->get($pic_id)), false);
+			
+			// is_published should be true
+			$this->assertEqual($pic->is_published, true);
+
+			// Set is_published to false;
+			$this->assertEqual(is_error($this->p->unpublish($pic_id)), false);
+
+			// get the record
+			$this->assertEqual(is_error($pic = $this->p->get($pic_id)), false);
+
+			// Verify is_published is false;
+			$this->assertEqual($pic->is_published, false);
+
+			// Remove record
+			$this->assertEqual(is_error($this->p->remove(0,$pic_id)), false);
+		}
+		
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_pic_set_order()
+		*/
+
+		function test_biz_pic_set_order()
+		{
+			global $db;
+			
+			$pic_ids = array();
+			
+			// Create 3 new pic records.
+			for($i=0;$i<3;$i++)
+			{
+				$this->assertEqual(is_error($pic_ids[] = $this->p->store($this->parms)), false);
+			}
+			
+			// $pick_val_id must be number
+			$this->assertEqual(is_error($this->p->set_order('bad pic id vlaue',1)), 'invalid_pic_id');
+			
+			// $new_position must be number
+			$this->assertEqual(is_error($this->p->set_order($pic_ids[0],'bad new position')), 'invalid_new_position');
+
+			// must throw error if record doesn't exist
+			$this->assertEqual(is_error($this->p->set_order(10000000000,1)), 'pic_id_not_found');
+
+			// It should set the new position
+			$new_position = 1;
+			$this->assertEqual($this->p->set_order($pic_ids[2],$new_position), true);
+			
+			// get the record
+			$this->assertEqual(is_error($pic = $this->p->get($pic_ids[2])), false);
+			
+			// the new order should be $new_position
+			$this->assertEqual($pic->sort_order, $new_position);
+			
+			// Delete records created for test;
+			for($i=0;$i<3;$i++)
+			{
+				$this->assertEqual(is_error($this->p->remove(0,$pic_ids[$i])), false);
+			}
+		}
+		
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_pic_bump_up()
+		*/	
+	
+		function test_biz_pic_bump_up()
+		{
+			global $db;
+			$pic_ids = array();
+			
+			// Create 3 new pic records.
+			for($i=0;$i<3;$i++)
+			{
+				$this->assertEqual(is_error($pic_ids[] = $this->p->store($this->parms)), false);
+			}
+			
+			// Get position of first record;
+			$this->assertEqual(is_error($pic = $this->p->get($pic_ids[0])), false);
+			$first_position = $pic->sort_order;
+			
+			// pic_id must be number
+			$this->assertEqual(is_error($this->p->bump_up('bad pic id')), 'invalid_pic_id');
+			
+			// Test for non existing pic
+			$this->assertEqual(is_error($this->p->bump_up( 1000000000 )), 'pic_id_not_found');
+
+			// Test function bump_up
+			$this->assertEqual(is_error($this->p->bump_up($pic_ids[0])) , false);
+
+			// get first record
+			$this->assertEqual(is_error($pic = $this->p->get($pic_ids[0])), false);
+			
+			// new position should be old position + 1
+			$this->assertEqual($pic->sort_order, $first_position + 1);
+
+			// get second record
+			$this->assertEqual(is_error($pic = $this->p->get($pic_ids[1])), false);
+
+			// Second record should have $first_position
+			$this->assertEqual($pic->sort_order, $first_position);
+			
+			// Delete records created for test;
+			for($i=0;$i<3;$i++)
+			{
+				$this->assertEqual(is_error($this->p->remove(0,$pic_ids[$i])), false);
+			}
+		}
+
+		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_pic_bump_down()
+		*/	
+	
+		function test_biz_pic_bump_down()
+		{
+			global $db;
+			$pic_ids = array();
+			
+			// Create 3 new pic records.
+			for($i=0;$i<3;$i++)
+			{
+				$this->assertEqual(is_error($pic_ids[] = $this->p->store($this->parms)), false);
+			}
+			
+			// Get position of last record inserted.
+			$this->assertEqual(is_error($pic = $this->p->get($pic_ids[2])), false);
+			$last_position = $pic->sort_order;
+			
+			// pic_id must be number
+			$this->assertEqual(is_error($this->p->bump_down('bad pic id')), 'invalid_pic_id');
+			
+			// Test for non existing pic
+			$this->assertEqual(is_error($this->p->bump_down( 1000000000 )), 'pic_id_not_found');
+
+			// Test function bump_down
+			$this->assertEqual(is_error($this->p->bump_down($pic_ids[2])) , false);
+
+			// get 3rd record
+			$this->assertEqual(is_error($pic = $this->p->get($pic_ids[2])), false);
+			
+			// new position should be old position - 1
+			$this->assertEqual($pic->sort_order, $last_position - 1);
+
+			// get second record
+			$this->assertEqual(is_error($pic = $this->p->get($pic_ids[1])), false);
+
+			// Second record should have $last_position
+			$this->assertEqual($pic->sort_order, $last_position);
+
+			// Delete records created for test;
+			for($i=0;$i<3;$i++)
+			{
+				$this->assertEqual(is_error($this->p->remove(0,$pic_ids[$i])), false);
+			}
+
+		}
+
+	}
+	
+/*
+
+assertTrue($x)	Fail if $x is false
+assertFalse($x)	Fail if $x is true
+assertNull($x)	Fail if $x is set
+assertNotNull($x)	Fail if $x not set
+assertIsA($x, $t)	Fail if $x is not the class or type $t
+assertNotA($x, $t)	Fail if $x is of the class or type $t
+assertEqual($x, $y)	Fail if $x == $y is false
+assertNotEqual($x, $y)	Fail if $x == $y is true
+assertWithinMargin($x, $y, $m)	Fail if abs($x - $y) < $m is false
+assertOutsideMargin($x, $y, $m)	Fail if abs($x - $y) < $m is true
+assertIdentical($x, $y)	Fail if $x == $y is false or a type mismatch
+assertNotIdentical($x, $y)	Fail if $x == $y is true and types match
+assertReference($x, $y)	Fail unless $x and $y are the same variable
+assertClone($x, $y)	Fail unless $x and $y are identical copies
+assertPattern($p, $x)	Fail unless the regex $p matches $x
+assertNoPattern($p, $x)	Fail if the regex $p matches $x
+expectError($x)	Swallows any upcoming matching error
+assert($e)	Fail on failed expectation object $e
+
+*/
+	
+?>

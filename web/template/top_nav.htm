@@ -1,0 +1,130 @@
+<div id="nav_wrapper">
+
+	<div id="logo-bar">
+		<div id="search">
+			<form action="/search" method="get">
+				<input type="hidden" name="biz_type_search" value="<?= isset($TARGET->arg1)?$TARGET->arg1:$TARGET->action_orig ?>" />
+				<div style="float:left;"><div id="suggestions"></div><input type="text" class="fade" name="q" id="query" size="20" autocomplete="off" value="<?= (isset($_REQUEST['q'])?$_REQUEST['q']:'Enter Zip or Business') ?>" onKeyup="ezAjax.search.suggest(this)" onClick="ezAjax.tools.clearField(this,'')"/>
+					
+				</div>
+				<div style="float:left;"><input type="submit" value="Search" class="search-button" /></div>
+				<input type="hidden" name="search" value="1">
+			</form>
+		</div>
+		<a href="/"><img src="/template/gfx/healthclub-logo.jpg" alt="Health Clubs" width="263" height="71" border="0" id="Health_Clubs_Logo" /></a>
+	</div>
+
+	<div id="navcontainer">
+			<div class="navleftcnr">
+				<img src="/template/gfx/nav/navleftcnr.jpg" width="10" height="31" alt="" />
+			</div>
+			<div class="navbackgrnd">
+			 	<div id="nav-menu">
+			     <ul>
+			 		<?php
+			 		
+						/*
+			 			if ( session_is_active() )
+						{
+							$GLOBAL_NAV['login'] = array
+							(
+								'target' => '/logout',
+								'match'  => '/^logout/i',
+								'text'   => 'Logout',
+							);
+						}
+						*/
+			 		
+						$i=0;
+			      	foreach ( $GLOBAL_NAV as $count => $nav )
+			      	{
+			      		$last = '';
+			      		if ( ++$i == count($GLOBAL_NAV) )
+			      		{
+			      			$last = 'class="last"';	
+			      		}
+			      		
+			      		$highlight = '';
+							if ( preg_match($nav['match'],$TARGET->action_orig) )
+							{
+								$highlight = 'class="current"';
+							}
+			      		print "<li $last><a href='{$nav['target']}' $highlight>{$nav['text']}</a></li>\n";
+			      	}      
+			      ?>
+			     </ul>    
+			     </div>    
+			 </div>
+			<div class="navrightcnr">
+				<img src="/template/gfx/nav/navrightcnr.jpg" width="9" height="31" alt="" />
+			</div>
+		</div>
+	</div>
+
+<? /*
+<!--
+<div id="nav_wrapper">
+  
+	<div id="logo"><a href="/"><img src="/template/gfx/healthclubs-logo.jpg" alt="Health Clubs" width="232" height="71" border="0" id="Health_Clubs_Logo" /></a></div>
+ 
+ 	<div id="navcontainer">
+		<div class="navleftcnr">
+			<img src="images/navleftcnr.jpg" width="10" height="31" alt="" />
+		</div>
+		<div class="navbackgrnd">
+		 	<div id="nav-menu">
+		     <ul>
+		 		<?php
+		      	foreach ( $GLOBAL_NAV as $nav )
+		      	{
+		      		$highlight = '';
+						if ( preg_match($nav['match'],$TARGET->action_orig) )
+						{
+							$highlight = 'class="current"';
+						}
+		      		print "<li><a href='{$nav['target']}' $highlight>{$nav['text']}</a></li>\n";
+		      	}      
+		      ?>
+		     </ul>    
+		     </div>    
+		 </div>
+		<div class="navrightcnr">
+			<img src="images/navrightcnr.jpg" width="9" height="31" alt="" />
+		</div>
+	</div>
+ 
+ 
+
+  <div id="nav_bar">
+ 
+    <div id="nav-menu">
+      <ul>
+      <?php
+      	foreach ( $GLOBAL_NAV as $nav )
+      	{
+      		$highlight = '';
+				if ( preg_match($nav['match'],$TARGET->action_orig) )
+				{
+					$highlight = 'class="current"';
+				}
+      		print "<li><a href='{$nav['target']}' $highlight>{$nav['text']}</a></li>\n";
+      	}      
+      ?>
+      </ul>
+    </div>
+    
+		<div id="search">
+			<form action="/search" method="get">
+				<input type="hidden" name="biz_type_search" value="<?= isset($TARGET->arg1)?$TARGET->arg1:$TARGET->action_orig ?>" />
+				<div style="float:left;"><input type="text" class="fade" name="q" id="query" size="20" autocomplete="off" value="<?= (isset($_REQUEST['q'])?$_REQUEST['q']:'Enter Zip or Business') ?>" onKeyup="ezAjax.search.suggest(this)" onClick="ezAjax.tools.clearField(this,'')"/><div id="suggestions"></div></div>
+				<div style="float:left;"><input type="submit" value="Search" class="search-button" /></div>
+				<input type="hidden" name="search" value="1">
+			</form>
+		</div>
+
+  </div>
+
+</div>
+-->
+
+*/ ?>

@@ -1,0 +1,43 @@
+<?= html_tabs($ADMIN_NAV) ?>
+<h1><img src='/template/gfx/icons/image_edit.png' style='vertical-align: middle; border: 0;'> Fix Geocodes</h1>
+
+
+<div style="margin: 10px 0 0 0;">
+<?php
+
+	if ( isset($__edit) && $__edit )
+	{
+		$FORM = new form('/'.$TARGET->action_orig,'my-form-id','Edit Address');
+
+		$FORM->add('hidden','type',$__edit->type);
+	
+		foreach ( (array) $__edit as $k => $v )
+		{
+			if ( ! preg_match('/(name|street|zip|city)/i',$k) )
+			{
+				continue;
+			}
+			$FORM->add('text',$k,$v,'','',ucwords(str_replace('_',' ',$k)));
+		}
+
+		$FORM->add('select','state',$__edit->state,'',$GLOBALS['STATES_CAPITALISED'],'State');
+	
+		$FORM->add('submit','do_update','Update');
+	
+		print $FORM->render();
+		print "<br />";
+	}
+?>
+<b><?= number_format($__num_bad_addresses) ?> bad addresses</b>
+<?php
+
+	if ( isset($__bad_addresses) )
+	{
+		foreach ( $__bad_addresses as $item )
+		{
+			print "<div style='margin: 5px 0 5px 0;'><a href=\"javascript:ezAjax.tools.confirm('Sure?','/admin/fix-geocodes?delete={$item->biz_id}')\" title='Delete business'><img src='/template/gfx/icons/delete.png' style='vertical-align: middle; border: 0;'></a> <a href='/admin/fix-geocodes/{$item->biz_id}' title='Quick edit address (above)'><img src='/template/gfx/icons/image_edit.png' style='vertical-align: middle; border: 0;'></a> <a href='/admin/business/{$item->biz_id}' title='Full edit (main edit page)'><img src='/template/gfx/icons/application_form_edit.png' style='vertical-align: middle; border: 0;'></a> {$item->name}, {$item->street}, {$item->city}, {$item->state}</div>";
+		}
+	}
+
+?>
+</div>

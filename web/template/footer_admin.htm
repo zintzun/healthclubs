@@ -1,0 +1,46 @@
+
+			<div id="footer">
+			
+				<div class="nav">
+			
+					<? /* <a href="/"><?= APP_TITLE ?></a><span class="pipe"> - </span> */ ?>
+					 <a href="/admin/home">Home</a><span class="pipe"> - </span>
+					<a href="/admin/fix-geocodes">Geocodes</a><span class="pipe"> - </span>
+					<a href="/admin/business">Businesses</a><span class="pipe"> - </span>
+					<a href="/admin/reviews">Reviews</a><span class="pipe"> - </span>
+					<a href="/admin/picklists">Picklists</a><span class="pipe"> - </span>
+					<a href="/admin/leads">Leads</a><span class="pipe"> - </span>
+					<a href="/admin/billing">Billing</a><span class="pipe"> - </span>
+					<a href="/admin/members">Members</a><span class="pipe"> - </span>
+					<a href="/admin/listing-claims">Listing Claims</a><span class="pipe"> - </span>
+					<a href="/admin/link-biz">Link Business</a><span class="pipe"> - </span>
+					<a href="/admin/export-email">Export Email</a><span class="pipe"> - </span>
+					<a href="/logout">Logout</a>
+					<br /><br />
+				</div>
+					
+					<div class="copyright">Copyright &copy; <?= date('Y') ?> <?= APP_TITLE ?> - All rights reserved - <a href="/privacy">Privacy Policy</a>  - <a href="/terms">Terms of Service</a> - <a href="/site-map">Sitemap</a>  <?= (CACHE_FULL_PAGES && preg_match(CACHE_THIS_ACTION,$TARGET->action)) ? '' : '- Dynamic' ?></div>
+			
+				</div>
+			</div>
+
+<?php
+
+	 if ( DEBUG ) 
+	 {
+	 	foreach ( array('_SESSION','_GET','_COOKIE','_POST') as $superglobal )
+	 	{
+	 		print "<hr /><br />";
+	 		print "<b>\$$superglobal</b>";
+	 		print_ar(${$superglobal	});
+	 	} 
+	 } 
+
+?>
+
+		</div>
+
+		<? include "template/analytics.htm"; ?>
+		
+	</body>
+</html>

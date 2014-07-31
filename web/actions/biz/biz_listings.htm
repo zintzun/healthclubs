@@ -1,0 +1,63 @@
+<?= html_tabs($BIZ_NAV) ?>
+<h1>
+	<?= $__title ?> &#9658;
+	<span class="std"><a href="/biz/add-listing">Add a New Listing</a></std>
+</h1>
+<? 
+	if ($__businesses)
+	{
+
+?>
+<table>
+	<tr style="font-size: 12px;">
+		<td style="background: #f0f5ff; border: solid #cee2f2 1px; padding: 6px;">
+			<b>Use Lead System?</b>
+		</td>
+		<td td style="background: #f0f5ff; border: solid #cee2f2 1px; padding: 6px;">
+			<b>My Listings</b>
+		</td>
+	</tr>
+<?
+
+		foreach ($__businesses as $biz)
+		{
+			
+			if ($biz->is_linked)
+			{
+		?>
+		<tr>
+			<td align=center>
+				<span style="vertical-align:middle;">
+					<input class="checkbox" type="checkbox" id="is_premium-<?= $biz->biz_id ?>" name="is_premium-<?= $biz->biz_id ?>" value="<?= $biz->is_premium ?>" <?= $biz->is_premium?'checked':'' ?> onclick="ezAjax.bizListings.toggleIsPremium(<?= $biz->biz_id ?>);" />
+				</span>
+			</td>
+			<td>
+				<a href="javascript:ezAjax.tools.confirm('Are you sure you want to delete this business from your listings?','/biz/listings?delete=<?=$biz->biz_id ?>')" title='Delete this listing'><img src='/template/gfx/icons/delete.png' style='vertical-align: middle; border: 0; padding-right:5px;'></a>
+				
+				<a href='/biz/add-listing/<?=$biz->biz_id ?>' title='Edit this listing'><img src='/template/gfx/icons/application_form_edit.png' style='vertical-align: middle; border: 0; padding-right:5px;'></a>
+				
+				<b><?=$biz->name?></b> - <span style="font-size:11px; color:#444444"><?=$biz->street?>, <?=$biz->city?>, <?=$biz->state?>  <?=$biz->zip?>  <?=$biz->phone?></span>
+				
+			<?
+			}
+			else
+			{
+				?>
+					<span style="padding-left: 41px;">
+						<?=$biz->name?>, <?=$biz->city?>, <?=$biz->state?> <span class="fade">(awaiting approval)</span>
+					</span>
+				<?
+			}
+			?>
+				</td>
+			</tr>
+		<?
+		}
+		
+		?>
+		</table>
+		<?
+		
+	}
+
+?>

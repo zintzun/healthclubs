@@ -1,0 +1,36 @@
+<? if ( preg_match('/(success)/',$__confirm_status) ) { ?>
+<h1>Congratulations!</h1>
+<p>You have successfully reset your password!</p>
+<p>To continue please <a href="/biz/login">login here</a></p>
+<? } ?>
+
+
+<? if ( preg_match('/(invalid_link_format|no_user|bad_secret)/',$__confirm_status) ) { ?>
+<h1>Validation Link Error</h1>
+<p>Oops. We could not recognise that validation link.</p>
+<p>Please be sure to copy/paste it exactly as written in the validation email.</p>
+<? } ?>
+
+
+<? if ( preg_match('/(show_form)/',$__confirm_status) ) { ?>
+<h1>Reset Password</h1>
+
+<div class="reset-explain">
+	Please enter your new password and click "Reset Password"
+</div>
+
+<div class="reset-form">
+<form method="post" action="/<?= $TARGET->action_orig; ?>">
+
+	<div class="label">
+		New Password:
+	</div>
+	<div class="input password">
+		<input type="password" name="password" value="" id="password" autocomplete="off"/>
+	</div>
+	
+	<input type="submit" name="do_reset_password" value="Reset Password" />
+	
+</form>
+</div>
+<? } ?>

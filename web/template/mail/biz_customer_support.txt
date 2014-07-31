@@ -1,0 +1,20 @@
+From: {senders_first_name} {senders_last_name} <{senders_email}>
+Subject: Healthclubs.net Business Support Question
+
+
+Support Topic: {support_topic}
+
+
+Login Name:	{login_name}
+Email:		{senders_email}
+
+First Name: {senders_first_name}
+Last Name:  {senders_last_name}
+
+Phone:		{phone_number} 
+
+
+Question:
+------------
+{question}
+

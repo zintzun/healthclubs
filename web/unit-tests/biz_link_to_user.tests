@@ -1,0 +1,239 @@
+<?php
+
+	/*
+	* Tests for biz_link_to_user.inc
+	*/		
+
+	include "interfaces/biz/biz_link_to_user.inc";
+
+	class biz_link_to_user_tests extends UnitTestCase
+	{
+		// A valid input array to create anew pic record;
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* This makes it easy to access the classes withotu having to re 
+		* initialise them in every test function
+		*/
+
+		function __construct()
+		{
+			$this->bl = new biz_link_to_user();
+		}
+	
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* These tests prove that all the functions exist in the loaded class
+		*/	
+	
+		function test_functions_exist()
+		{
+			
+			// TEST FUNCS EXIST IN biz_link_to_user CLASS
+			$functions = array
+			(
+				'request',
+				'remove',
+				'approve',
+				'un_approve',
+				'is_approved',
+				'is_requested'
+			);
+		
+			$biz_link_to_user = new biz_link_to_user();
+		
+			foreach ($functions as $function) 
+			{
+				$this->assertTrue( method_exists($biz_link_to_user, $function), "biz_link_to_user function ($function) does not exist" );
+			}
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_table_exist()
+		*/	
+
+		function test_table_exist()
+		{
+			global $db;
+			$this->assertEqual( $db->get_var("SHOW TABLES LIKE 'biz_link_to_user'"), 'biz_link_to_user');
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_link_to_user_remove()
+		*/	
+	
+		function test_biz_link_to_user_remove()
+		{
+			global $db;
+			
+			$user_id = 1;
+			$biz_id = 0;
+			
+			// $user_id should be numeric
+			$this->assertEqual( is_error($this->bl->remove('bad user id',0)), 'invalid_user_id');
+
+			// $biz_id should be numeric
+			$this->assertEqual(is_error($this->bl->remove(0,'bad biz id')), 'invalid_biz_id');
+
+			// Create a test record
+			$this->assertEqual($db->query("INSERT INTO  biz_link_to_user(user_id,biz_id) VALUES($user_id,$biz_id)"),true);
+
+			// Test remove record just created
+			$this->assertEqual(is_error($this->bl->remove($user_id,$biz_id)), false);
+			
+			// We shouln't be able to get record
+			$this->assertEqual($db->get_var("SELECT user_id FROM biz_link_to_user WHERE biz_id = 0 AND user_id= 1"), false);
+		}
+
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_link_to_user_is_approved()
+		*/	
+	
+		function test_biz_link_to_user_is_approved()
+		{
+			global $db;
+			
+			$user_id = 2;
+			$biz_id = 0;
+
+			// Create a test record
+			$this->assertEqual($db->query("INSERT INTO  biz_link_to_user(user_id,biz_id,is_linked) VALUES($user_id,$biz_id,1)"),true);
+			
+			// Test is_approved
+			$this->assertEqual($this->bl->is_approved($user_id,$biz_id), true);
+			
+			// Delete_record
+			$this->assertEqual($this->bl->remove($user_id,$biz_id), true);
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_link_to_user_is_requested()
+		*/	
+	
+		function test_biz_link_to_user_is_requested()
+		{
+			global $db;
+			
+			$biz_id = 0;
+			$user_id = 2;
+			
+			// Create a test record
+			$this->assertEqual($db->query("INSERT INTO  biz_link_to_user(user_id,biz_id,is_linked) VALUES($user_id,$biz_id,0)"),true);
+			
+			// Test is_requested
+			$this->assertEqual($this->bl->is_requested($user_id,$biz_id), true);
+			
+			// Delete_record
+			$this->assertEqual($this->bl->remove($user_id,$biz_id), true);
+		}
+
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_link_to_user_request()
+		*/
+
+		function test_biz_link_to_user_request()
+		{
+			$user_id = 3;
+			$biz_id = 0;
+			
+			// $user_id should be numeric
+			$this->assertEqual( is_error($this->bl->request('bad user id',0)), 'invalid_user_id');
+
+			// $biz_id should be numeric
+			$this->assertEqual(is_error($this->bl->request(0,'bad biz id')), 'invalid_biz_id');
+
+			// Test for a successful record insert
+			$this->assertEqual($this->bl->request($user_id,$biz_id), true);
+
+			// Verify existance of the record just created
+			$this->assertEqual($this->bl->is_requested($user_id,$biz_id), true);
+			
+			// By default is_approved is set to false;
+			$this->assertEqual($this->bl->is_approved($user_id,$biz_id), false);
+			
+			// Remove record
+			$this->assertEqual($this->bl->remove($user_id, $biz_id), true);
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_link_to_user_approve()
+		*/	
+	
+		function test_biz_link_to_user_approve()
+		{
+			global $db;
+
+			$user_id = 4;
+			$biz_id = 0;
+
+			// $user_id must be a number
+			$this->assertEqual( is_error($this->bl->approve('bad user id',0)), 'invalid_user_id');
+
+			// $biz_id must be a number
+			$this->assertEqual( is_error($this->bl->approve(0,'bad biz id')), 'invalid_biz_id');
+			
+			// Create a test record
+			$this->assertEqual($this->bl->request($user_id,$biz_id), true);
+			
+			// Approve link
+			$this->assertEqual(is_error($this->bl->approve($user_id,$biz_id)), false);
+
+			// Verify link
+			$this->assertEqual($this->bl->is_approved($user_id,$biz_id), true);
+			
+			// Delete_record
+			$this->assertEqual(is_error($this->bl->remove($user_id,$biz_id)), false);
+
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_link_to_user_un_approve()
+		*/	
+	
+		function test_biz_link_to_user_un_approve()
+		{
+			global $db;
+
+			$user_id = 5;
+			$biz_id = 0;
+
+			// $user_id must be a number
+			$this->assertEqual( is_error($this->bl->un_approve('bad user id',0)), 'invalid_user_id');
+
+			// $biz_id must be a number
+			$this->assertEqual( is_error($this->bl->un_approve(0,'bad biz id')), 'invalid_biz_id');
+			
+			// Create a test record
+			$this->assertEqual($this->bl->request($user_id,$biz_id), true);
+			
+			// Verify that is unapproved
+			$this->assertEqual($this->bl->is_approved($user_id,$biz_id), false);
+
+			// Approve link
+			$this->assertEqual(is_error($this->bl->approve($user_id,$biz_id)), false);
+
+			// Verify that is Approved
+			$this->assertEqual($this->bl->is_approved($user_id,$biz_id), true);
+
+			// Unapprove link
+			$this->assertEqual(is_error($this->bl->un_approve($user_id,$biz_id)), false);
+
+			// Verify that is unapproved
+			$this->assertEqual($this->bl->is_approved($user_id,$biz_id), false);
+
+			// Delete_record
+			$this->assertEqual(is_error($this->bl->remove($user_id,$biz_id)), false);
+		}
+
+	}
+
+?>

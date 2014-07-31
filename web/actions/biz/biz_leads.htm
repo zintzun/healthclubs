@@ -1,0 +1,48 @@
+<?= html_tabs($BIZ_NAV) ?>
+<h1>
+	<?= $__title ?> &#9658;
+	<? $title = billing_date_select() ?>
+	<? if ( isset($__leads) ) { ?>
+		<span class="std"><a href="/<?=$TARGET->action_orig ?>?download=true&range=<?= $__range ?>">Export to CSV</a></span>
+	<? } ?>
+</h1>
+
+<div class="biz_note">
+	<img src="/template/gfx/icons/error.png" class="vam"/> 
+	<span class="vam">When you've followed up on a lead, click the gray check mark to remind you it's been processed. Once you have clicked it, it will turn green. This also ensures that the correct number of new leads are listed on your control panel homepage.</span>
+</div>
+
+
+<?
+	if ( isset($__leads) )
+	{
+
+		foreach ((array) $__leads as $lead )
+		{
+			$tick    =  $lead->is_done ? 'tick.png':'tick_grey.gif';
+			$onclick =  $lead->is_done ? '' : "onclick=\"ezAjax.bizLeads.toggleLeadStatus({$lead->lead_id})\" ";
+			$title   =  $lead->is_done ? '' : "title='Mark as complete' ";
+
+			print 
+				"<div style='margin: 5px 0 5px 0;'>" .
+					"<span id='tick{$lead->lead_id}' ". $onclick .' >'
+						."<img src='/template/gfx/icons/".$tick."' class='tick vam' " .$title.' />'
+				."</span>".
+				" <span class='vam'><b>ID:".$lead->lead_id.'</b> - '.date("m/d/Y g:ia",strtotime($lead->creation_date)).", {$lead->first_name} {$lead->last_name}, ".
+					'<a href="mailto:'.$lead->email.'">'.$lead->email."</a>, {$lead->phone}, Zip: {$lead->zip},".
+					" {$lead->coupon}</span>";
+			print "<div style='margin-left: 20px; color: #999; font-size: 11px;'>{$lead->name}, {$lead->street}, {$lead->city}, {$lead->state}</div>";		
+			print "</div>";
+		}
+		
+?>
+<hr />
+
+<?
+		
+	}
+	else
+	{
+		print "<span class='fade'>Oops! No leads using this search criteria</span>";
+	}
+?>

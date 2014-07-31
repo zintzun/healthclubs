@@ -1,0 +1,35 @@
+<?php
+
+	if ( isset($BREADCRUMBS) )
+	{
+		print "<div id=\"breadcrumbs\">";
+
+		$num_items = count($BREADCRUMBS);
+	
+		for ( $i=0; $i < $num_items; $i ++ )
+		{
+		
+			if ( $num_items - $i == 1 )
+			{
+				$BREADCRUMBS[$i][1] = preg_replace( "/(\w+)/e", "ucfirst('\\1')",  (strtolower($BREADCRUMBS[$i][1])));
+				print "<span>".  preg_replace( "/('[A-Z])/e", "strtolower('\\1')", $BREADCRUMBS[$i][1]) . "</span>";
+			}
+			else
+			{
+				$BREADCRUMBS[$i][0] = preg_replace( "/(\w+)/e", "ucfirst('\\1')", strtolower($BREADCRUMBS[$i][0]));
+				$BREADCRUMBS[$i][1] = preg_replace( "/(\w+)/e", "ucfirst('\\1')", strtolower($BREADCRUMBS[$i][1]));
+				
+				foreach ( $LISTING_TYPES as $type )
+				{
+					$BREADCRUMBS[$i][0] = preg_replace("/($type)/ei","strtolower('\\1')",$BREADCRUMBS[$i][0]);	
+				}
+				
+				print "<a href=\"{$BREADCRUMBS[$i][0]}\">{$BREADCRUMBS[$i][1]}</a> &gt; ";
+			}
+		
+		}
+
+		print "</div>";
+	}
+
+?>

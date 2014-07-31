@@ -1,0 +1,14 @@
+<div class="header">
+	
+	<h3>Hello <?=$_SESSION['USER']['first_name']  ?>, you are claiming</h3>
+	
+	<h1><?=$__biz->name ?></h1>
+	
+	
+	<h2 style="padding-top:10px"><?=$__biz->street.', '.$__biz->city.', '.$__biz->state.' '.$__biz->zip ?></h2>
+	
+	<div class="header-text"> <?=$text ?></div>
+
+	<input type="image" src="/template/gfx/claim-listing.png" onClick="location.href='/<?=$TARGET->action_orig ?>?claim=true'">
+
+</div>

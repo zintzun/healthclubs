@@ -1,0 +1,224 @@
+<?php
+
+	/*
+	* Tests for the biz_lead interface
+	*/		
+
+	include "interfaces/biz/biz_leads.inc";
+
+	class biz_lead_tests extends UnitTestCase
+	{
+		
+		var $cur_lead_id = 0;
+
+		function __construct()
+		{
+			$this->l  = new biz_lead();
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_table_exist()
+		*/	
+
+		function test_table_exist()
+		{
+			global $db;
+			$this->assertEqual( $db->get_var("SHOW TABLES LIKE 'biz_leads'"), 'biz_leads');	
+		}
+		
+		function test_functions_exist()
+		{
+			
+			// TEST FUNCS EXIST IN biz_lead CLASS
+			$functions = array
+			(
+				'add_or_update',
+				'remove',
+				'approve',
+				'get',
+				'get_leads_for_biz',
+				'get_leads_by_biz_type'
+			);
+			
+			$biz_lead = new biz_lead();
+		
+			foreach ($functions as $function) 
+			{
+				$this->assertTrue( method_exists($biz_lead, $function), "biz_lead function ($function) does not exist" );
+			}
+		}
+		
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_lead_add_or_update()
+		*/	
+
+		function test_biz_lead_add_or_update()
+		{
+			global $db;
+			
+			$parms = array
+			(
+				'biz_id' 			=> 0,
+				'first_name'	=> 'justin-first',
+				'last_name' 	=> 'vincent-last',
+				'phone' 			=> '555-555-5555',
+				'zip' 				=> '90210',
+				'is_approved'	=> 0,
+				'email' => '',
+			);
+
+			// No email passed;
+			$this->assertEqual(is_error($lead_id = $this->l->add_or_update($parms)), 'invalid_email');
+
+			$parms['email'] = 'jv@vip.ie';
+			
+			// No type passed should return error
+			$this->assertEqual(is_error($lead_id = $this->l->add_or_update($parms)), 'invalid_type');
+
+			$parms['type'] = 'healthclub';
+			
+			// Wrong type passed
+			$this->assertEqual(is_error($lead_id = $this->l->add_or_update($parms)), 'invalid_type');
+
+			$parms['type'] = 'health-clubs';
+			
+			// Not expecting any kind of error when inserting good value
+			$this->assertEqual(is_error($lead_id = $this->l->add_or_update($parms)), false);
+			
+			// Store the new lead id
+			$this->store_lead_id($lead_id);
+			
+			// SQL Test to make sure it is correct
+			$this->assertEqual($var=$db->get_var("SELECT first_name FROM biz_leads WHERE lead_id = '".$this->get_lead_id()."'"), 'justin-first');
+			
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_value_get()
+		*/	
+	
+		function test_biz_lead_get()
+		{
+			global $db;
+			
+			// $lead_id must be number
+			$this->assertEqual(is_error($this->l->get('bad lead id')), 'invalid_lead_id');
+			
+			// test it works!
+			$this->assertEqual(is_error($biz_lead_object = $this->l->get($this->get_lead_id())), false);
+
+			// Check it has the correct object structure (expecting 13 elements)
+			$this->assertEqual(count((array)$biz_lead_object),14);
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_lead_remove()
+		*/	
+	
+		function test_biz_lead_remove()
+		{
+			global $db;
+
+			$parms = array
+			(
+				'biz_id' 			=> 0,
+				'type' 			=> 'health-clubs',
+				'first_name'	=> 'justin-first-remove',
+				'last_name' 	=> 'vincent-last',
+				'phone' 			=> '555-555-5555',
+				'zip' 				=> '90210',
+				'is_approved'	=> 0
+			);
+
+			// Not expecting any kind of error when inserting good value
+			$this->assertEqual(is_error($lead_id = $this->l->add_or_update($parms)), false);
+
+			// $lead_id must be number
+			$this->assertEqual(is_error($this->l->remove('bad lead id')), 'invalid_lead_id');
+			
+			// Must remove the value succesfully
+			$this->assertEqual(is_error($this->l->remove($lead_id)), false);
+			
+			// SQL to test
+			$this->assertEqual($db->get_var("SELECT first_name FROM biz_leads WHERE first_name = 'justin-first-remove'"), false);
+
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_lead_get_leads_for_biz()
+		*/	
+	
+		function test_biz_lead_get_leads_for_biz()
+		{
+			global $db;
+			
+			// Create records for testing;
+			$parms = array
+			(
+				'biz_id' 			=> 0,
+				'first_name'	=> 'justin-first',
+				'last_name' 	=> 'vincent-last',
+				'phone' 			=> '555-555-5555',
+				'zip' 				=> '90210',
+				'is_approved'	=> 0
+			);
+			
+			$this->l->add_or_update($parms);
+			$this->l->add_or_update($parms);
+			
+			$this->assertIsA($result_array = $this->l->get_leads_for_biz(0), 'Array');
+			
+			$db->query("DELETE FROM biz_leads WHERE first_name = 'justin-first'");
+		}
+		
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_biz_lead_get_leads_by_biz_type()
+		*/
+		function test_biz_lead_get_leads_by_biz_type()
+		{
+			global $db;
+			
+			// Create records for testing;
+			$parms = array
+			(
+				'biz_id' 			=> 0,
+				'type'				=> 'health-clubs',
+				'first_name'	=> 'justin-first-type',
+				'last_name' 	=> 'vincent-last',
+				'phone' 			=> '555-555-5555',
+				'zip' 				=> '90210',
+				'is_approved'	=> 0
+			);
+			
+			$this->l->add_or_update($parms);
+			$this->l->add_or_update($parms);
+			$this->assertIsA($result_array = $this->l->get_leads_by_biz_type('health-clubs'), 'Array');
+			
+			$db->query("DELETE FROM biz_leads WHERE first_name = 'justin-first-type'");
+
+		}
+		
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* Private funcs used by this testing class
+		*/	
+		
+		private function store_lead_id($lead_id)
+		{
+			$this->cur_lead_id = $lead_id;
+		}
+
+		private function get_lead_id()
+		{
+			return $this->cur_lead_id;
+		}
+		
+		
+	}
+?>

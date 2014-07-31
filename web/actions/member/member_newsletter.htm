@@ -1,0 +1,7 @@
+<?= html_tabs($MEMBER_NAV) ?>
+<h1><?= $__title ?></h1>
+<p>Here you can subscribe or unsubscribe from our newsletter.</p>
+<p>
+	<input type="radio" id="subscribe" name="on_mailing_list" <?= $__on_mailing_list ? 'checked' : '' ?> onChange="window.location='/member/newsletter/subscribe'" /> <label for="subscribe">Subscribe</label> &nbsp 
+	<input type="radio"  id="unsubscribe" name="on_mailing_list" <?= $__on_mailing_list ? '' : 'checked' ?> onChange="window.location='/member/newsletter/unsubscribe'" /> <label for="unsubscribe">Unsubscribe</label>
+</p>

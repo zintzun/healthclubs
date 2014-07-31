@@ -1,0 +1,48 @@
+<?
+
+	if ( isset($FORCE_ERROR_PAGE) )
+	{
+		include "actions/page-not-found/page-not-found.proc";
+		include "actions/page-not-found/page-not-found.htm";
+		return;
+	}
+
+?>
+<h1><?= $TARGET->content_title ?></h1>
+<br />
+<div class="std-form container">
+	<form>
+		<fieldset>
+			<legend>Select a City</legend>
+				<div class="letter-bar"> <?= $__letter_bar ?> </div>
+				<?
+					if ( $clouds )
+					{
+						foreach (array_keys($clouds) as $letter)
+						{
+							?>
+								<div class="letter-container">
+									<div class="letter">
+										<a name="<?= $letter ?>"></a><span><?= $letter ?></span>
+									</div>
+									<div class="cloud"> <?= $clouds[$letter] ?> </div>
+									<br clear="left" />
+								</div>
+								<br clear="left" />
+							<?
+						}
+					}
+					else
+					{
+						?>
+							<center>
+								<span class="fade">Sorry, we have no listings for this location</span>
+							</center>
+						<?	
+					}
+				?>
+				<div class="fieldset-inner">
+				</div>
+		</fieldset>
+	</form>
+</div>

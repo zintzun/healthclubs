@@ -1,0 +1,18 @@
+From: Healthclubs.net <{from}>
+Subject: You have a new lead for {biz_name}
+
+Hello {first_name},
+
+Your listing at Healthclubs.net has generated a new lead for {biz_name}
+
+Lead info:
+-----------
+
+{lead_first_name} {lead_last_name}
+
+
+Please log into your account at Healthclubs.net for more information about this lead.
+
+
+Regards,
+Healthclubs.net

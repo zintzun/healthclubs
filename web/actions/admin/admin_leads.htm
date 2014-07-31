@@ -1,0 +1,103 @@
+<?= html_tabs($ADMIN_NAV) ?>
+<h1>
+	<form method="post" action="/<?= $TARGET->action_orig ?>">
+	<input type="hidden" name="do_search" />
+	<img src='/template/gfx/icons/image_edit.png' style='vertical-align: middle; border: 0;'> Moderate Leads &#9658;
+	<select name="listing_type" id="listing_type" onChange="window.location='/admin/leads/'+$('#listing_type').val()+'/'+$('#lead_type').val()">
+	<?
+		print '<option value="'.$__listing_type.'">'.ucfirst($__listing_type).'	</option>';
+		print '<option>---</option>';
+
+		foreach ($LISTING_TYPES as $listing_type)
+		{
+			print "<option value=\"$listing_type\">".ucfirst($listing_type)."</option>";
+		}
+	?>
+	</select>
+	<select name="lead_type" id="lead_type" onChange="window.location='/admin/leads/'+$('#listing_type').val()+'/'+$('#lead_type').val()">
+	<?
+		print '<option value="'.$__lead_type.'">'.ucfirst($__lead_type).' Leads</option>';
+		print '<option>---</option>';
+		print '<option value="unapproved">Unapproved Leads</option>';
+		print '<option value="all">All Leads</option>';
+	?>
+	</select>
+	
+	 <input type="text" name="lead_search" value="<?= isset($_POST['lead_search'])? $_POST['lead_search'] : '' ?>" /><input type="submit" value="Search" /> 
+	
+	</form>
+</h1>
+
+<?
+	if (isset($__edit))
+	{
+		print "<br /><h2>$__biz_name</h2>";
+
+		
+		$FORM = new form('/'.$TARGET->action_orig,'my-form-id','Edit Lead');
+	
+		
+		foreach ( (array) $__edit as $k => $v )
+		{
+			
+			if( in_array($k,array('biz_id','type','i_am_18','last_updated','creation_date','is_done')) )
+			{
+				continue;
+			}
+			else if( $k == 'is_approved')
+			{
+				$FORM->add('select','is_approved',$__edit->is_approved,'',array ('No','Yes'),'Approved?');
+			}
+			else if ( $k == 'lead_id')
+			{
+				continue;
+			}
+			else
+			{
+				$FORM->add('text',$k,$v,'','',ucwords(str_replace('_',' ',$k)));
+			}
+		}
+		$FORM->add('submit','do_update_lead','Update');
+	
+		print "<br />";
+		print $FORM->render();
+		print "<br />";
+
+	}
+?>
+
+<?
+	if ( isset($__leads) )
+	{
+		
+		foreach ( $__leads as $lead )
+		{
+			if ( $__lead_type == "unapproved" && $lead->is_approved )
+			{
+				continue;
+			}
+			print 
+			highlight_content
+			(
+				"<div style='margin: 5px 0 5px 0;'>" .
+				'<a href="/admin/leads/'.$__listing_type.'/'.$__lead_type.'/'.$lead->lead_id.'?approved=true" title="Approve lead">'.
+					"<img src='/template/gfx/icons/accept.png' style='vertical-align: middle; border: 0;'></a> ".
+				"<a href=\"javascript:ezAjax.tools.confirm('Sure?','/admin/leads/".$__listing_type.'/'.$__lead_type."?delete={$lead->lead_id}')\" title='Delete lead'>".
+					"<img src='/template/gfx/icons/delete.png' style='vertical-align: middle; border: 0;'></a> ".
+				'<a href="/admin/leads/'.$__listing_type.'/'.$__lead_type.'/'.$lead->lead_id.'" title="Edit this review.">'.
+					"<img src='/template/gfx/icons/image_edit.png' style='vertical-align: middle; border: 0;'></a>" .
+				" <b>ID: {$lead->lead_id}</b> - {$lead->creation_date}, {$lead->first_name} {$lead->last_name}, {$lead->email}, {$lead->phone}, Zip: {$lead->zip}, {$lead->coupon}".
+				"<div style='margin-left: 60px; color: #999; font-size: 11px;'>{$lead->name}, {$lead->street}, {$lead->city}, {$lead->state}</div>".				
+				"</div>",
+				isset($_POST['lead_search'])? $_POST['lead_search'] : ''
+				,
+				"b"
+			);
+			
+		}
+	}
+	else
+	{
+		print "No Leads";	
+	}
+?>

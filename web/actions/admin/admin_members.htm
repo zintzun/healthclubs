@@ -1,0 +1,104 @@
+<?= html_tabs($ADMIN_NAV) ?>
+
+<h1>
+	<form method="post" action="/<?= $TARGET->action_orig ?>">
+		<input type="hidden" name="do_search" />
+		<img src='/template/gfx/icons/image_edit.png' style='vertical-align: middle; border: 0;'> Moderate Members &#9658;
+		<select name="member-status" id="member-status" onChange="window.location='/admin/members/'+$('#member-status').val()">
+		
+		<?
+			print '<option value="'.$__status.'">'.$__option.'	</option>';
+		  print '<option>---</option>';
+			
+			foreach ($__MEMBER_STATUS as $status => $option)
+			{
+				print "<option value=\"$status\">".$option."</option>";
+			}
+		?>
+		</select>
+		
+	 <input type="text" name="member_search" value="<?= isset($_POST['member_search'])? $_POST['member_search'] : '' ?>" /><input type="submit" value="Search" /> 
+	</form>
+
+</h1>
+
+<?
+
+	if (isset($__edit))
+	{
+		
+		$__edit->password = '';
+
+		
+		$FORM = new form('/'.$TARGET->action_orig,'my-form-id','Edit Member');
+		
+		foreach ( (array) $__edit as $k => $v )
+		{
+			if( $TARGET->arg4 == 'member' && ($k == 'first_name' || $k == 'last_name' || $k == 'biz_name' || $k == 'biz_position' || $k == 'phone') )
+			{
+				continue;
+			}
+			else if( $k == 'type' || $k == 'is_admin' )
+			{
+				continue;
+			}
+			else if( $k == 'is_biz_owner')
+			{
+				$FORM->add('select','is_biz_owner',$__edit->is_biz_owner,'',array ('No','Yes'),'Bussines Owner?');
+			}
+			else if( $k == 'on_mailing_list')
+			{
+				$FORM->add('select','on_mailing_list',$__edit->on_mailing_list,'',array ('No','Yes'),'On Mailing List?');
+			}
+			else if( $k == 'approval_status')
+			{
+				$FORM->add('select','approval_status',$__edit->approval_status,'',array ('new_user'=>'Unapproved &raquo; New','edited_details'=>'Unapproved &raquo; Updated','approved'=>'Approved'),'Approval Status');
+			}
+			else if ( in_array($k, array('user_id','short_secret','long_secret','is_validated','creation_date','last_login','last_updated') ) )
+			{
+				continue;
+			}
+			else
+			{
+				$FORM->add('text',$k,$v,'','',ucwords(str_replace('_',' ',$k)));
+			}
+		}
+		$FORM->add('submit','do_update_user','Update');
+	
+		print "<br />";
+		print $FORM->render();
+		print "<br />";
+
+	}
+?>
+
+<?
+	if ( isset($__users) )
+	{
+		
+		foreach ( $__users as $user )
+		{
+			print 
+			highlight_content
+			(
+				"<div style='margin: 5px 0 5px 0;'>" .
+				'<a href="/admin/members/'.$user->approval_status.'/'.$TARGET->arg4.'/'.$user->user_id.'?approval_status=approved" title="Approve member">'.
+					"<img src='/template/gfx/icons/accept.png' style='vertical-align: middle; border: 0;'></a> ".
+				"<a href=\"javascript:ezAjax.tools.confirm('Sure you want to delete this member?','/admin/members/".$user->approval_status.'/'.$TARGET->arg4."?delete={$user->user_id}')\" title='Delete user'>".
+					"<img src='/template/gfx/icons/delete.png' style='vertical-align: middle; border: 0;'></a> ".
+				'<a href="/admin/members/'.$user->approval_status.'/'.$TARGET->arg4.'/'.$user->user_id.'" title="Edit this user.">'.
+					"<img src='/template/gfx/icons/image_edit.png' style='vertical-align: middle; border: 0;'></a>".
+				" Joined: {$user->creation_date}, {$user->login}, {$user->first_name} {$user->last_name}, {$user->email},".
+				", {$user->phone}, {$user->url}, {$user->biz_name}, {$user->biz_position}</div>",
+				isset($_POST['member_search'])? $_POST['member_search'] : ''
+				,
+				"b"
+			);
+			
+		}
+	}
+	else
+	{
+		print "No Members";	
+	}
+?>

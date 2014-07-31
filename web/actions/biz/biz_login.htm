@@ -1,0 +1,41 @@
+<!--[if lte IE 6]><script src="/template/js/ie6/warning.js"></script><script>window.onload=function(){e("/template/js/ie6/")}</script><![endif]-->
+
+<h1>Log in to your account</h1>
+
+<div id="container" class="member">
+	<div class="member login-explain">
+		Please log in to your account using the form below.
+	</div>
+
+	<div class="login-form">
+		<form method="post" action="/<?= $TARGET->action_orig; ?>">
+		
+			<div class="label">
+				Username / Email:
+			</div>
+			<div class="input username">
+				<input type="text" name="username" value="" id="username" autocomplete="on"/>
+			</div>
+			
+			<div class="label">
+				Password:
+			</div>
+			<div class="input password">
+				<input type="password" name="password" value="" id="password" autocomplete="off"/>
+			</div>
+			
+			<div class="remember_me">
+				<input type="checkbox" name="remember_me" value="1" id="remember_me" /> <label for="remember_me">Remember Me</label>
+			</div>
+		
+			<input type="submit" name="do_login" value="Login" />
+			
+			<div class="forgot-password">
+				<a href="/biz/reset-password">Forgot password?</a> <br /> 
+				<a href="/biz/resend-validation">Re-send validation email</a> <br />
+				<a href="/add-listing">Sign up for an account</a>
+			</div>
+			
+		</form>
+	</div>
+</div>

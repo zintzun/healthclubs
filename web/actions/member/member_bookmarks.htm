@@ -1,0 +1,36 @@
+<?= html_tabs($MEMBER_NAV) ?>
+<h1><?= $__title ?></h1>
+
+<? if ( ! $__bookmarks ) { ?>
+	<p>No bookmarkss written just yet!</p>
+<? } else { ?>
+	<p>Click on the icon if you want to delete a bookmark, or click on the business name to see a detailed information.</p>
+	<?
+	
+		foreach ( $__bookmarks as $bookmark )
+		{
+			
+			$link = "/".$bookmark->type."/".get_long_state($bookmark->state)."/".format_link_subject($bookmark->city)."/{$bookmark->biz_id}/".format_link_subject($bookmark->name);
+			/*
+			  // I like this better. But did it the other way too.
+				print "<a href=\"javascript:ezAjax.tools.confirm('Delete &quot;".$bookmark->name."&quot; from your bookmarks?','/"
+						.$TARGET->arg1."/".$TARGET->arg2
+						."?delete={$bookmark->user_id}-{$bookmark->biz_id}')\" title='Delete bookmark'>"
+						."<img src='/template/gfx/icons/delete.png' style='vertical-align: middle; border: 0;'></a>";
+			*/
+
+			?>
+			<a 
+				href="javascript:ezAjax.tools.confirm('Delete &quot;<?=$bookmark->name ?>&quot; from your bookmarks?','/<?=$TARGET->arg1.'/'.$TARGET->arg2 ?>?delete=<?=$bookmark->user_id.'-'.$bookmark->biz_id ?>')" title="Delete bookmark"
+			>
+				<img src="/template/gfx/icons/delete.png" style="vertical-align: middle; border: 0;">
+			</a>
+
+			<a href="<?=$link?>" target="_blank">
+			<?=$bookmark->name.', '.$bookmark->city.', '.$bookmark->state ?>
+			</a><br />
+			<?
+		}
+	
+	?>
+<? } ?>

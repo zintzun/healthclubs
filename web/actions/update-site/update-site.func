@@ -1,0 +1,484 @@
+<?php
+
+	define('UPDATES_DIR','actions/'.$TARGET->action.'/updates');
+
+	/**
+	 * Get the currently running update version
+	 *
+	 * @return int currently running version number
+	 */
+	function update_get_running_version()
+	{
+		global $db;
+
+		if ( $db->get_var("SHOW TABLES like 'updates'") == 'updates' )
+		{
+			if ( ! $running_version = $db->get_var("SELECT MAX(update_id) FROM updates") )
+			{
+				$running_version = 0; // as no rows in updates table
+			}
+		}
+		else
+		{
+			$running_version = 0; // as we don't even have an update table yet
+		}
+
+		return $running_version;
+	}
+
+	/**
+	 * Get all updates that can be done
+	 *
+	 * @return array updates
+	 */
+	function update_get_updates()
+	{
+		$updates = dir_to_array(UPDATES_DIR);
+		foreach ($updates AS $key => $update)
+		{
+			if ( ! is_dir(UPDATES_DIR.'/'.$update) )
+			{
+				if ( ! $updates[$key] = (int) preg_replace("/[^0-9]/","",$update) )
+				{
+					unset($updates[$key]);
+				}
+			}
+			else unset($updates[$key]);
+		}
+
+		sort($updates); // just in case, put them in chronological order
+
+		return $updates;
+	}
+
+	/**
+	 * Return a message depending whether up to date or not
+	 * @param int - the currently running version number
+	 * @param int - the latest update's version number
+	 * @return string - status text to be shown to the user
+	 */
+	function update_status_html($running_version, $latest_version)
+	{
+		global $TARGET;
+		
+		if ( $running_version > $latest_version )
+		{
+			$message = "<b>WARNING:</b> System is running an update version ($running_version) higher than the latest update version ($latest_version).";
+		}
+		else if ( $running_version == $latest_version )
+		{
+			$message = "<p>System is up to date (update $running_version has been run).</p>";
+		}
+		else
+		{
+			$message = "<p>Updates are available and should be run. Currently running version ".($running_version ? $running_version : '0')." but $latest_version is the latest.</p><p><b><a href='".$TARGET->action."?auto_run=true' style='background: green; color: white; padding: 5px;'>Run the updates now</a></b></p>";
+		}
+
+		return $message;
+	}
+
+	/**
+	 * HTML to enable a user to manually select an update to run
+	 * @param int - the currently running version number
+	 * @param int - the latest update's version number
+	 * @param array - all updates
+	 * @return string - status text to be shown to the user
+	 */
+	function update_manual_select_html($running_version, $latest_version, $updates)
+	{
+		global $TARGET;
+		
+		$html = '';
+
+		if ( ! IS_LOCALHOST )
+		{
+			$colour = 'red';
+		}
+		else
+		{
+			$colour = 'yellow';
+		}
+
+		$html .= "<p><a href='javascript:void(true);' onClick=\"javascript:document.getElementById('manual_select').style.display='block';\">Click me to rerun updates manually</a></p>\n";
+		$html .= "<form method='post' action='/$TARGET->action' id='manual_select' style='display:none; background: $colour; padding: 5px;'>\n";
+		$html .= "<p><b>IMPORTANT WARNING:</b> Running a manual update will run all updates after and including the update number you choose. Note that running an update twice may cause problems e.g. if you're inserting the same data twice into the database. Only run a manual update if you have to, for example whilst testing and developing an update.</p>";
+		$html .= "<b>Run updates starting from:</b> <select name='do_update_id'>\n";
+
+		foreach ($updates AS $update)
+		{
+			$selected = '';
+			$fresh = '';
+			if ($update == ($running_version + 1))
+			{
+				$selected = " selected='selected' style='font-weight: bold;'";
+			}
+			if ($update == 1)
+			{
+//				if ( ! IS_LOCALHOST )
+//				{
+//					$html .= "<option value='99999999999'>LIVE SERVER - CLEAN INSTALL NOT POSSIBLE!!!</option>\n";
+//					continue;
+//				}
+//				else
+//				{
+					$fresh = " - fresh install";
+//				}
+			}
+			$html .= "<option value='$update'$selected>Update $update$fresh</option>\n";
+		}
+		if ( $running_version == $latest_version )
+		{
+			$html .= "<option value='".($running_version + 1)."' selected='selected' style='font-weight: bold;'>-- Already up to date --</option>\n";
+		}
+		$html .= "</select>\n";
+		$html .= "<input type='submit' value='Run manual updates' />\n";
+		$html .= "</form>\n";
+
+		return $html;
+	}
+
+
+	/**
+	 * HTML to show update history
+	 * @param int - the currently running version number
+	 * @return string - html
+	 */
+	function update_history_html($running_version)
+	{
+		global $db;
+
+		$html = '';
+
+		$html .= "<h3>Update History</h3>";
+		$html .= "<ul>";
+
+		if ($running_version)
+		{
+			$results = $db->get_results("SELECT * FROM updates ORDER BY update_id DESC LIMIT 3");
+			foreach ($results AS $result)
+			{
+				$html .= "<li>Update {$result->update_id} ({$result->date_updated})</li>";
+			}
+			$html .= "<li>...</li>";
+			$first_update = $db->get_row("SELECT * FROM updates WHERE update_id = 1");
+			$html .= "<li>Installed - {$result->date_updated}</li>";
+			
+		}
+		else
+		{
+			$html .= "<li>First update (install) has not yet been run</li>";
+		}
+
+		$html .= "</ul>";
+
+		return $html;
+	}
+
+
+	/**
+	 * Show messages from a previous update run
+	 * @param array - messages
+	 * @return string - html
+	 */
+	function update_messages_html($messages)
+	{
+		$html = '';
+
+		$html .= "<div style='background: #FFFFCC; padding: 10px;'>";
+		$html .= "<h3>Update messages</h3>";
+		$html .= "<ul>";
+		foreach ($messages as $message)
+		{
+			$html .= '<li>'.$message.'</li>';
+		}
+		$html .= '</ul>';
+		$html .= "</div>";
+
+		return $html;
+	}
+
+
+	/**
+	 * Runs through all necessary updates
+	 * @param int - first update to run
+	 * @param int - last update to run
+	 * @return boolean
+	 */
+	function update_do_updates($first_update, $last_update)
+	{
+		global $TARGET;
+		update_message('About to run updates '.($first_update ? $first_update : '1').' through to '.$last_update);
+
+		for ($update_id=$first_update; $update_id<=$last_update; $update_id++)
+		{			update_do_update($update_id);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Runs a single update
+	 * @param int - id of the update to run
+	 * @param string - Name of web application (e.g. Woyano/Knexus/etc)
+	 * @return boolean
+	 */
+	function update_do_update($update_id)
+	{
+		global $db;
+
+		update_message('<b>Doing update '.$update_id.'</b>');
+
+		$file_number = str_pad($update_id, 3, '0', STR_PAD_LEFT); // padded out with leading zeros, e.g. 007
+		
+		if ( file_exists(UPDATES_DIR.'/update_'.$file_number.'.inc') ) 
+		{
+			require(UPDATES_DIR.'/update_'.$file_number.'.inc');
+		}
+		else 
+		{
+			update_message('<b>NOTE: Unable to do update '.$update_id.' - update file is not for this application.</b>');
+		}
+		
+		$db->query('DELETE FROM updates WHERE update_id = '.$update_id); // in case we're re-running an update
+		$db->query('INSERT INTO updates (update_id, date_updated) VALUES ('.$update_id.', NOW())');		
+		return true;
+	}
+
+	/**
+	 * Updates the table schema files for each db table we're interested in
+	 * @param int - the id of the last update, echo'd out into generated files
+	 * @param array - tables that we don't want to create schema files for
+	 * @return boolean
+	 */
+	function update_refresh_table_schemas($last_update, $exclude_tables = array())
+	{
+		global $db;
+
+		$show_tables = $db->get_results("SHOW TABLES");
+		foreach ($show_tables AS $show_value)
+		{
+			foreach ($show_value AS $table)
+			{
+				// Get the table structure for all tables but the special table email_addresses
+				if ( ! in_array($table, $exclude_tables) )
+				{
+					update_refresh_table_schema($table, $last_update);
+				}
+				
+			}
+		}
+
+		return true;
+	}
+
+
+	/**
+	 * Updates the table schema files for each db table we're interested in
+	 * @param int - the id of the last update, echo'd out into generated files
+	 * @param array - tables that we don't want to create schema files for
+	 * @return boolean
+	 */
+	function update_refresh_table_schema($table, $last_update)
+	{
+		global $db;
+
+		$field_categories = array(); // to hold our new data grouped by type/category
+		$primary_keys = array(); // to enable a primary key across multiple fields
+		$indexes = array(); // db get results object
+		$fulltext_keys = array(); // needed for fulltext where a key shares multiple columns
+		$index_keys = array(); // fields with indexs
+
+		// Deal with INDEX and FULLTEXT
+		if ( $indexes = $db->get_results("SHOW INDEXES FROM $table") )
+		{
+			foreach ($indexes AS $index)
+			{
+				if ( $index->Key_name != "PRIMARY" )
+				{
+					if ($index->Index_type == 'BTREE')
+					{
+						if ( $index->Non_unique )
+						{
+							// A 'normal' (BTREE) index (also, not UNIQUE)
+							$index_keys[] = $index->Column_name;
+						}
+					}
+					else if ($index->Index_type == 'FULLTEXT')
+					{
+						// A 'fulltext' (FULLTEXT) index
+						// May be across multiple columns, in which case we need those columns together with , between
+						if ( array_key_exists($index->Key_name, $fulltext_keys) )
+						{
+							// Already a column for this key, so add this column to that key as well
+							$fulltext_keys[$index->Key_name][] = $index->Column_name;
+						}
+						else
+						{
+							// First (maybe only) column for this key
+							$fulltext_keys[$index->Key_name] = array();
+							$fulltext_keys[$index->Key_name][] = $index->Column_name;
+						}
+					}
+				}
+			}
+		}
+
+		$fields = $db->get_results("DESCRIBE $table");
+
+		$field_categories['table_name'] = $table;
+
+		foreach ($fields AS $field)
+		{
+
+			$field_type = strtoupper($field->Type);
+			$enum_options = array();
+
+			// Deal with primary keys
+			if ( $field->Key == 'PRI' )
+			{
+				$primary_keys[] = $field->Field;
+			}
+
+			// Deal with unique fields
+			else if ( $field->Key == 'UNI' )
+			{
+				$field_type .= ' UNIQUE';
+			}
+
+			// Get the enum options out of the type
+			if ( preg_match("/^ENUM/", $field_type) )
+			{
+				$enum_options = split(',',substr($field->Type,5, -1));
+				foreach ($enum_options AS $key => $option)
+				{
+					$enum_options[$key] = substr($option, 1, -1);
+				}
+				$field_type = 'ENUM';
+				
+			}
+
+			if ($field->Null == 'NO' )
+			{
+				$field_type .= " NOT NULL";
+			}
+
+			if ($field->Extra )
+			{
+				$field_type .= " $field->Extra";
+			}
+
+			// Get the default into the type (except for enum)
+			if ( ( ! empty($field->Default) || $field->Default == '0' ) && $field_type != 'ENUM' )
+			{
+				if ( is_numeric($field->Default) )
+				{
+					$field_type .= " DEFAULT " . $field->Default;
+				}
+				else
+				{
+					$field_type .= " DEFAULT '" . $field->Default . "'";
+				}
+			}
+
+			// Put this field in our new schema array
+			if ( !array_key_exists($field_type, $field_categories) )
+			{
+				$field_categories[$field_type] = array();
+			}
+
+			if ($field_type == 'ENUM')
+			{
+				$field_categories[$field_type][$field->Field] = array
+				(
+					'values' => $enum_options,
+					'default' => $field->Default,
+				);
+			}
+			else {
+				$field_categories[$field_type][] = $field->Field;
+			}
+		}
+
+		if ( count($primary_keys) )
+		{
+			$field_categories['PRIMARY KEY'] = array();
+			$field_categories['PRIMARY KEY'][] = join(', ',$primary_keys);
+		}
+
+		if ( count($index_keys) )
+		{
+			$field_categories['INDEX'] = array();
+			foreach ($index_keys AS $key)
+			{
+				$field_categories['INDEX'][] = $key;
+			}
+		}
+
+		if ( count($fulltext_keys) )
+		{
+			$field_categories['FULLTEXT'] = array();
+			foreach ($fulltext_keys AS $cols)
+			{
+				$field_categories['FULLTEXT'][] = join(', ',$cols);
+			}
+		}
+
+		// Write the array into schema files (through a temp file)
+		$file = fopen("db/table_$table.tmp", "w");
+
+		fwrite($file, "<?php \n\t// Auto generated after update ".$last_update." (".date('Y-m-d H:i:s').")\n\nreturn ".var_export($field_categories, true).';');
+
+		$file = fclose($file);
+
+		copy("db/table_$table.tmp", "db/table_$table.inc");
+
+		unlink("db/table_$table.tmp");
+	}
+
+
+	/**
+	 * Prints a message to the screen and puts in a session variable
+	 * so it can be output after a redirect too
+	 */
+	function update_message($str,$error=false)
+	{
+		if ( $error )
+		{
+			$print = "<b style='background-color: yellow;'>$str</b><br />\n";
+		}
+		else
+		{
+			$print = "$str<br />\n";
+		}
+
+		$_SESSION['update_messages'][] = $print;
+	}
+
+
+	/**
+	 * Handles errors so they don't get lost in redirects
+	 */
+	function update_error_handler($errno, $errmsg, $filename, $linenum, $vars)
+	{
+		$errortype = array
+		(
+			2   =>  "Warning",
+			8   =>  "Notice",
+			256 =>  "User Error",
+			512 =>  "User Warning",
+			1024=>  "User Notice",
+		);
+
+		if ( isset($errortype[$errno]) )
+		{
+			$err_level = $errortype[$errno];
+			// Don't do anything with stuff less than warning
+
+			$error = "$err_level: $filename($linenum):  $errmsg";
+
+			update_message($error, true);
+		}
+	}
+
+
+?>

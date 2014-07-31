@@ -1,0 +1,19 @@
+<?php
+
+  if ( isset($FORCE_ERROR_PAGE) )
+  {
+		include "actions/page-not-found/page-not-found.proc";
+		include "actions/page-not-found/page-not-found.htm";
+    return;
+  }
+
+	if ( isset($TARGET->arg2) && ($TARGET->arg2 == 'basic-info'|| $TARGET->arg2 == 'thank-you') )
+	{
+		include 'actions/add-listing/_'.$TARGET->arg2.'.htm';
+	}
+	else
+	{
+		include 'actions/add-listing/_sign-up.htm';
+	}
+
+?>

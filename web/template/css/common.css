@@ -1,0 +1,1361 @@
+/* set standard font */
+body, .std
+{
+	font: 13px Arial, Verdana, Helvetica;
+	font-weight: normal;
+}
+
+body
+{
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+}
+
+a { color:#3b73b9; }
+a:hover, #nav-menu li a:hover { color:#EF8200; }
+.hide { display: none; }
+form { padding: 0; margin: 0; } /* for IE */
+.small { font-size: 11px; }
+.fade { color: #999; }
+.vam { vertical-align: middle; }
+#zip {width: 100px;}
+.tick { vertical-align: middle; border: 0; cursor: pointer; }
+fieldset { border: solid #ccc 1px; padding-left: 1em; }
+legend { color: #999; }
+
+.admin h1, .biz h1, .member h1 
+{ 
+	border-bottom: solid 1px #cee2f2; padding-bottom: 10px; margin-bottom: 10px; 
+}
+
+.biz_note
+{
+	/*
+	background: #efefef; 
+	padding: 5px; 
+	border: solid #ddd 1px; 
+	color: #555;
+	margin: 10px 0 0 0;
+	*/
+	
+	background: #f0f5ff; 
+	padding: 5px; 
+	border: solid #cee2f2 1px; 
+	color: #555;
+	margin: 10px 0 0 0;
+	
+}
+
+#notify, #error
+{
+	/*
+	font-size: 16px;
+	color: #CC0000;
+	margin: 0 0 10px 0;
+	padding:10px;
+	border: 1px solid #CC0000;
+	background-color: #FFCCCC;
+	*/
+	font-size: 16px;
+	color: #cc0000;
+	margin: 0 0 10px 0;
+	padding:10px;
+	border: 1px solid #e66;
+	background-color: #fdd;
+	
+	
+}
+
+#notify 
+{ 
+	/* color: #009500;
+	border: 1px solid #009500;
+	background-color: #ccffcc;
+	*/
+	color: #009500;
+	border: 1px solid #9dd07b;
+	background-color: #e5fdd0;
+	 
+}
+
+#container 
+{
+	margin:0 auto;
+	width:900px;
+	padding:0px;
+	text-align:left;
+} 
+
+
+.homebulletlist {
+float:left;
+padding:0;
+width:266px;
+}
+
+.homebullet_topic {
+float: left;
+width: 210px;
+padding-bottom: 15px;
+margin-bottom: 15px;
+border-bottom:1px solid #DDDDDD;
+color:#333;
+
+}
+
+.homebullet_last {
+float: left;
+width: 210px;
+padding-bottom: 10px;
+margin-bottom: 10px;
+color:#333;
+border-bottom:medium none;
+}
+
+.homebullet_img {
+float:left;
+padding-left: 6px;
+}
+
+
+
+
+hr 
+{
+	color: #fff; 
+	background-color: #fff; 
+	border: 2px dotted #efefef; 
+	border-style: none none dotted; 
+}
+
+/*
+* Breadcrumbs
+*/
+
+#breadcrumbs
+{
+	font: 12px Arial, Helvetica, sans-serif;
+	margin: 0 0 15px 8px;
+}
+
+#breadcrumbs span
+{
+	color:#333;
+	font-style: italic;
+	font-weight: bold;
+}
+
+#statelinks 
+{
+
+}
+
+.statelinks td
+{
+	width: 130px;
+	padding: 0;
+	font: 12px Arial, Helvetica, sans-serif;
+}
+
+.citylinks td
+{
+	padding: 0 35px 3px 0;
+}
+
+#state_dd 
+{
+	float:right;
+	margin-right:0.50em;
+}
+
+#pmessage 
+{
+	margin: 0 auto;
+	text-align:center;
+	width:600px;
+	border:#119911 2px solid;
+	background-color:#e6f8dd;
+	padding:20px;
+	font: 14px "Lucida Grande", sans-serif, Arial, Helvetica,;
+	color:#006600;
+}
+
+/* inc_state styles */
+
+table.padded-table td 
+{ 
+	padding: 3px 0px 3px 0px;
+}
+
+.page-titles 
+{
+	padding:55px 0px 35px 0px;
+	margin: 0 auto;
+	text-align:center;
+}
+
+.club_text 
+{
+	font: 15px Arial, Helvetica, sans-serif;
+}
+
+.social_text 
+{
+	font: 11px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+}
+
+h1, h2, h3 
+{
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	color: #3a72af;
+	margin:0px;
+	padding:0px;
+	font-weight: normal;
+} 	
+	
+h1 { font-size: 25px; }
+h2 { font-size: 18px; }
+h3 { font-size: 15px; }
+
+#footer 
+{
+	margin: 0 auto;
+ 	width: 900px;
+	text-align:center;
+	padding-top:40px;
+	margin-bottom: 20px;
+	clear: both;
+}
+
+#footer .nav 
+{
+	font-size: 12px;
+}
+
+#footer .nav .pipe
+{
+  	font-size: 12px;
+  	color:#555;
+}
+
+#footer .nav a
+{
+	text-decoration: none;
+}
+
+#footer .copyright 
+{
+	font-size: 11px;
+	color: #777;
+}
+
+/* TOP NAVIGATION */
+#navcontainer {
+	margin:0 auto 20px auto;
+	width:900px;
+	height:31px;
+}
+
+div.navleftcnr {
+	float:left;
+	width:10px;
+	height:31px;
+}
+
+div.navbackgrnd {
+	float:left;
+	width:881px;
+	height:31px;
+	background-image:url(/template/gfx/nav/navbackgrnd.jpg);
+	background-repeat:repeat-x;
+}
+
+div.navrightcnr {
+	float:left;
+	width:9px;
+	height:31px;
+}
+
+
+#nav-menu {
+	margin-left: 5px;
+	
+}
+
+#nav-menu .current { 
+	font-weight: bold; 
+}
+
+
+
+#nav-menu ul {
+	list-style: none;
+	padding: 0px;
+	margin: 0;	
+}
+
+
+#nav-menu li {
+	float: left;
+	margin: 0 12px; /* spaces nav options */
+	margin-top: 2px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	color:444;
+	padding-right:25px;
+	_padding-right:20px;
+	border-right: 1px solid #ccc;
+}
+
+#nav-menu li.last {
+	border-right:none;
+	padding-right:0;
+}
+
+
+#nav-menu li a {
+	height: 2em;
+	line-height: 2em;
+	float: left;
+	width: 8em;
+	color: #444;
+	text-decoration: none;
+	text-align: center;
+}
+
+/* Hide from IE5-Mac \*/
+
+#nav-menu li a {
+	float: none;
+}
+
+/* End hide */
+
+
+#search 
+{
+	float: right;
+	margin-right:1.30em;
+	margin-top: 2.50em;
+
+}
+	
+.search-button 
+{
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
+	color:#333;
+	background:#efefef;
+	border:1px #999 solid;
+	width:60px; 
+	height:22px;
+	margin-left:.40em;
+}
+
+
+/* TOP NAVIGATION */
+
+
+/* form styles */
+
+/**********************************************************
+* Home Page
+*/
+	
+.home h1 {font-size: 30px; margin:20px 0 5px 0;}
+.home .intro-block { float: left; width: 520px; margin-top: 20px; color: #333; }
+/* .home .intro-block h1 { margin-bottom: 10px; margin-bottom:15px; padding:0; text-align:left; } */
+.home .get-started-block { float: left; margin:25px 0px 50px 80px; background-image: url(/template/gfx/search-box.jpg); width: 336px; height: 157px; text-align: center; }
+.home .get-started-block h6 { margin:25px 0 10px 0; font-size: 25px; color: #3a72af; font-weight: bold; text-align: center; }
+.home .get-started-block input[type=text] { width: 200px;}
+.home .healthclub-image { float: right; width: 338px; height: 236px; margin: 28px 0 50px 0; }
+
+ 
+
+
+/* 
+.home .panel1, .home .panel2, .home .panel3
+{
+	float: left;
+	width: 280px;
+	margin-right: 30px;
+	margin-top: 15px;
+}
+.home .panel3 {margin-right: 0; }
+.home .panel1 .m2, .home .panel2 .m2, .home .panel3 .m2
+{
+	height: 200px;
+}
+*/
+
+.home .statebox { float:left; width:288px; font-size: 12px; line-height: 15px; }
+.home .statebox a { text-decoration: none;}
+.home .newsbox { float:left; width:266px; }
+.home .spacer { float:left; width:40px; }
+.home .news { margin-bottom: 20px; color: #333; }
+.home .social-image { float:left; }
+.home .social-text {float:left; margin:8px 0 0 15px; color: #333;}
+
+/**********************************************************
+* Healthclubs Tab
+*/
+
+.listing-root .intro-block { float: left; width: 430px;  margin-top: 10px;}
+.listing-root .intro-block h1 { margin-bottom: 10px; }
+.listing-root .get-started-block { float: left; margin:15px 0px 70px 40px; background-image: url(/template/gfx/search-box-listing.jpg); width: 336px; height: 127px; text-align: center; }
+.listing-root .get-started-block h1 { margin-bottom: 10px; margin-top: 20px; font-weight: bold; }
+.listing-root .get-started-block input[type=text] { width: 200px; }
+
+.listing-root .flashmap { float: right; width: 460px;  margin-top: 10px;}
+
+
+.listing-root .panel1, .listing-root .panel2, .listing-root .panel3
+{
+	float: left;
+	width: 280px;
+	margin-right: 30px;
+	margin-top: 15px;
+}
+.listing-root .panel3 {margin-right: 0; }
+.listing-root .panel1 .m2, .listing-root .panel2 .m2, .listing-root .panel3 .m2
+{
+	height: 200px;
+}
+
+
+/*
+* Generic box settings
+*/
+
+.t { height: 9px; }
+.t .r { width: 9px; height: 9px; float: right; }
+.m2 { padding: 1px 12px; }
+.b { height: 9px; } 
+.b .r { width: 9px; height: 9px; float: right; }
+
+/*
+* IE6 Fix(s)
+*/
+
+.m, .m2, .item, .detail, .thumb { position: relative; }
+
+/*
+* White box with blue lines
+*/
+
+.box-white { margin-bottom: 15px; }
+.box-white .t { background: url(/template/gfx/box-white.gif) top left; }
+.box-white .t .r { background: url(/template/gfx/box-white.gif) top right; }
+.box-white .m { border-left: solid #9699C3 1px; border-right: solid #9699C3 1px; }
+.box-white .b { background: url(/template/gfx/box-white.gif) bottom left; }
+.box-white .b .r { background: url(/template/gfx/box-white.gif) bottom right; }
+
+/**********************************************************
+* City Listing
+*/
+
+.listing-city h1
+{
+	text-align: center;
+	padding:12px 0;
+	font-weight: normal;
+	text-align: center;
+}
+
+.listing-city .map-block, .search-by-zip .map-block
+{
+	width: 570px;
+	height: 350px;
+	float: left;
+	margin-top: 20px;
+	border: solid #ddd 1px;
+	border-left: none;
+}
+
+.listing-city .listing-block, .search-by-zip .listing-block
+{
+	width: 320px; 
+	height: 350px; 
+	float: left; 
+	overflow: auto;
+	margin-top: 20px;
+	border: solid #ddd 1px;
+}
+
+.listing-city .listing-block .item, .search-by-zip .listing-block .item
+{
+	padding: 15px 10px;
+	position: static;
+	border-bottom: dotted #ddd 1px;
+}
+
+.listing-city .listing-block .logo, .search-by-zip .listing-block .logo, .search .logo
+{
+	float: left; 
+	margin: 0 7px 0 0;
+}
+
+.listing-city .listing-block .logo img, .search-by-zip .listing-block .logo img, .search .logo img
+{
+	width: 50px; 
+	height: 50px;
+}
+
+.listing-city .listing-block .pin, .search-by-zip .listing-block .pin
+{ 
+	float: left; 
+	width: 30px; 
+	padding-top: 3px;
+	padding-right: 5px; 
+}
+
+.listing-city .listing-block .address, .search-by-zip .listing-block .address
+{ 
+	float: left;
+	line-height: 17px;
+	width: 230px;
+}
+
+.listing-city .listing-block .restrict, .search-by-zip .listing-block .restrict
+{ 
+	width: 170px;
+}
+
+.listing-city .listing-block .address .more, .search-by-zip .listing-block .address .more
+{ 
+	color: #138913;
+	font-size: 12px;
+}
+
+.listing-city .listing-block .coupon, .search-by-zip .listing-block .coupon
+{
+	padding:5px 0 0 48px;
+}	
+
+/**********************************************************
+* by zip code listings
+*/
+
+.search-by-zip h1
+{
+	text-align: center;
+	padding:12px 0;
+	font-weight: normal;
+	text-align: center;
+}
+
+
+
+
+/**********************************************************
+* Entry Listing
+*/
+
+.listing-entry h1  {
+	padding:12px 0;
+	font-weight: normal;
+	text-align: center;
+}
+
+.listing-entry .address-block
+{
+	width: 320px; 
+	height: 370px; 
+	float: left; 
+	overflow: auto;
+	margin-top: 20px;
+	/* margin-bottom: 10px; */
+	/* border: solid #ddd 1px; */
+}
+
+
+.listing-entry .address { margin: 0 0 0 10px; font-size: 14px; float: left; width:230px; }
+
+.listing-entry .address-block .logo img { width:50px; height:50px; }
+
+.listing-entry .address-block .logo
+{
+	float:left;
+	width:50px;
+	height:50px;
+	margin:10px 0 0 10px;
+}
+
+
+.listing-entry .address-block .review
+{
+	margin: 10px 0 0 0;
+	font-size: 12px;
+	
+}
+
+.listing-entry .address-block .coupon
+{ 
+	min-width: 200px;
+	font-size: 14px;
+	font-weight: bold;
+	padding:3px;
+	color: #009500;
+	border: 1px dashed #009500;
+	background-color: #dafde0; 
+	margin:20px 20px 20px 0;
+	text-align: center;
+}
+
+.listing-entry .address-block .coupon a
+{ 
+	text-decoration: none;
+	color: #009500;
+}
+
+.listing-entry .address-block .coupon .claimtext
+{ 
+	color:#000;
+	font-size: 11px;
+	font-weight: 100;
+	margin-top:3px;
+}
+
+.listing-entry .top-ads
+{
+	margin:10px 0 0 10px;
+}
+
+.listing-entry .middle-ads
+{
+	margin:60px 0;
+	text-align:center;
+	width:890px;
+}
+
+
+.listing-entry .address-block .description
+{
+	margin:0 20px 0 0;
+	font-size: 13px;
+	text-align: justify;
+}
+
+.listing-entry .map-block
+{
+	width: 570px;
+	height: 360px;
+	float: left;
+	margin-top: 20px;
+	border: solid #ddd 1px;
+	/* border-left: none; */
+}
+
+.listing-entry .add-this { margin-left: 15px; float: left; }
+
+.listing-entry .link-block
+{
+ border:1px solid #cee2f2;
+ background-color: #f0f5ff;
+ padding:7px 0 5px 0;
+ width: 890px;
+ margin:20px 0 0;
+}
+
+
+.listing-entry .reviews { width: 540px; margin:0; float:left; }
+
+.listing-entry .reviews h2 { font-size: 22px; font-weight: bold; }
+
+.listing-entry .reviews .title { width: 200;  float: left; }
+
+.listing-entry .reviews .review-link { float: right; margin: 7px 50px 0 0; }
+
+.listing-entry .reviews .review-text { margin: 10px 0 20px 0; text-align: justify;}
+
+.listing-entry .review-box
+{
+	width: 510px; 
+	border-bottom: solid #ddd 1px;
+	float: left; 
+	margin-top: 10px;
+}
+
+
+
+/* Club Info */
+
+.listing-entry .club {margin:60px 0; width: 890px;}
+.listing-entry .biz-pricing {margin:30px 0;}
+.listing-entry .hours-prices { float:left; }
+.listing-entry .right-align { text-align: right; }
+
+.listing-entry .amenities div { width: 145px; float: left; }
+.listing-entry .amenities-table { margin-left: 35px; }
+.listing-entry .amenities-table td { padding-right: 15px; white-space: nowrap; }
+
+.listing-entry .pictures { float:left; margin: 20px 10px 0 0; }
+.listing-entry .pictures div { width: 165px; float: right; text-align: center; vertical-align: bottom; margin: 0 0 5px 5px; }
+.listing-entry .pictures img { border: solid #333 1px; }
+
+.listing-entry .club .club-info td { vertical-align: top; }
+.listing-entry .club .title { font-size: 14px; border-bottom: solid 1px #999; padding-bottom: 2px; margin:0 0 4px 0; }
+
+/* Adds Next to reviews width ~ 900- 530 - 5 */
+.listing-entry .biz-add-section { width: 300px; margin:20px 0 40px 50px; float: left; }
+
+/* Add to bookmarks button */
+.listing-entry .bookmarks { float:left; }
+
+/* Links to yahoo and mapquest  */
+.listing-entry .map-links { float: right;margin-right:10px; }
+.listing-entry .map-links span { margin-left: 10px; }
+
+/*
+ * Address block shown in map
+ */
+
+.map-address-block { float:left;margin-left:5px ; width: 215px;}
+
+/*
+ * Biz Logo used in map
+ */
+
+.logo_50x50 { float:left; width:50px; height:50px; }
+.logo_50x50 img { width:50px; height:50px; }
+
+
+/*
+* Suggestion Styling
+*/
+
+#suggestions
+{
+	margin-top: 23px;
+	background-color: #ffffff;
+	width: 220px;
+	height: 100px;
+	border: solid #666 1px;
+	position: absolute;
+	font-size: 11px;
+	overflow: auto;
+	display: none;
+	z-index: 1000;
+}
+
+/*
+* Search styling
+*/
+
+.search .results b
+{
+}
+
+/*
+* Admin Fix Geocodes
+*/
+
+.input-text { width: 300px; }
+
+/*
+* Registration
+*/
+
+.reg-error, .reg-no-error { font-weight: bold; font-size: 11px; }
+.reg-error {color: #CC0000; }
+.reg-no-error {color: #009900; }
+
+/*
+* Review stuff
+*/
+
+#new-review-panel textarea, 
+#edit-review-panel textarea,
+#new-review-panel input[type=text]
+{ width: 400px; }
+
+#new-review-panel textarea, 
+#edit-review-panel textarea 
+{height: 100px; }
+
+.review { margin: 5px 0 10px 0;}
+.review .stars { padding-right: 10px; }
+
+/*
+* Tabs
+*/
+
+ul.tabs
+{
+	font: normal 11px verdana, arial, sans-serif; /* set font as desired */
+	margin: 50px;
+	text-align: left; /* set to left, right or center */
+	margin: 1em 0 1em 0; /* set margins as desired */
+	border-bottom: 1px solid #bbb; /* set border COLOR as desired */
+	list-style-type: none;
+	padding: 3px 10px 3px 10px; /* THIRD number must change with respect to padding-top (X) below */
+}
+
+ul.tabs li a 
+{
+	padding: 3px 4px; /* set padding (tab size) as desired; FIRST number must change with respect to padding-top (X) above */
+	border: 1px solid #ccc; /* set border COLOR as desired; usually matches border color specified in #tabnav */
+	background-color: #efefef; /* set unselected tab background color as desired */
+	color: #666; /* set unselected tab link color as desired */
+	margin-right: 0px; /* set additional spacing between tabs as desired */
+	text-decoration: none;
+	border-bottom: none;
+}
+
+ul.tabs a { text-decoration: none; }
+ul.tabs li { display: inline; }
+ul.tabs li.current { border-bottom: 1px solid #fff; background-color: #fff; font-weight: bold; }
+ul.tabs li.current a { border-top: 1px solid #bbb; border-left: 1px solid #bbb; border-right: 1px solid #bbb; background: #fff; color: #000; position: relative; top: 1px; padding-top: 4px; padding-left: 8px; padding-right: 8px;}
+ul.tabs li a:hover { background: #fff; }
+
+/*
+* member join
+*/
+
+.member .join-explain {margin-top: 10px; }
+.member .join-form { border: solid #eee 1px; width: 490px; padding: 10px; margin-top: 10px;}
+.member .join-form .label { margin-bottom: 2px; }
+.member .join-form .input { margin-bottom: 5px; }
+.member .join-form .recaptcha { position: absolute; margin: -165px 0 0 165px; }
+.member .join-form .input input {width: 130px;}
+.member .join-form input[type=submit] {float: right; }
+
+/*
+* biz join
+*/
+
+.biz .join-explain {margin-top: 10px; }
+.biz .join-form { border: solid #eee 1px; width: 490px; padding: 10px; margin-top: 10px;}
+.biz .join-form .label { margin-bottom: 2px; }
+.biz .join-form .input { margin-bottom: 5px; }
+.biz .join-form .recaptcha { position: absolute; margin: -165px 0 0 165px; }
+.biz .join-form .input input {width: 130px;}
+.biz .join-form input[type=submit] {float: right; }
+
+/*
+* member login
+*/
+
+.member .login-explain {margin-top: 10px; }
+.member .login-form { border: solid #eee 1px; width: 124px; padding: 10px; margin-top: 10px;}
+.member .login-form .label { margin-bottom: 2px; }
+.member .login-form .input input {width: 100px;}
+.member .login-form .username { margin-bottom: 5px; }
+.member .login-form .password { margin-bottom: 5px; }
+.member .login-form .remember_me { margin-bottom: 10px; font-size: 11px; }
+.member .login-form .forgot-password { margin-top: 10px; text-align: left; font-size: 11px;}
+
+/*
+* member reset password
+*/
+
+.member .reset-explain {margin-top: 10px; }
+.member .reset-form { border: solid #eee 1px; width: 120px; padding: 10px; margin-top: 10px;}
+.member .reset-form .label { margin-bottom: 2px; }
+.member .reset-form .input input {width: 120px;}
+.member .reset-form .username { margin-bottom: 5px; }
+
+/*
+* generic form formatting
+*/
+
+.form { margin-top: 10px; }
+.form .label { margin-bottom: 2px; }
+.form .input { margin-bottom: 5px; }
+.form input[type=text] { width: 150px; }
+.form input[type=password] { width: 150px; }
+.form input[type=submit] { margin-top: 10px; }
+
+/*
+* admin, link biz to user
+*/
+
+#link-biz-to-user .tick { float: left; width: 16px; height: 16px; vertical-align: middle; margin-right: 3px; clear: left; }
+#link-biz-to-user .list-item { float: left; vertical-align: middle; cursor: pointer; }
+
+/*
+* add listing
+*/
+
+#add-listing .info-box, #add-listing .container
+{
+	width: 400px;
+}
+
+#add-listing h1 { margin:10px 0 0 20px; }
+#add-listing li {padding-bottom: 10px;}
+#add-listing .sell-copy  { width: 800px; margin: 20px 0 40px 20px; }
+#add-listing .container { float: left;  }
+#add-listing .container .title { color: #3A72AF ; margin: 0 0 10px 0; font-weight: bold; font-size: 18px; padding-bottom: 5px;}
+#add-listing .enhanced {margin: 0 0 0 80px; width: 350px;}
+#add-listing .basic {margin: 0 0 0 20px;}
+#add-listing .info-box { border: solid #999 1px; padding: 10px; }
+#add-listing .button-container {text-align:center;}
+#add-listing .button-container .check-biz-listed {text-align: center; background:#f0f5ff; border:solid #cee2f2 1px; margin:20px 0 30px 0; padding:10px; font-size:12px;}
+#add-listing .button-container .biz-not-listed {margin:0 0 10px 0; font-size: 12px;}
+
+
+/*
+* biz customer support
+*/
+
+#biz-support-form textarea {width: 350px; height: 100px; }
+
+/*
+* Contact Us
+*/
+
+#contact-form textarea {width: 350px; height: 100px; } 
+
+
+/*
+* listing lead
+*/
+
+.lead-header
+{
+	width: 600px;
+	margin: auto;
+	text-align: center;
+}
+
+.lead-container
+{
+	width: 310px;
+	margin: auto;
+	text-align: left;
+}
+
+.lead-container .label
+{
+	float: left;
+	padding-top: 4px;
+	width: 100px;
+	margin: 4px auto;
+	text-align: left;
+}
+
+.lead-container .input
+{
+	float: left;
+	width: 210px;
+	margin: 4px auto;
+	text-align: left;
+}
+
+
+/*
+* listing lead form
+*/
+
+.listing-lead-form .thanks-text
+{
+	width: 500px;
+	margin: 20px auto;
+	text-align: center;
+}
+
+.listing-lead-form .print-button
+{
+	margin:20px auto;
+	text-align: center;
+}
+
+.listing-lead-form .coupon
+{
+	margin:20px auto;
+	border: solid #aaa 2px;
+	width: 500px;
+	overflow: auto;
+	padding: 5px;
+	text-align:center;
+}
+
+.listing-lead-form .coupon div{ float:left; }
+
+.listing-lead-form .fine_print
+{
+	font: 10px Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	margin-top:10px;
+	float:bottom;
+}
+
+
+/*
+ *  listing-claim-biz
+ */	
+ 
+ 
+ /*
+* add listing
+*/
+
+
+.listing-claim-biz .logged-out-main
+{
+	width:880px;
+	text-align:center;
+}
+
+.listing-claim-biz .logged-out-left
+{
+	float:left;
+	text-align: left;
+	width:350px;
+	margin-left:80px;
+	border-right: 1px #999 solid;
+	text-align:left;
+}
+
+
+.listing-claim-biz .logged-out-left .title
+{
+color:#3A72AF;
+margin:0 0 10px 0;
+font-weight:bold;
+font-size:18px;
+padding-bottom: 5px;
+
+
+}
+
+.listing-claim-biz .logged-out-left-int
+{
+	width:290px;
+	text-align:center;
+}
+
+.listing-claim-biz .button
+{
+	margin-top:40px;
+}
+
+.listing-claim-biz .header
+{
+	margin:auto;
+	width:880px;
+	text-align:center;
+
+}
+
+.listing-claim-biz .header h1
+{
+	font-size: 26px;
+	font-weight:bold;
+}
+
+.listing-claim-biz .header h3
+{
+	margin-bottom:10px;
+}
+
+.listing-claim-biz .header .address-text
+{
+	margin:6px 0 0 0;
+	color:#444;
+	font-size: 12px;
+}
+
+.listing-claim-biz .header-text
+{
+	text-align:center;
+	margin:20px 0 30px 0;
+}
+
+.listing-claim-biz .logged-out-right
+{
+	float:left;
+	margin:0 0 0 60px;
+	width: 380px;
+	text-align: left;
+}
+
+
+.listing-claim-biz .logged-out-right .title
+{
+color:#3A72AF;
+margin:0 0 10px 0;
+font-weight:bold;
+font-size:18px;
+padding-bottom: 5px;
+}
+
+.listing-claim-biz .logged-out-right .button-container
+{
+margin:24px 0 0 36px;
+}
+
+
+.listing-claim-biz .logged-out-left-int .label
+{
+	float: left;
+	margin:10px 0 0 24px;
+	_margin:10px 0 0 14px;
+	width: 75px;
+	text-align: left;
+}
+
+.listing-claim-biz .logged-out-left-int .input
+{
+	float: left;
+	margin:5px 0 0 0;
+	width: 150px;
+	text-align: left;
+}
+
+.listing-claim-biz .logged-out-left-int .text
+{
+	text-align:left;
+	margin-bottom:30px;
+}
+
+.listing-claim-biz .logged-out-right .text
+{
+	text-align:left;
+}
+
+
+/*
+ *  listing-state
+ */	
+
+.listing-state .container 
+{ 
+	margin:auto;
+	width: 800px;
+}
+
+.listing-state .letter-bar
+{ 
+	_margin-top: 10px;
+	*margin-top: 10px;
+	text-align: center;
+	font-size: 20px;
+}
+
+.listing-state .letter-container 
+{ 
+	margin-top: 20px;
+	border-top: 1px #ddd solid;
+	padding-top: 20px;
+}
+
+.listing-state .letter
+{ 
+	float: left;
+	width: 40px;
+	text-align: center;
+}
+
+.listing-state .letter span
+{ 
+	color: #3A72AF;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.listing-state .cloud
+{ 
+	float: left;
+	width: 650px;
+	border-left: dotted #ddd 1px;
+	padding-left: 10px;
+}
+
+.listing-state h1
+{
+	text-align: center;
+	padding:12px 0;
+	font-weight: normal;
+	text-align: center;
+}
+
+.listing-state a
+{
+	text-decoration:none
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+*  Biz Add Listing Biz Info
+*/	
+
+.biz .biz-details { margin: 10px 0 0 0; }
+.biz .biz-details fieldset { *padding: 3px; }
+.biz .biz-details-left { float:left; width: 370px; margin: auto; margin-left: 10px; padding-bottom: 10px; }
+.biz .biz-details-right { float:left; width: 370px; }
+.biz .biz-details input[type=text] { width: 190px; }
+.biz .biz-details select { width: 195px; }
+
+.biz .biz-details .label, .biz .biz-details .label-right
+{
+	float: left;
+	margin:16px 20px 0 0;
+	_margin:18px 20px 0 0;
+	width: 100px;
+	text-align: left;
+}
+
+.biz .biz-details .label-right { width: 55px; }
+
+.biz .biz-details .input
+{
+	float: left;
+	margin:10px 0 0 0px;
+	width: 200px;
+	text-align: left;
+}
+
+.biz .biz-description { padding: 0 0 10px 10px; *padding-top: 5px;}
+.biz .biz-description .c { margin: 10px 0 0 0; width: 635px; border-top: solid #ddd 1px; padding-top: 10px;}
+.biz .biz-details .description-text { margin: 0 0 10px 0; }
+.biz .biz-details .description { height: 100px; width: 635px; margin-bottom: 10px; overflow: auto; }
+
+.biz .biz-hours
+{
+	width: 350px;
+	float: left;
+	margin: 10px 0 10px 10px;
+}
+
+.biz .biz-hours .radios { margin: 10px 0 0 35px; }
+
+.biz .biz-pricing
+{
+	width: 400px;
+	float: left;
+	margin: 10px 0 10px 10px;
+}
+
+.biz .biz-pricing .ihrsa { margin: 8px 0 0 125px; }
+.biz .biz-pricing h2 {padding-bottom: 18px;}
+.biz .label-pricing
+{
+	text-align: right;
+}
+
+.biz .submit-buttons
+{
+	margin: 15px 0 10px 0;
+	text-align: right;
+	padding-right: 5px;
+}
+
+.biz .submit-buttons input
+{
+	margin-left: 15px;
+}
+
+/*
+* Add Listing Biz Photos
+*/
+
+/*.add-photos .logo,*/
+/*.add-photos .logo .left-container,*/
+/*.add-photos .logo .right-container,*/
+/*.add-photos .logo .select-desc-container,*/
+/*.add-photos .logo .select-list-container,*/
+.add-photos .logo .upload-container
+{
+	border: solid red 1px;
+}
+
+.add-photos .logo { margin: 10px 0 0 0;  *margin: 0 0 0 0; }
+.add-photos .logo fieldset { padding-bottom: 15px;}
+.add-photos .logo .left-container { float: left; width: 400px; }
+.add-photos .logo .right-container {float: left; margin-left: 10px; padding-top: 2px;}
+.add-photos .logo .select-desc-container { float: left; width: 140px; margin: 10px 0 0 10px; }
+.add-photos .logo .select-list-container { float: left; border: solid #ccc 1px; margin: 10px 0 0 0; }
+.add-photos .logo .select-list-container .logo-list { width:142px; height:110px; overflow : auto; }
+.add-photos .logo .select-list-container .logo-list div { border-bottom: dashed #bbb 1px; text-align: center;}
+.add-photos .logo .select-list-container .logo-list img {width: 100px; height: 100px; cursor: pointer; }
+.add-photos .logo .upload-label { float: left; width: 140px; clear: left; margin: 10px 0 0 10px; }
+.add-photos .logo .upload-input { float: left; margin: 10px 0 0 0; }
+.add-photos .logo .right-container fieldset { width: 160px; height: 150px; text-align: center; padding: 0; }
+.add-photos .logo .right-container img { margin-top: 13px; width: 100px; height: 100px; }
+.amenities-container .biz_note, .photo-bar .biz_note, .logo .biz_note { margin: 7px 0 5px 0; width:833px;}
+.amenities-container .amenities { float: left; margin-right: 20px; }
+
+
+
+/*
+* Add Listing Biz Coupons
+*/
+
+.coupon-fieldset { margin-top: 10px; padding: 20px; }
+.biz-coupon { margin: 0 0 0 20px; }
+.biz-coupon .label { float: left; width: 100px; }
+.paypal-title {padding-bottom: 20px; }
+.paypal-title h2 { margin: 0 0 10px 0;}
+.paypal-info .label { float: left; width: 150px; margin: 0 0 0 20px; }
+.payment-fieldset { margin-top: 10px; padding-bottom: 20px; }
+.thumbnails {margin-top: 10px; white-space: nowrap;clear: both;}
+#thumbnails td{text-align:center; height:155px; vertical-align: bottom;}
+#thumbnails img{margin: 5px;}
+
+
+/*
+* BMI Calculator
+*/
+
+.bmi-calculator .wrapper {width: 690px; margin: 0 auto; margin-top:30px; background-color: aqua;}
+.bmi-calculator .left-side { float:left; width:350px; }
+.bmi-calculator .get-started-block { margin:20px 20px 20px 0; background-image: url(/template/gfx/search-box-listing.jpg); background-repeat: no-repeat; width: 336px; height: 127px; text-align: center; }
+.bmi-calculator .right-side {float:right; width: 310px; height: 260px; margin-top: 0;}
+
+/*
+* Admin Billing
+*/
+
+#admin-billing .letterbar { font-size: 16px; margin: 15px 0 15px 0; }
+#admin-billing .letterbar span { color: #999; }
+#admin-billing .letterbar a { font-weight: bold; }
+
+#admin-billing .results { height: 150px; overflow: auto; width: 600px; border: solid #ddd 1px; padding: 5px; }
+
+#admin-billing th { padding-left: 10px; padding-right: 15px; }
+#admin-billing td { padding-left: 10px; padding-right: 15px; }
+
+#admin-billing .title { font-size: 20px; margin: 0 0 10px 0; }
+#admin-billing .totals { margin-top: 5px; text-align: right; width: 610px; color: #555; font-size: 12px; }
+#admin-billing .actions { position: absolute; font-size: 11px; margin: 0 0 0 450px; }
+
+/*
+* Admin Billing Detail
+*/
+
+#admin-billing-detail .account-info { font-weight: bold; }
+#admin-billing-detail .listing { margin: 20px 0 0 0; padding-bottom: 20px; border-bottom: solid #ccc 2px; }
+#admin-billing-detail .listing .title { font-size: 20px; margin: 0 0 10px 0; color: #3A72AF; }
+#admin-billing-detail .listing .address { color: #3A72AF; font-size: 11px; }
+#admin-billing-detail table { border-collapse: collapse; width: 900px; }
+#admin-billing-detail th { padding: 3px; padding-right: 10px; font-size: 12px; }
+#admin-billing-detail td { padding: 3px; padding-right: 10px; font-size: 12px; }
+#admin-billing-detail td.total-desc { text-align: right; font-weight: bold; color: #3A72AF; }
+#admin-billing-detail td.total { color: #3A72AF; }
+#admin-billing-detail tr.alt { background: #eee; }
+#admin-billing-detail tr.header { background: #ddd; }
+#admin-billing-detail td.credit { color: #999; }
+
+#admin-billing-errors .entry { border-bottom: solid #ccc 1px; margin-bottom: 10px; padding-bottom: 10px; }
+#admin-billing-errors .entry .biz-name { font-size: 16px; font-weight: bold; }
+#admin-billing-errors .entry .biz-info { color: #000; font-size: 12px; font-weight: bold; }
+#admin-billing-errors .entry .bill-info { color: #990000; margin-left: 0; margin-top: 5px; font-size: 12px; }
+#admin-billing-errors .entry .error { margin-left: 0; color: #990000; font-size: 12px; font-weight: bold;  }
+
+/*
+* Biz Account Info (credit card etc)
+*/
+
+
+#biz-account-info .left-panel, #biz-account-info .right-panel { float: left; width: 430px; }
+#biz-account-info .right-panel {  margin: 0 0 0 20px; }
+#biz-account-info input[type=text] { width: 200px; }
+
+#biz-account-info input.exp-month { width: 30px; }
+#biz-account-info input.exp-year { width: 50px; }
+#biz-account-info input.csv { width: 40px; }
+#biz-account-info .input-submit { float: right; margin: 10px 10px 0 0;}
+#biz-account-info .ccbillwarning {width:240px; background: #ffffe0; border: solid #ffcc00 1px; margin:5px 0; padding: 4px; font-size:11px;}

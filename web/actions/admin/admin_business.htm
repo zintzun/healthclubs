@@ -1,0 +1,53 @@
+<?= html_tabs($ADMIN_NAV) ?>
+<form method="get" action="/admin/business">
+<h1><img src='/template/gfx/icons/application_form_edit.png' style='vertical-align: middle; border: 0;'> Edit Businesses <input type="text" name="q" value="<?= isset($_REQUEST['q'])?$_REQUEST['q']:'' ?>" /><input type="submit" value="search" /></h1>
+</form>
+
+<div style="margin: 10px 0 0 0;">
+
+<?php
+
+	if ( isset($_REQUEST['q']) )
+	{
+		$SHOW_ADMIN_CONTROLS = true;
+		print "<br />";
+		include "actions/search/search.proc";
+		include "actions/search/search.htm";
+	}
+	// If first time in, or editing a club
+	else
+	{
+
+		$FORM = new form('/'.$TARGET->action_orig,'my-form-id','Add/Edit Address');
+		
+		foreach ( $BIZ_FIELDS as $field )
+		{
+			if ( $field == 'is_premium' )
+			{
+				$FORM->add('select','is_premium',isset($_POST[$field])?$_POST[$field]:'','',array ('No','Yes'),'Premium Listing');
+			}
+			else if ( $field == 'state' )
+			{
+				$FORM->add('select','state',isset($_POST[$field])?$_POST[$field]:'','',$GLOBALS['STATES_CAPITALISED'],'State');
+			}
+			else if ( $field == 'type' )
+			{
+				$FORM->add('select','type',isset($_POST[$field])?$_POST[$field]:'','',$LISTING_TYPES,'Type');
+			}
+			else
+			{
+				$FORM->add('text',$field,isset($_POST[$field])?$_POST[$field]:'','','',ucwords(str_replace('_',' ',$field)));
+			}
+		}
+	
+		//$FORM->add('select','state',$EDIT->state,'',$GLOBALS['STATES_CAPITALISED'],'State');
+	
+		$FORM->add('submit','do_add_edit','Add/Edit');
+	
+		print $FORM->render();
+
+	}
+
+
+?>
+</div>

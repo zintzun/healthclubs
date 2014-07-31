@@ -1,0 +1,23 @@
+<script type="text/javascript">
+ var RecaptchaOptions = {
+    theme : 'white'
+ };
+ </script>
+ <a name="reviewtop"></a>
+<div class="reviews">
+	<div class="title">
+		<h2><?=$ENTRY->name . " Reviews"?></h2>
+	</div>
+	<div class="review-link">
+		<a href="#writereview">(Write a review)</a>
+	</div>
+	<br clear="all" />
+	
+	<br />
+	<br />
+		
+	<? include "actions/listing-entry/_review_listing.htm"; ?>
+	
+	<? include "actions/listing-entry/_new_review_panel.htm"; ?>
+
+</div><!-- reviews -->

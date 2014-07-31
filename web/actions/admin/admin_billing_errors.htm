@@ -1,0 +1,38 @@
+<?= html_tabs($ADMIN_NAV); ?>
+<h1>
+	<a href="/admin/billing">Billing</a> &#9658; 
+	Paypal Processing Errors
+</h1>
+
+<div id="admin-billing-errors">
+	<?php
+	
+		if ( $__errors )
+		{
+			foreach ( $__errors as $error )
+			{
+				?>
+					<div class="entry">
+						<div class="biz-name"><?= $error->biz_name ?></div>
+						<div class="biz-info"><?= $error->first_name ?> <?= $error->last_name ?> (<?= $error->biz_position ?>), Tel: <?= $error->phone ?>, Email: <?= $error->email ?>, Login: <?= $error->login ?>, UID: <?= $error->user_id ?></div>
+						<div class="bill-info"><?= $error->description ?></div>
+						<div class="error"><?= $error->error ?></div>
+						<div class="actions"><a href="?rebill=true&pid=<?= $error->payment_id ?>">Re-bill Now &raquo;</a></div>
+					</div>
+				<?
+			}
+			//print_ar($__errors);
+		}
+		else
+		{
+			?>
+				<div class="fade" style="padding: 50px 0; font-size: 20px;">No Errors</div>
+			<?
+		}
+	
+		
+	
+		//print_ar($__leads);
+	
+	?>
+</div>

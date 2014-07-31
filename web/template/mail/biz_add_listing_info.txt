@@ -1,0 +1,26 @@
+From: Healthclubs.net <{from}>
+Subject: Healthclubs.net - Add Listing Basic Info
+
+
+
+Contact Information:
+--------------------
+
+First Name: {first_name}
+Last Name: {last_name} 
+Position: {position}
+Phone: {phone}
+Email: {email}
+
+
+Business Information:
+---------------------
+
+Business Name: {business_name}
+Business Type: {type}
+Street Address 1: {street1}
+Street Address 2:{street2}
+City: {city}
+State: {state}
+Zip: {zip}
+Website: {website}

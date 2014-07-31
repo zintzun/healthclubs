@@ -1,0 +1,20 @@
+From: Healthclubs.net <{from}>
+Subject:  Thank you for submitting your business to Healthclubs.net
+
+Hello {first_name},
+
+Thank you for submitting your business to Healthclubs.net. We will review your info and will get back to you shortly.
+
+This is the business information we received:
+
+
+{business_name}
+{type}
+{street1}
+{street2}
+{city}, {state}, {zip}
+{website}
+
+
+Regards,
+Healthclubs.net

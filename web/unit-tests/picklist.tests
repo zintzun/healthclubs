@@ -1,0 +1,394 @@
+<?php
+
+	/*
+	* Tests for the feature interface
+	*/		
+
+	include "interfaces/picklist.inc";
+
+	class picklist_tests extends UnitTestCase
+	{
+
+		var $cur_pick_id = 0;
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* This makes it easy to access the classes withotu having to re 
+		* initialise them in every test function
+		*/
+
+		function __construct()
+		{
+			$this->pa = new picklist_admin('test_picklist');
+			$this->p  = new picklist('test_picklist');
+		}
+	
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* These tests prove that all the functions exist in the loaded class
+		*/	
+	
+		function test_functions_exist()
+		{
+			
+			// TEST FUNCS EXIST IN picklist_admin CLASS
+			$functions = array
+			(
+				'add',
+				'edit',
+				'remove',
+				'remove_by_text',
+				'set_order',
+				'bump_up',
+				'bump_down',
+				'get',
+				'get_num',
+				'get_all',
+			);
+		
+			$picklist_admin = new picklist_admin('test_picklist');
+		
+			foreach ($functions as $function) 
+			{
+				$this->assertTrue( method_exists($picklist_admin, $function), "picklist_admin function ($function) does not exist" );
+			}
+			
+			// TEST FUNCS EXIST IN picklist CLASS
+			$functions = array
+			(
+				'assign_val',
+				'revoke_val',
+			);
+		
+			$picklist = new picklist('test_picklist');
+		
+			foreach ($functions as $function) 
+			{
+				$this->assertTrue( method_exists($picklist, $function), "picklist_admin function ($function) does not exist" );
+			}
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_table_exist()
+		*/	
+
+		function test_table_exist()
+		{
+			global $db;
+			$this->assertEqual( $db->get_var("SHOW TABLES LIKE 'picklists'"), 'picklists');
+			$this->assertEqual( $db->get_var("SHOW TABLES LIKE 'picklists_lookup'"), 'picklists_lookup');
+		}
+		
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_admin_add()
+		*/	
+	
+		function test_picklist_admin_add()
+		{
+			global $db;
+			
+			// Mus be some text in there
+			$this->assertEqual(is_error($this->pa->add($new_text='')), 'missing_text');
+			
+			// Not expecting any kind of error when inserting good value
+			$this->assertEqual(is_error($pick_val_id = $this->pa->add('Test Value 1')), false);
+
+			// Store the new pick val id
+			$this->store_pick_id($pick_val_id);
+			
+			// SQL Test to make sure it is correct
+			$this->assertEqual($db->get_var("SELECT value FROM picklists WHERE picklist_name = 'test_picklist'"), 'Test Value 1');
+
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_admin_get()
+		*/	
+	
+		function test_picklist_admin_get()
+		{
+			global $db;
+			
+			// $pick_val_id must be number
+			$this->assertEqual(is_error($this->pa->get('bad pick val id')), 'invalid_pick_val_id');
+			
+			// test it works!
+			$this->assertEqual(is_error($pick_list_obj = $this->pa->get($this->get_pick_id())), false);
+			
+			// Check it has the correct object structure (expecting 4 elements)
+			$this->assertEqual(count((array)$pick_list_obj),4);
+
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_admin_edit()
+		*/	
+	
+		function test_picklist_admin_edit()
+		{
+			global $db;
+			
+			// $pick_val_id must be number
+			$this->assertEqual(is_error($this->pa->edit('bad pick val id','Test Value 1 Edited')), 'invalid_pick_val_id');
+
+			// $new_text must not be empty
+			$this->assertEqual(is_error($this->pa->edit($this->get_pick_id(),'')), 'missing_text');
+			
+			// must throw error if record doesn't exist
+			$this->assertEqual(is_error($this->pa->edit(10000000000,'Test Value 1 Edited')), 'pick_val_not_found');
+
+			// Must edit the value succesfully
+			$this->assertEqual(is_error($this->pa->edit($this->get_pick_id(),'Test Value 1 Edited')), false);
+			
+			// SQL to test
+			$this->assertEqual($db->get_var("SELECT value FROM picklists WHERE picklist_name = 'test_picklist'"), 'Test Value 1 Edited');
+
+		}
+		
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_admin_remove()
+		*/	
+	
+		function test_picklist_admin_remove()
+		{
+			global $db;
+
+			// $pick_val_id must be number
+			$this->assertEqual(is_error($this->pa->remove('bad pick val id')), 'invalid_pick_val_id');
+			
+			// Must remove the value succesfully
+			$this->assertEqual(is_error($this->pa->remove($this->get_pick_id())), false);
+			
+			// SQL to test
+			$this->assertEqual($db->get_var("SELECT value FROM picklists WHERE picklist_name = 'test_picklist'"), false);
+
+		}
+				
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_admin_set_order()
+		*/	
+	
+		function test_picklist_admin_set_order()
+		{
+			global $db;
+
+			$this->pa->add('Test Value 1');
+			$this->pa->add('Test Value 2');
+			$this->pa->add('Test Value 3');
+			$this->pa->add('Test Value 4');
+			$this->store_pick_id($this->pa->add('Test Value 5'));
+
+			// $pick_val_id must be number
+			$this->assertEqual(is_error($this->pa->set_order('bad pick val id',1)), 'invalid_pick_val_id');
+			
+			// $new_position must be number
+			$this->assertEqual(is_error($this->pa->set_order($this->get_pick_id(),'bad new position')), 'invalid_new_position');
+
+			// must throw error if record doesn't exist
+			$this->assertEqual(is_error($this->pa->set_order(10000000000,1)), 'pick_val_not_found');
+
+			// It should set the new position
+			$this->assertEqual(is_error($this->pa->set_order($this->get_pick_id(),3)), false);
+			
+			// Test that value 5 has been moved down to value 3
+			$list = $db->get_col("SELECT value FROM picklists WHERE picklist_name = 'test_picklist' ORDER BY sort_order");
+			$this->assertEqual($list[2], "Test Value 5");
+
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_admin_bump_up()
+		*/	
+	
+		function test_picklist_admin_bump_up()
+		{
+			global $db;
+			
+			// $pick_val_id must be number
+			$this->assertEqual(is_error($this->pa->bump_up('bad pick val id')), 'invalid_pick_val_id');
+			
+			// test it works!
+			$this->assertEqual(is_error($this->pa->bump_up($this->get_pick_id())), false);
+			
+			// Test that value 3 has been moved down to value 4
+			$list = $db->get_col("SELECT value FROM picklists WHERE picklist_name = 'test_picklist' ORDER BY sort_order");
+			$this->assertEqual($list[3], "Test Value 5");
+		}
+		
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_admin_bump_down()
+		*/	
+
+		function test_picklist_admin_bump_down()
+		{
+			global $db;
+			
+			// $pick_val_id must be number
+			$this->assertEqual(is_error($this->pa->bump_down('bad pick val id')), 'invalid_pick_val_id');
+			
+			// test it works!
+			$this->assertEqual(is_error($this->pa->bump_down($this->get_pick_id())), false);
+			
+			// Test that value 3 has been moved down to value 4
+			$list = $db->get_col("SELECT value FROM picklists WHERE picklist_name = 'test_picklist' ORDER BY sort_order");
+			$this->assertEqual($list[2], "Test Value 5");
+		}
+		
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_admin_get_num()
+		*/	
+	
+		function test_picklist_admin_get_num()
+		{
+			$this->assertEqual($this->pa->get_num(), 5);
+		}
+		
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_admin_get_all()
+		*/	
+	
+		function test_picklist_admin_get_all()
+		{
+			$this->assertIsA($result_array = $this->pa->get_all(), 'Array');
+			$this->assertEqual(count($result_array), 5);
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_assign_val()
+		*/	
+	
+		function test_picklist_assign_val()
+		{
+			global $db;
+			
+			// $pick_val_id must be number
+			$this->assertEqual(is_error($this->p->assign_val('bad pick val id',1)), 'invalid_pick_val_id');
+			
+			// $owner_id should be numeric
+			$this->assertEqual(is_error($this->p->assign_val($this->get_pick_id(),'bad owner id')), 'invalid_owner_id');
+			
+			// test it works!
+			$this->assertEqual(is_error($this->p->assign_val($this->get_pick_id(),1)), false);
+			
+			// Make sure that this item has been assigned
+			$this->assertEqual($db->get_var("SELECT value FROM picklists_lookup pl, picklists p WHERE p.picklist_name = 'test_picklist' AND pl.pick_val_id=p.pick_val_id"),'Test Value 5');
+
+		}
+		
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_get()
+		*/	
+	
+		function test_picklist_get()
+		{
+			global $db;
+						
+			// $owner_id should be numeric
+			$this->assertEqual(is_error($this->p->get('bad owner id')), 'invalid_owner_id');
+			
+			// test it works!
+			$this->assertEqual(is_error($picklist = $this->p->get(1)), false);
+
+			$this->assertIsA($picklist, 'Array');
+			$this->assertEqual(count($picklist), 1);
+
+		}
+		
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_revoke_val()
+		*/	
+	
+		function test_picklist_revoke_val()
+		{
+			global $db;
+			
+			// $pick_val_id must be number
+			$this->assertEqual(is_error($this->p->revoke_val('bad pick val id',1)), 'invalid_pick_val_id');
+			
+			// $owner_id should be numeric
+			$this->assertEqual(is_error($this->p->revoke_val($this->get_pick_id(),'bad owner id')), 'invalid_owner_id');
+			
+			// test it works!
+			$this->assertEqual(is_error($this->p->revoke_val($this->get_pick_id(),1)), false);
+
+			// Make sure that this item has been un-assigned
+			$this->assertEqual($db->get_var("SELECT value FROM picklists_lookup pl, picklists p WHERE p.picklist_name = 'test_picklist' AND pl.pick_val_id=p.pick_val_id"),false);
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* test_picklist_admin_remove_by_text()
+		*/	
+	
+		function test_picklist_admin_remove_by_text()
+		{
+			global $db;
+			
+			// $new_text must not be empty
+			$this->assertEqual(is_error($this->pa->remove_by_text('')), 'missing_text');
+			
+			// Must remove the value succesfully
+			for ( $i=1; $i <=5 ; $i++ )
+			{
+				$this->pa->remove_by_text("Test Value $i");
+			}
+
+			// SQL to test
+			$this->assertEqual($db->get_var("SELECT value FROM picklists WHERE picklist_name = 'test_picklist'"), false);
+
+		}
+
+		/********************************************************************
+		* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		* Private funcs used by this testing class
+		*/	
+
+		private function store_pick_id($pick_val_id)
+		{
+			$this->cur_pick_id = $pick_val_id;
+		}
+		
+		private function get_pick_id()
+		{
+			return $this->cur_pick_id;
+		}
+
+	}
+	
+/*
+
+assertTrue($x)	Fail if $x is false
+assertFalse($x)	Fail if $x is true
+assertNull($x)	Fail if $x is set
+assertNotNull($x)	Fail if $x not set
+assertIsA($x, $t)	Fail if $x is not the class or type $t
+assertNotA($x, $t)	Fail if $x is of the class or type $t
+assertEqual($x, $y)	Fail if $x == $y is false
+assertNotEqual($x, $y)	Fail if $x == $y is true
+assertWithinMargin($x, $y, $m)	Fail if abs($x - $y) < $m is false
+assertOutsideMargin($x, $y, $m)	Fail if abs($x - $y) < $m is true
+assertIdentical($x, $y)	Fail if $x == $y is false or a type mismatch
+assertNotIdentical($x, $y)	Fail if $x == $y is true and types match
+assertReference($x, $y)	Fail unless $x and $y are the same variable
+assertClone($x, $y)	Fail unless $x and $y are identical copies
+assertPattern($p, $x)	Fail unless the regex $p matches $x
+assertNoPattern($p, $x)	Fail if the regex $p matches $x
+expectError($x)	Swallows any upcoming matching error
+assert($e)	Fail on failed expectation object $e
+
+*/
+	
+?>

@@ -1,0 +1,42 @@
+<?= html_tabs($ADMIN_NAV) ?>
+
+<h1>
+	Listing Claims &#9658;
+	<select name="claim-status" id="claim-status" onChange="window.location='/admin/listing-claims/'+$('#claim-status').val()">
+	<?
+		print '<option value="'.$TARGET->arg3.'">'.ucfirst($TARGET->arg3).'</option>';
+		print '<option>---</option>';
+		
+		foreach ($__CLAIM_STATUS as $status)
+		{
+			print '<option value="'.$status.'">'.ucfirst($status).'</option>';
+		}
+	?>
+	</select>
+</h1>	
+
+<?
+	if ( isset($__claims) )
+	{
+		foreach ( $__claims as $claim )
+		{
+			print 
+			(
+				"<div style='margin: 5px 0 5px 0;'>" .
+				'<a href="/admin/listing-claims/'.$TARGET->arg3.'?approve='.$claim->user_id.'-'.$claim->biz_id.'" title="Approve claim">'.
+					"<img src='/template/gfx/icons/accept.png' style='vertical-align: middle; border: 0;'></a> ".
+				"<a href=\"javascript:ezAjax.tools.confirm('Are you sure you want to delete this claim?','/admin/listing-claims/".$TARGET->arg3.
+					"?delete=".$claim->user_id.'-'.$claim->biz_id."')\" title='Delete claim'>".				
+					"<img src='/template/gfx/icons/delete.png' style='vertical-align: middle; border: 0;'></a> ".
+				"<a href=\"/admin/members/{$claim->approval_status}/".($claim->is_biz_owner?'biz':'member').
+					"/{$claim->user_id}\">{$claim->login}</a> wants to claim ".
+					"<a href=\"/admin/business/{$claim->biz_id}\">{$claim->name}</a>"
+			);
+		}
+	}
+	else
+	{
+		print "<p>No claims</p>";	
+	}
+
+?>

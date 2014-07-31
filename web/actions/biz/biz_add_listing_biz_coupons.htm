@@ -1,0 +1,70 @@
+<?= html_tabs($BIZ_NAV) ?>
+<h1><?= ( isset($_SESSION['BIZ_LISTING']['biz_id']) && $_SESSION['BIZ_LISTING']['biz_id'] != 1) ? 'Edit Listing': 'Add a Listing' ?></h1>
+<?= html_tabs($BIZ_LISTING_NAV) ?>
+<div style="border: solid #BBBBBB 1px; margin-top: -11px; border-top: none; padding: 10px;">
+
+	<h2>Coupons and Discounts</h2>
+
+	<div class="biz_note">Choose an incentive offer below. This will entice visitors looking for fitness memberships to contact you.</div>
+
+
+	<form name="biz-coupons-form" method=post action="/<?= $TARGET->action_orig?>">
+
+	<fieldset class="coupon-fieldset">
+		<legend>Coupons and Discounts</legend>
+
+<br>
+
+	<?
+		if (isset($__coupons))
+		{
+			?>
+			<div class="biz-coupon">
+
+				<div class="row">
+					<div class="label">Discount Type</div> 
+					<div class="input-container">
+						<select type="select" name="coupon_id" class="select">
+							<option value="<?= isset($__coupons[$__coupon_id]) ? $__coupon_id : '' ?>"><?= isset($__coupons[$__coupon_id]) ? $__coupons[$__coupon_id]:'Select a coupon.' ?></option>
+							<option value="">---</option>
+							<?
+								foreach ($__coupons as $pick_val_id => $text)
+								{
+									?>
+									<option value="<?= $pick_val_id ?>"><?= $text ?></option>
+									<?
+								}
+							?>
+						</select>
+					</div>
+					<br clear="all"/>
+				</div>
+
+			</div>
+
+			<?
+		} // if (isset($__coupons))
+		else
+		{
+			?>
+				<div class="biz_note">
+					<b>Please specify the business type first.</b>
+				</div>
+			<?
+		}
+	?>
+	</fieldset>
+
+	
+		
+		<br clear="all"/>
+
+		<div class="submit-buttons">
+				<input type=submit name="do_previous" value="&laquo; Previous" />
+			<? /*	<input type=submit name="do_save" value="Save" /> */ ?>
+				<input type=submit name="do_finish" value="Finish &raquo;" />
+		</div>
+
+	</form>
+
+</div>

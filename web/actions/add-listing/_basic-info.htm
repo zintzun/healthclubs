@@ -1,0 +1,52 @@
+<script type="text/javascript">
+ var RecaptchaOptions = {
+    theme : 'white'
+ };
+ </script>
+<div style="width: 500px; margin: auto;">
+
+<h1 style="text-align: center;">Provide Your Business Information</h1>
+
+<p style="text-align: center;"> We will contact you shortly.  </p>
+
+<?
+	$FORM = new form('/'.$TARGET->action_orig,'biz-basic-info','Your Business Basic Information');
+	
+	foreach ($fields as $field)
+	{
+		if ( $field == 'state' )
+		{
+			$FORM->add('select','state',isset($_POST[$field])?$_POST[$field]:'','',$GLOBALS['STATES_CAPITALISED'],'State');
+		}
+		else if ( $field == 'type' )
+		{
+			$FORM->add('select','type',isset($_POST[$field])?$_POST[$field]:'','',$LISTING_TYPES,'Type');
+		}
+		else
+		{
+			$FORM->add('text',$field,isset($_POST[$field])?$_POST[$field]:'','','',ucwords(str_replace('_',' ',$field)));
+		}
+	}
+	$FORM->add('submit','do_submit_basic_info','Submit');
+
+	$form = $FORM->render();
+
+	$captcha = '';
+	$submit_button = '';
+
+	if ( 1 && USE_CAPTCHA )
+	{
+		include_once "third_party/recaptcha/recaptchalib.php";
+		$pos = strpos($form, '<td><input type="submit" name="do_submit_basic_info" id="id-do_submit_basic_info"');
+		$submit_button = substr($form,$pos);
+		$form = substr($form,0,$pos);
+		$captcha =
+			'<td></td></tr><tr>'.
+			'<td></td><td><div class="recaptcha">'.
+			recaptcha_get_html(RECAPTCHA_PUBLIC_KEY,null,true).
+			'</div></td></tr><tr><td>&nbsp</td>';
+	}
+	print $form. $captcha .  $submit_button;
+?>
+
+</div>

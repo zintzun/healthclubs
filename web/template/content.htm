@@ -1,0 +1,16 @@
+<?php
+
+	if ( defined('ERROR_STR') )
+	{
+		print '<div id="error">Oops! '.ERROR_STR."</div>\n";
+	}
+
+	if ( defined('NOTIFY_STR') )
+	{
+		print '<div id="notify">'.NOTIFY_STR."</div>\n";
+	}
+
+?>
+<div id="content">
+	<?= $TARGET->content ?>
+</div>

@@ -1,0 +1,15 @@
+From: Healthclubs.net <service@healthclubs.net>
+Subject: {biz_name}
+
+Hello {first_name},
+
+There has been an issue with the approval process for "{biz_name}" or it has been unlinked from your account.
+
+Please contact us using our contact form if you have any further questions:
+
+
+	--> {contact_link}
+
+
+Regards,
+Healthclubs.net

@@ -1,0 +1,19 @@
+<?php
+
+  if ( isset($FORCE_ERROR_PAGE) )
+  {
+    include "actions/page-not-found/page-not-found.proc";
+    include "actions/page-not-found/page-not-found.htm";
+    return;
+  }
+	
+	if ( $__form_was_submitted == true )
+	{
+		include "actions/listing-lead-form/_thanks.htm";
+	}
+	else
+	{
+		include "actions/listing-lead-form/_form.htm";
+	}
+
+?>

@@ -1,0 +1,368 @@
+<?
+  if ( isset($FORCE_ERROR_PAGE) )
+  {
+		include "actions/page-not-found/page-not-found.proc";
+		include "actions/page-not-found/page-not-found.htm";
+    return;
+  }
+?>
+<h1><?= ucwords($TARGET->content_title) ?></h1>
+
+<div class="address-block">
+
+	<?= ($ENTRY->is_premium && $biz_is_linked && $biz_logo)? '<div class="logo"><img src="'.$biz_logo.'" /></div>' : '' ?>
+
+
+	<!-- Google Rich Snippet -->	
+	<?= $biz_rating ? '<span xmlns:v="http://rdf.data-vocabulary.org/#" typeof="v:Review-aggregate">' : '' ?> 
+
+	<div class="address">
+		
+		<?= $biz_rating ? '<span property="v:itemreviewed">' : '' ?>
+			<b><?= $ENTRY->name ?></b>
+		<?= $biz_rating ? '</span>' : '' ?>
+		
+		<br />
+		<?= $ENTRY->street ?><br />
+		<?= $ENTRY->city ?>, <?= $STATE_SHORT ?> <?= $ENTRY->zip ?><br />
+		<?= $ENTRY->phone ?>
+
+		<div class="review">
+			<?
+				 if ($biz_rating)
+				{
+					?> 
+							<div class="stars" id="">
+								<span property="v:average" style="display:none;"><?= $biz_rating ?></span> 
+								<?= create_stars ('average-rating', $biz_rating)  ?>
+							</div>					
+						 
+						&nbsp; <a href="#reviewtop"> <span property="v:count"> <?= $review_count ?> </span>  review<?= $review_count >1?'s':'' ?> </a>
+					<? 
+				}
+			?>
+		</div>
+
+		<!-- End Google Rich Snippet -->	
+		<?= $biz_rating ? '</span>' : '' ?>
+
+</div>
+<br clear="all" />
+
+
+
+	<?
+		if ($ENTRY->is_premium && $biz_is_linked)
+		{
+			if ($ENTRY->is_premium && $coupon_link) 
+			{
+				?>
+					<div class="coupon">
+						<a href="<?=$coupon_link.'" rel="nofollow">'.$coupon->value ?></a><br>
+						<div class="claimtext">click to claim</div>
+					</div>
+				<?
+			}
+			?>
+
+				<div class="description">
+					<?= $ENTRY->description ?>
+				</div>
+
+
+		<?
+		}
+		else
+		{
+			?>
+
+ 				<div class="top-ads">
+					<?
+						if ( ENV == 'live' )
+						{
+							?>
+								<script type="text/javascript">
+			  					GA_googleFillSlot("Healthclubsnet_ListingPage_BeneathBizAddress_234x60");
+								</script>
+							<?
+						}
+					?>
+				</div>
+
+			<?
+		}
+	?>
+</div> <!-- address-block -->
+
+
+<div class="map-block">
+<?php
+
+	/*
+	* Print out Google map with pins
+	*/
+
+	if ( $GMAP_MARKER_JS )
+	{
+		print "<div id='map' style='width:570px;height:360px'></div>\n";
+		print "<script>\n";
+		print "ezAjax.gmaps.init($MAP_CENTER_JS_ARGS,".ZOOM_LEVEL_LISTING_ENTRY.");\n";
+		print $GMAP_MARKER_JS;
+		print "</script>\n";
+	}
+
+?>
+</div>
+<br clear=all />
+
+
+<div class="link-block">
+
+<div class="bookmarks">
+	<div style="margin-left:4px;float:left"> <b>Share it:</b> </div>
+	<div class="add-this">
+		<!-- AddThis Button BEGIN -->
+			<script type="text/javascript">var addthis_pub="tylernichols";</script>
+			<script type="text/javascript" src="http://s7.addthis.com/js/200/addthis_widget.js"></script>
+			<a href="http://www.addthis.com/bookmark.php?v=20" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()">
+				<img src="http://s7.addthis.com/static/btn/lg-share-en.gif" width="125" height="16" alt="Bookmark and Share" style="border:0"/>
+			</a>
+		<!-- AddThis Button END -->
+	</div>
+	
+	
+<? 
+	if ( $ENTRY->is_premium && $biz_is_linked ) 
+	{
+		?>	
+<div style="margin-left:50px;float:left">
+<?= $ENTRY->homepage ? '<span style="float:left;margin-left:15px;"><a href="'.(preg_match('/^http:/',$ENTRY->homepage)?'':'http://').$ENTRY->homepage.'" rel="nofollow" target="_blank">Visit Website</a></span> ':'' ?>	
+</div>	
+	<? 
+		}	?>
+
+
+
+<div style="margin-left:50px;float:left"><?= (! $biz_is_linked)? ' <a href="/contact/'.$TARGET->arg4.'" rel="nofollow">Suggest a Correction</a>':'' ?></div>
+	
+
+<? // if ( session_is_active() ) { ?>
+
+<div style="margin-left:50px;float:left"><?= (! $biz_is_linked)? '<a href="'.$claim_link.'" rel="nofollow">Claim This Listing</a>':'' ?></div> 
+
+<? // } ?>
+	
+<br clear=all />
+
+</div>
+
+
+
+
+<div class="map-links">
+	<b>Other Maps:</b> 
+	<span>
+		<a href="http://www.mapquest.com/maps?address=<?= str_replace(' ','+',$ENTRY->street).'&city='.$ENTRY->city.'&state='.$STATE_SHORT.'&zipcode='.$ENTRY->zip ?>&country=US" rel="nofollow"> Mapquest</a>
+	</span><span> | </span><span>
+			<a href="http://maps.yahoo.com/maps_result?addr=<?= str_replace(' ','+',$ENTRY->street) ?>&csz=<?= $ENTRY->city.'+'.$STATE_SHORT.'+'.$ENTRY->zip ?>&country=us" rel="nofollow"> Yahoo!</a>
+		</span>
+</div>
+<br clear=all />
+
+
+</div>
+
+
+<? 
+	if ( $ENTRY->is_premium && $biz_is_linked ) 
+	{
+		?>
+		<div></div>
+		<?
+	}
+		else
+	{
+		?>
+		<div class="middle-ads">
+		<?
+			if ( ENV == 'live' )
+			{
+				?>
+					<script type="text/javascript">
+					  GA_googleFillSlot("Healthclubsnet_ListingPage_AboveReviewSection_728x90");
+					</script>
+				<?
+			}
+		?>
+		</div>
+		<?
+	}
+?>
+
+
+
+<?
+if ( $ENTRY->is_premium && $biz_is_linked ) 
+{
+	?>
+		<div class="club">
+			<table class="club-info" width="100%">
+			 <col width="24%"></col> <col width="34%"></col> <col width="42%"></col>
+			 <tr>
+				 <td>
+					<table class="" width="100%">
+						<tr>
+							<td colspan="2">
+								<div class="title">
+									<b>
+										Hours
+									</b>
+								</div>
+							</td>
+						</tr>
+						<?
+						  if ($ENTRY->is_24_hour)
+							{
+								print "<tr><td>Open 24 hrs</td></tr>";
+							}
+						  else if ($ENTRY->is_appointment_only)
+							{
+								print "<tr><td>By Appointment Only</td></tr>";
+							}
+						  else
+							{
+								foreach (array('mon-Thu','fri','sat','sun') as $day)
+								{
+									print "<tr><td>".ucfirst($day)."</td>";
+									if ( ! $ENTRY->is_appointment_only && ! $ENTRY->is_24_hour )
+									{
+										printf("<td class=\"right-align\">%2d:00am -&nbsp;",$ENTRY->{substr($day,0,3).'_open'});
+										printf("%2d:00pm</td>",$ENTRY->{substr($day,0,3).'_close'});
+									}
+									print "</tr>";
+								}
+							}
+						?>
+					</table>
+					<br>
+					<div class="biz-pricing">
+
+						<div class="title"> <b>Prices & Fees</b> </div>
+						<table width="100%">
+							<tr>
+								<td> Basic Dues: </td>
+								<td class="right-align">
+									<?= $ENTRY->cost_membership?'$'.$ENTRY->cost_membership .'/'. $ENTRY->cost_membership_timeframe:'Free' ?> </td>
+							</tr>
+							<tr>
+								<td> Guest Fee: </td>
+								<td class="right-align"><?= $ENTRY->cost_guest?'$'.$ENTRY->cost_guest.'/'. $ENTRY->cost_guest_timeframe:'Free' ?> </td>
+							</tr>
+							<tr>
+								<td> Initiation Fee: </td>
+								<td class="right-align"><?= $ENTRY->cost_to_join?'$'.$ENTRY->cost_to_join:'Free' ?> </td>
+							</tr>
+							<tr>
+								<td style="padding-top: 30px;" colspan="2">
+									<?
+										if ($ENTRY->is_ihrsa)
+										{
+											?>
+												<span><img src="/template/gfx/icons/tick.png" class="vam" title="International Health, Racquet and Sportsclub Association"></span>
+												<span class="vam" title="International Health, Racquet and Sportsclub Association">
+													<b>IHRSA Passport Program</b>
+												</span>
+											<?
+										}
+									?>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+				<td>
+					<table class="amenities-table">
+						<tr>
+							<td colspan="2">
+								<div class="title"> <b>Amenities</b> </div>
+							</td>
+						</tr>
+						<?
+							if ($amenities) 
+							{
+								$i = 0;
+								foreach ($amenities as $amenity)
+								{
+									print ((++$i % 2)?'<tr><td>'.$amenity.'</td>' : '<td>'.$amenity."</td></tr>\n"); 
+								}
+							}
+							else
+							{
+								?>
+									<tr><td><span class="fade">Coming Soon!</span></td></tr>
+								<?
+							}
+						?>
+					</table>
+				</td>
+				<td>
+					<div class="pictures">
+						<?
+							foreach ( $biz_pics as $pic )
+							{
+								?>
+									<div>
+										<a href="<?= $pic['pic'] ?>" title="" class="thickbox" rel="my-biz"><img src="<?= $pic['thumb'] ?>" /></a> 
+									</div>
+								<?
+							}
+						?>
+					</div>
+				</td>
+				</tr>
+			</table>
+		</div> <!-- class=club -->
+	<?
+}
+?>
+
+
+
+
+<? /* 
+
+// this is for member functionality that will be in ver. 2 
+
+<? if ( session_is_active() ) { ?>
+	<a style="cursor: pointer;" onclick="ezAjax.bizBookmarks.addBookmark(<?= myuid().','.$TARGET->arg4 ?>)" class="list-item">
+	<img src="/template/gfx/icons/book_add.png" style="vertical-align: top;"> Add to Bookmarks</a> 
+	<span id='biz_bookmark'></span>
+	<br /><br />
+<? } ?>
+
+*/ ?>
+
+
+<? /*
+
+// moved up further on the page
+
+<? if ( session_is_active() ) { ?>
+
+<?= (! $biz_is_linked)? '<a href="'.$claim_link.'">Claim This Listing</a>':'' ?>
+<br /><br />
+<? } ?>
+
+*/ ?>
+
+
+
+<? include "actions/listing-entry/_reviews.htm"; ?>
+
+<div class="biz-add-section"></div>
+
+<br>
+
+<div class="biz-add-section"></div>
+
+<br clear=all />

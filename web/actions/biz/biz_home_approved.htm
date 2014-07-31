@@ -1,0 +1,11 @@
+<?= html_tabs($BIZ_NAV) ?>
+<h1>
+	Welcome back <?= ucfirst(strtolower( $_SESSION['USER']['first_name'])) ?>
+</h1>
+<ul>
+	<li>You have <?= format_s($__stats['num_listings'],'listing') ?> <a href="/biz/listings">edit your listings</a></li>
+	<li>You have <?= format_s($__stats['num_leads'],'new lead') ?> <a href="/biz/leads">view your leads</a></li>
+</ul>
+<p>
+
+</p>

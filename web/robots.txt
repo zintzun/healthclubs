@@ -1,0 +1,13 @@
+User-agent: *
+
+Disallow: /health-clubs/Massachusetts/Clinton/45826/Test-Gym
+
+Allow: /
+
+User-agent: dotbot
+Disallow: / 
+
+User-agent: ia_archiver
+Disallow: /
+
+Sitemap: http://www.healthclubs.net/sitemap.xml

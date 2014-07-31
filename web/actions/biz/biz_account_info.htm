@@ -1,0 +1,132 @@
+<?= html_tabs($BIZ_NAV) ?>
+<div id="biz-account-info">
+	<? 
+		if ( $__is_first_login ) 
+		{
+			?><h1>Create Account</h1><?
+		}
+		else
+		{
+			?><h1>Account Information</h1><?
+		}
+	?>
+	<p>
+	<? 
+		if ( $__is_first_login ) 
+		{ 	
+			?>
+				Welcome to <?= APP_TITLE ?>. Please tell us a little bit about yourself!
+				<br />
+			<?
+		}
+	?>
+	This information will NOT be included in your listing on the site
+	</p>
+	<form method="post" action="/biz/account-info" id="my-form-id" onSubmit="return validate_form();">
+	<div class="left-panel">
+
+		<div class="std-form">
+			<fieldset>
+			<legend>Account Info</legend><div class="fieldset-inner">
+			<table width="100%"><tr class="std-form-item text-tr"><td nowrap valign="top" style="padding-top: 4px;" class="label">First Name</td><td><div class="tag first_name-tag"></div><input type="text" name="first_name" id="id-first_name" class="input-text id-first_name" value="<?= get_var('first_name') ?>" /></td></tr>
+			<tr class="std-form-item text-tr"><td nowrap valign="top" style="padding-top: 4px;" class="label">Last Name</td><td><div class="tag last_name-tag"></div><input type="text" name="last_name" id="id-last_name" class="input-text id-last_name" value="<?= get_var('last_name') ?>" /></td></tr>
+			<tr class="std-form-item text-tr"><td nowrap valign="top" style="padding-top: 4px;" class="label">Business Name</td><td><div class="tag biz_name-tag"></div><input type="text" name="biz_name" id="id-biz_name" class="input-text id-biz_name" value="<?= get_var('biz_name') ?>" /></td></tr>
+			<tr class="std-form-item text-tr"><td nowrap valign="top" style="padding-top: 4px;" class="label">Position / Title</td><td><div class="tag biz_position-tag"></div><input type="text" name="biz_position" id="id-biz_position" class="input-text id-biz_position" value="<?= get_var('biz_position') ?>" /></td></tr>
+			
+			<tr class="std-form-item text-tr"><td nowrap valign="top" style="padding-top: 4px;" class="label">Phone</td><td><div class="tag phone-tag"></div><input type="text" name="phone" id="id-phone" class="input-text id-phone" value="<?= get_var('phone') ?>" /></td></tr>
+			<tr class="std-form-item text-tr"><td nowrap valign="top" style="padding-top: 4px;" class="label">Email</td><td><div class="tag email-tag"></div><input type="text" name="email" id="id-email" class="input-text id-email" disabled="1" value="<?= get_var('email') ?>" /></td></tr>
+			<tr class="std-form-item form_body-tr"><td nowrap valign="top" style="padding-top: 4px;" class="label"></td><td><div class="form-body"><span class="fade small">Please contact customer support if you need to change your email</span></div></td></tr>
+	
+			</table></div></fieldset>
+
+		</div>
+
+	</div>
+	<div class="right-panel">
+
+		<? if ( ! defined('NOTIFY_STR') && ( $__is_post || isset($_GET['change_cc']) || ( ! $__is_post && ! get_var('card_number') ) ) ) { ?>
+			<input type="hidden" name="do_update_cc" value="1" />
+			<div class="std-form">
+				<fieldset>
+				<legend>Credit Card Information</legend><div class="fieldset-inner">
+				<table width="100%"><tr><td></td><td style="padding:5px 0"><img src="/template/gfx/buy-cards.png" /></td></tr><tr class="std-form-item text-tr"><td nowrap valign="top" style="padding-top: 4px;" class="label">Card Type</td><td><div class="tag first_name-tag"></div>
+				<select type="select" name="card_type" id="card_type" class="input-select" >
+					<option value="visa" <?= ( get_var('card_type') == 'visa' ? 'class="selected-option" selected' : '' ) ?>>Visa</option>
+					<option value="amex" <?= ( get_var('card_type') == 'amex' ? 'class="selected-option" selected' : '' ) ?>>Amex</option>
+					<option value="discover" <?= ( get_var('card_type') == 'discover' ? 'class="selected-option" selected' : '' ) ?>>Discover</option>
+					<option value="mastercard" <?= ( get_var('card_type') == 'mastercard'  ? 'class="selected-option" selected' : '' ) ?>>Mastercard</option>
+				</select></td></tr>
+				<tr class="std-form-item text-tr">
+					<td nowrap valign="top" style="padding-top: 4px;" class="label">Name on Card</td>
+					<td>
+						<input type="text" name="card_name" id="card_name" value="<?= get_var('card_name') ?>" />
+					</td>
+				</tr>
+				<tr class="std-form-item text-tr">
+					<td nowrap valign="top" style="padding-top: 4px;" class="label">Card Number</td>
+					<td>
+						<input type="text" name="card_number" id="card_number" value="<?= get_var('card_number') ?>" />
+					</td>
+				</tr>
+				<tr class="std-form-item text-tr">
+					<td nowrap valign="top" style="padding-top: 4px;" class="label">Expiration</td>
+					<td>
+						<input type="text" name="exp_month" id="exp_month" class="input-text exp-month" value="<?= get_var('exp_month') ?>" /> MM  
+						<input type="text" name="exp_year" id="exp_year" class="input-text exp-year" value="<?= get_var('exp_year') ?>" /> YYYY 
+					</td>
+				</tr>
+				<tr class="std-form-item text-tr">
+					<td nowrap valign="top" style="padding-top: 4px;" class="label">Security Code</td>
+					<td>
+						<input type="text" name="csv" id="csv" class="input-text csv" value="<?= get_var('csv') ?>" />
+						<img src="/template/gfx/buy-cvv.png"  align="absmiddle" />
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<div class="ccbillwarning"><strong>Please note:</strong><br />After saving this form your credit card will be charged $1 to establish a new billing reference.</div>
+					</td>
+				</tr>
+	
+				</table></div>
+				
+				
+				</fieldset>
+			</div>
+		<? } else if ( defined('NOTIFY_STR') || ! isset($_GET['change_cc']) && ( ! $__is_post && strlen(get_var('card_number')) == 4 ) ) { ?>
+			<div class="std-form">
+				<fieldset>
+				<legend>Credit Card Information</legend><div class="fieldset-inner">
+				<table width="100%">
+				<tr class="std-form-item text-tr">
+					<td nowrap valign="top" style="padding-top: 4px;" class="label"><b>Your credit card on file</b></td>
+					<td>
+					</td>
+				</tr>
+				<tr class="std-form-item text-tr">
+					<td nowrap valign="top" style="padding-top: 4px;" class="label"><?= ucfirst(get_var('card_type')) ?>: **** **** **** <?= ucfirst(get_var('card_number')) ?> <a href="/biz/account-info?change_cc=true">change/update</a></td>
+					<td>
+					</td>
+				</tr>
+			
+				</table></div></fieldset>
+			</div>
+		<? } ?>
+
+
+		<input type="submit" name="do_update" id="id-do_update" class="input-submit id-do_update" value="Save" />
+		
+	</div>
+	<!-- close form -->
+	<script type="text/javascript">
+	function validate_form()
+	{
+
+
+		return true;
+
+	}
+	</script>	
+	</form>
+</div>

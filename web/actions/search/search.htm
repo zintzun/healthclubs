@@ -1,0 +1,16 @@
+<?php
+
+	if ( $BUSINESSES )
+	{
+		include "actions/search/_results.htm";
+	}
+	else if ( isset($_REQUEST['q']) && trim($_REQUEST['q']) )
+	{
+		include "actions/search/_no_results.htm";
+	}
+	else
+	{
+		include "actions/search/_search_home.htm";
+	}
+
+?>

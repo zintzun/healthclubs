@@ -1,0 +1,78 @@
+<script type="text/javascript">
+ var RecaptchaOptions = {
+    theme : 'white'
+ };
+ </script>
+
+<div style="width: 500px; margin: auto;">
+
+<h1 style="text-align: center;"><?= $__title ?></h1>
+
+<p>
+Have a question for us? Drop us a note below. You can also browse our online FAQ's for answers to commonly asked questions.
+</p>
+
+<?
+	$FORM = new form('/'.$TARGET->action_orig,'contact-form','Contact Us');
+	
+	if (isset($suggestion))
+	{
+		$FORM->add('hidden','suggestion',$suggestion[0]);
+	}
+
+	foreach ($fields as $field)
+	{
+		if ($field == 'reason')
+		{
+			$FORM->add('select','reason','','',isset($suggestion)?$suggestion:$CONTACT_REASONS,'Reason');
+		}
+		else if ($field == 'question')
+		{
+			$FORM->add('textarea','question','','','',$question);
+		}
+		else
+		{
+			$FORM->add('text',$field,'','','',ucwords(str_replace('_',' ',$field)));
+		}
+	}
+
+	$FORM->add('submit','do_contact_us','Submit');
+
+	$form = $FORM->render();
+
+	$captcha = '';
+	$submit_button = '';
+
+	if ( 1 && USE_CAPTCHA )
+	{
+		include_once "third_party/recaptcha/recaptchalib.php";
+		$pos = strpos($form, '<td><input type="submit" name="do_contact_us"');
+		$submit_button = substr($form,$pos);
+		$form = substr($form,0,$pos);
+		$captcha =
+			'<td></td></tr><tr>'.
+			'<td></td><td><div class="recaptcha">'.
+			recaptcha_get_html(RECAPTCHA_PUBLIC_KEY,null,true).
+			'</div></td></tr><tr><td>&nbsp</td>';
+	}
+	print $form. $captcha .  $submit_button;
+?>
+
+	<?/*
+	</center>
+	<script>
+		document.getElementById("contact-form").onsubmit = function (){ alert('foo'); return false; };
+		alert($("[name=recaptcha_challenge_field]").val());
+		alert($("[name=recaptcha_response_field]").val());
+	</script>
+	*/?>
+
+<?
+	if ( IS_LOCALHOST && isset($_SESSION['LAST_MAIL_DEBUG']) )
+	{
+		print_ar($_SESSION['LAST_MAIL_DEBUG']);
+	}
+?>
+
+
+</div>

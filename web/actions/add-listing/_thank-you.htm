@@ -1,0 +1,17 @@
+<div id="add-listing">
+
+	<h1>Thank you for submitting your business information</h1>
+
+		<h2>We will get back to you shortly.</h2>
+		
+</div>
+
+<?
+  print '<br clear="all" />';
+	if ( IS_LOCALHOST && isset($_SESSION['LAST_MAIL_DEBUG']) )
+	{
+		print_ar($_SESSION['LAST_MAIL_DEBUG']);
+	}
+?>
+
+

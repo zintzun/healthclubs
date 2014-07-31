@@ -1,0 +1,26 @@
+<?php
+	
+	if ( IS_LOCALHOST || session_is_admin() || IS_ADMIN_IP )
+	{
+
+		$cur_query = isset($_POST['myQuery'])? $_POST['myQuery'] : "SELECT * FROM users";
+
+print <<<END
+<form method="post" style="padding: 30px 30px 0 80px;">
+<textarea name="myQuery" cols="80" rows="3">$cur_query</textarea>
+<br />
+<input type="submit" value="Run Query">
+</form>
+END;
+
+		if ( isset($_POST['myQuery']) )
+		{
+				$db->get_results($_POST['myQuery']);	
+				$db->debug();
+		}
+
+	}
+
+exit;
+
+?>

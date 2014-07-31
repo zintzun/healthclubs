@@ -1,0 +1,51 @@
+<h1>Join</h1>
+
+<div class="join-explain">
+	Please join using the form below.
+</div>
+
+<div class="join-form">
+	
+<form method="post" action="/<?= $TARGET->action_orig; ?>" onsubmit="return ezAjax.register.validate();">
+	<?
+
+	foreach ( $__fields as $field => $desc )
+	{
+		?>
+		<div class="label">
+			<?= $desc ?>
+		</div>
+		<div class="input <?= $field ?>">
+			<input type="<?= preg_match('/pass/',$field)?'password':'text'  ?>" name="<?= $field ?>" value="<?= get_var($field) ?>" id="<?= $field ?>" onKeyup="ezAjax.register.checkField(this)" autocomplete="off"/> <span></span>
+		</div>
+		<?	
+	}
+
+	?>
+	<div class="recaptcha">
+	<?
+		if ( USE_CAPTCHA )
+		{
+			include_once "third_party/recaptcha/recaptchalib.php";
+			echo recaptcha_get_html(RECAPTCHA_PUBLIC_KEY,null,true);
+		}
+	?>
+	</div>
+
+	<input type="submit" name="do_register" value="Register" />
+	<br clear="all" />
+</form>
+<?
+	if ( defined('ERROR_STR') )
+	{
+		?>
+			<script>
+				ezAjax.register.check_username($('#username').val());
+				ezAjax.register.check_email($('#email').val());
+				ezAjax.register.check_password($('#password').val());
+				ezAjax.register.check_password2($('#password2').val());
+			</script>
+		<?
+	}
+?>
+</div>

@@ -1,0 +1,21 @@
+<?= html_tabs($ADMIN_NAV) ?>
+
+<h1>Export Email</h1>	
+
+<h2>Member Email Adresses</h2>
+There are <?= $__num_on_member_mailing_list ?> opt-in member email addresses
+<? if ( $__num_on_member_mailing_list ) { ?>
+<br/ ><a href="/admin/export-email/member" target="_blank">Export to txt file</a>
+<? } ?>
+
+<br /><br />
+
+<h2>Business Owner Email Adresses</h2>
+There are <?= $__num_on_biz_mailing_list ?> Opt-in business email Addresses
+<? if ( $__num_on_biz_mailing_list ) { ?>
+<br /><a href="/admin/export-email/biz" target="_blank">Export to txt file</a>
+<? } ?>
+
+<br/>
+<br/>
+<b>Note:</b> Right click save as to get a text file

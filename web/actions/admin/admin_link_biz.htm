@@ -1,0 +1,57 @@
+<?= html_tabs($ADMIN_NAV) ?>
+
+<h1>
+	Link User to Business 
+</h1>
+
+<table id="link-biz-to-user">
+	<tr>
+		<td>
+			<div style="margin: 0 0 3px 0; color: #777;">
+				<img src="/template/gfx/icons/magnifier.png" style="vertical-align: middle;"/> Find users to link to a biz
+			</div>
+			<div id="search_users">
+				<input style="width: 308px;" type="text" name="user_query" id="user_query" size="20" autocomplete="off" value="" onkeyup="ezAjax.bizLinkToUser.getUsers(this)"/>
+			</div>
+		</td>
+		<td rowspan="2">
+			<span style="color: #3A72AF; font-size: 30px;">&#9658;</span>
+			<br />
+			<span style="color: #777;">(Link)</span>
+		</td>
+		<td>
+			<div style="margin: 0 0 3px 0; color: #777;">
+				<img src="/template/gfx/icons/magnifier.png" style="vertical-align: middle;"/> Find businesses to link to a user
+			</div>
+			<div id="search_businesses">
+				<input style="width: 408px;" type="text" name="biz_query" id="biz_query" value="" onkeyup="ezAjax.bizLinkToUser.getBusinesses($('#biz_query').val())"/>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div id="users" style="border: solid #aaa 1px; width: 300px; height: 200px; overflow: auto; padding: 5px;">
+			</div>
+		</td>
+		<td>
+			<div id="businesses" style="	border: solid #aaa 1px; width: 400px; height: 200px; overflow: auto; padding: 5px;">
+			</div>
+		</td>
+	</tr>
+</table>
+
+<br />
+<img src="/template/gfx/icons/tick_grey.gif"/> = A business/user that is not linked or selected<br/>
+<img src="/template/gfx/icons/arrow_right.png"/> = A user user/business(s) that you have successfully selected for linking<br/>
+<img src="/template/gfx/icons/link.png"/> = A business that is already linked. Hover over to see who the business is linked to.
+<br/>
+
+<br />
+
+<h2>Instructions</h2>
+<ol>
+<li>Search for a business user. Just type, no need to hit return.</li>
+<li>Click a user to select them.</li>
+<li>Search for one (or more businesses) Just type, no need to hit return.</li>
+<li>Click on the businesses(s) you would like to link to. Click again to unlink it.</li>
+</ol>

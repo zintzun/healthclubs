@@ -1,0 +1,93 @@
+<?= html_tabs($ADMIN_NAV); ?>
+<form method="get" action="/<?= $TARGET->action_orig ?>">
+<h1>
+	<a href="/admin/billing?range=<?= $__range ?>">Billing</a> &#9658; 
+	<?= $__biz_name ?> &#9658; 
+	<? $title = billing_date_select() ?> ($<?= number_format($__lead_total,2) ?>)
+	&nbsp;&nbsp;&nbsp;<input type="text" size="4" name="custom-rate" value="<?= $__lead_rate ?>" class="va"/><input type="submit" name="set-custom-rate" value="set custom rate" />
+</h1>
+</form>
+
+<div id="admin-billing-detail">
+	<div class="account-info"><?= $__biz_name ?>, <?= $__first_name ?> <?= $__last_name ?> (<?= $__biz_position ?>),  Phone: <?= $__phone ?>,  Email: <a href="mailto:<?= $__email ?>"><?= $__email ?></a></div>
+	<?php
+	
+		if ( $__leads )
+		{
+			foreach ( $__leads as $listing )
+			{
+				?>
+					<div class="listing">
+						<div class="title">
+							<?= $listing[0]->name ?>
+							<span class="address">BizId: <?= $listing[0]->biz_id ?>, <?= $listing[0]->biz_street ?>, <?= $listing[0]->biz_city ?>, <?= $listing[0]->biz_state ?> <?= $listing[0]->biz_zip ?></span>
+						</div>
+						
+						<div class="data">
+							<table>
+								<tr class="header">
+									<th>ID</th> 
+									<th>Date</th>
+									<th>Name</th>
+									<th>Email</th>
+									<th>Phone</th> 
+									<th>Zip Code</th>
+									<th>Coupon</th>
+									<th>Cost</th>
+									<th>Issue Credit</th>
+								</tr>
+								<?
+									$alt    = 1;
+									$total  = 0;
+									$credit = 0;
+									foreach ( $listing as $item )
+									{
+										?>
+											<tr class="<?= $alt?$alt='':$alt='alt' ?>">
+												<td><?= $item->lead_id ?></td> 
+												<td><?= date('m/d/Y',strtotime($item->date)) ?></td>
+												<td><?= $item->first_name ?> <?= $item->last_name ?></td>
+												<td><?= $item->email ?></td>
+												<td><?= $item->phone ?></td> 
+												<td><?= $item->zip ?></td>
+												<td><?= $item->coupon ?></td>
+												<td><?= $item->credit_lead ? '...' : '$'.$item->lead_rate ?></td>
+												<td><a href="javascript:ezAjax.bizLeads.toggleCreditLead(<?= $item->lead_id ?>)" id="credit-link-<?= $item->lead_id ?>"><?= ($item->credit_lead ? 'UNCREDIT LEAD' : 'credit lead') ?></a></td>
+											</tr>
+										<?
+										
+										if ( $item->credit_lead )
+										{
+											$credit += $item->lead_rate;
+										}
+										else
+										{
+											$total+=$item->lead_rate;
+										}
+									}
+								?>
+								<tr>
+									<td colspan="6"></td> 
+									<td class="total-desc">Total</td>
+									<td class="total">$<?= number_format($total,2) ?></td>
+									<td class="credit">$<?= number_format($credit,2) ?> <a href=""><img src="/template/gfx/icons/refresh.png" border="0" style="vertical-align: middle;"/></a></td>
+								</tr>
+								</table>
+						</div>
+					</div>
+				<?
+			}
+		}
+		else
+		{
+			?>
+				<div class="fade" style="padding: 50px 0; font-size: 20px;">No Leads</div>
+			<?
+		}
+	
+		
+	
+		//print_ar($__leads);
+	
+	?>
+</div>

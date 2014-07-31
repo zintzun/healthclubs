@@ -1,0 +1,56 @@
+<?= html_tabs($ADMIN_NAV); ?>
+<form method="get" action="/<?= $TARGET->action_orig ?>">
+<h1>
+	<a href="/admin/billing">Billing</a> &#9658; 
+	Users With Custom Rates
+</h1>
+</form>
+
+<div id="admin-billing">
+
+<? 
+
+	if ( $__users )
+	{
+		
+		?>
+			<div class="results">
+				<table>
+					<tr>
+						<th>Account Id</th>
+						<th>Business Name</th>
+						<th>Contact</th>
+						<th>Phone</th>
+						<th>Email</th>
+					</tr>
+					<?
+
+						foreach ( $__users as $user )
+						{
+
+							?>
+								<tr>
+									<td><?= $user->user_id ?></td>
+									<td><a href="/admin/members/<?= $user->approval_status ?>/biz/<?= $user->user_id ?>"><?= $user->biz_name ?></a></td>
+									<td><?= $user->first_name ?> <?= $user->last_name ?> (<? $user->biz_position ?>)</td>
+									<td><?= $user->phone ?></td>
+									<td><?= $user->email ?></td>
+								</tr>
+							<?
+						}
+						
+					?>
+				</table>
+			</div>
+		<?
+
+	}
+	else
+	{
+		?>
+			<div class="fade" style="padding: 50px 0; font-size: 20px;">No Users</div>
+		<?
+	}
+
+?>
+</div>

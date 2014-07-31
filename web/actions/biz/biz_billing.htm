@@ -1,0 +1,92 @@
+<?= html_tabs($BIZ_NAV) ?>
+<form method="get" action="/<?= $TARGET->action_orig ?>">
+<h1>
+	Billing Information &#9658; <? $title = billing_date_select() ?> ($<?= number_format($__lead_total,2) ?>)
+	<?php if ( $__leads ) { ?>
+		&nbsp; <a href="/biz/billing?export=true&range=<?= $__range ?>" class="std">export csv</a>
+		<?php if ( $__range < 0 && $__range > -240 ) { ?>
+			&nbsp; <a href="/biz/billing?invoice=true&range=<?= $__range ?>" class="std" target="_blank">invoice (PDF)</a>
+		<? } ?>
+	<? } ?>
+</h1>
+</form>
+
+<div id="admin-billing-detail">
+	<?php
+	
+		if ( $__leads )
+		{
+			foreach ( $__leads as $listing )
+			{
+				?>
+					<div class="listing">
+						<div class="title">
+							<?= $listing[0]->name ?>
+							<span class="address">BizId: <?= $listing[0]->biz_id ?>, <?= $listing[0]->biz_street ?>, <?= $listing[0]->biz_city ?>, <?= $listing[0]->biz_state ?> <?= $listing[0]->biz_zip ?></span>
+						</div>
+						
+						<div class="data">
+							<table>
+								<tr class="header">
+									<th>ID</th> 
+									<th>Date</th>
+									<th>Name</th>
+									<th>Email</th>
+									<th>Phone</th> 
+									<th>Zip Code</th>
+									<th>Coupon</th>
+									<th>Cost</th>
+								</tr>
+								<?
+									$alt    = 1;
+									$total  = 0;
+									$credit = 0;
+									foreach ( $listing as $item )
+									{
+										?>
+											<tr class="<?= $alt?$alt='':$alt='alt' ?>">
+												<td><?= $item->lead_id ?></td> 
+												<td><?= date('m/d/Y',strtotime($item->date)) ?></td>
+												<td><?= $item->first_name ?> <?= $item->last_name ?></td>
+												<td><?= $item->email ?></td>
+												<td><?= $item->phone ?></td> 
+												<td><?= $item->zip ?></td>
+												<td><?= $item->coupon ?></td>
+												<td><?= $item->credit_lead ? '...' : '$'.$item->lead_rate ?></td>
+											</tr>
+										<?
+										
+										if ( $item->credit_lead )
+										{
+											$credit += $item->lead_rate;
+										}
+										else
+										{
+											$total+=$item->lead_rate;
+										}
+									}
+								?>
+								<tr>
+									<td colspan="6"></td> 
+									<td class="total-desc">Total</td>
+									<td class="total">$<?= number_format($total,2) ?></td>
+								</tr>
+								</table>
+						</div>
+					</div>
+				<?
+			}
+		}
+		else
+		{
+			?>
+				<div class="fade" style="padding: 50px 0; font-size: 20px;">No Leads</div>
+			<?
+		}
+	
+		
+	
+		//print_ar($__leads);
+	
+	?>
+</div>

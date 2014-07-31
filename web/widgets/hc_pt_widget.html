@@ -1,0 +1,33 @@
+
+<script type="text/javascript">function getRadioValue(f) { for (var i=0; i < f.sex.length; i++) { if (f.sex[i].checked) { return f.sex[i].value; } } } </script>
+<form id="healthclubsnet" action="http://www.healthclubnet.com/search" method="post" style="margin:0" onsubmit="window.open('http://www.healthclubnet.com/'+getRadioValue(this)+'/by-zip/'+this.zipcode.value,'Healthclubsnet','attribute1,attribute2');return false;" >
+<form id="healthclubsnet" action="" method="post" style="margin:0">
+
+<div style="width:160px; height:240px; background-image: url(widgbck-160x240.gif);">
+
+<div style="width: 160px; text-align:center; padding:45px 0px 15px 0px;font-family: verdana; font-size: 12px; color: #444444;">Search Health Clubs<br>and Personal Trainers<br>Local to You</div>
+
+<table align="center">
+	<tr>
+		<td style="padding:0px 0px 1px 0px;"><span style="width: 160px; text-align:center; font-family: verdana; font-size: 11px;color: #666666;"><input type="radio" name="sex" checked value="health-clubs" />Health Clubs & Gyms</span></td>
+	</tr>
+
+	<tr>
+		<td style="padding:0px 0px 10px 0px;"><span style="width: 160px; text-align:center; padding:0px 0px 8px 0px;font-family: verdana; font-size: 11px;color: #666666;"><input type="radio" name="sex" value="personal-trainers" />Personal Trainers</span></td>
+	</tr>
+</table>
+
+<div style="width: 160px; text-align:center; padding:0px 0px 3px 0px;font-family: verdana; font-size: 10px; color: #666666">enter your zip code</div>
+
+
+<div style="text-align:center">
+<input style="width:96px; text-align:center; background-color: #e2ecf7; font-family: verdana; font-size: 13px; color: #666666" type="text" id="zipcode" name="zipcode" value="">
+</div>
+
+<div style="text-align:center; padding:4px 0px 0px 0px;">
+<input type="image" src="widget-button.gif" onclick="window.open('http://www.healthclubnet.com/'+getRadioValue(this.form)+'/by-zip/'+this.form.zipcode.value,'window name','attribute1,attribute2')" name="submit" value="Search">
+</div>
+
+</div>
+
+</form>

@@ -1,0 +1,36 @@
+<?
+
+	/*
+	* This is the review listing
+	*/
+
+	if ( $REVIEWS )
+	{
+		foreach ( $REVIEWS as $review )
+		{
+			if (! $review->is_approved && $review->user_id != myuid() )
+			{
+				continue;
+			}
+			$edit_link = '';
+			if ( session_user_id() == $review->user_id && session_user_id() != 0 )
+			{
+				$edit_link  = "<a href=\"javascript:;\" onClick=\"ezAjax.review.edit('{$review->review_id}','{$review->rating}')\">edit</a>";	
+			}
+			
+			?>
+				<a name="r<?= $review->review_id ?>"></a>
+				<div class="review" id="review-<?= $review->review_id ?>">
+					<div class="title">
+						<span class="stars" id="stars<?=$review->review_id?>"><?= create_stars('stars'.$review->review_id, $review->rating)  ?></span>
+						<span class="name">Posted <?= date("M j, Y",strtotime($review->last_updated)) ?> by <?= $review->name ?></span>
+					</div>
+					<br />
+					<div class="body review-text"><span><?= $review->review ?></span> <?= $edit_link ?></div>
+				</div>
+
+			<?
+		}
+	}
+
+?>

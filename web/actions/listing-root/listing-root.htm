@@ -1,0 +1,172 @@
+<div class="intro-block">
+
+	<h1><?= $__title ?></h1>
+  <p>
+		<?= $__intro	 ?>
+	</p>
+	
+	
+	<div class="get-started-block">
+<!-- Box Content -->
+			<div>
+				<h1>Get Started</h1>
+	
+			<input type="hidden" name="biz_type" value="<?= isset($TARGET->arg1)?$TARGET->arg1:$TARGET->action_orig ?>"/>				
+	<input type="text" name="" value="Enter Zip Code" id="zip" class="fade" onClick="ezAjax.tools.clearField(this,'')" onKeyUp="ezAjax.search.searchByZip(event)" autocomplete="off" /> 
+	<input type="button" value="Search" onClick="ezAjax.search.searchByZip(event)"/>
+				
+
+			<!-- End Box Content -->
+				</div>
+	</div>
+
+	
+	
+	
+	
+
+
+</div>
+<div class="flashmap">
+		<!-- flash map -->
+		 <script language="javascript">AC_FL_RunContent = 0;</script>
+		  <script src="/template/js/AC_RunActiveContent.js" language="javascript"></script>
+		  <script language="javascript">
+				if (AC_FL_RunContent == 0) 
+				{
+					alert("This page requires AC_RunActiveContent.js.");
+				} 
+				else 
+				{
+					AC_FL_RunContent
+					(
+						'codebase', 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0',
+						'width', '460',
+						'height', '320',
+						'src', '/template/flash/hcmap',
+						'quality', 'high',
+						'pluginspage', 'http://www.macromedia.com/go/getflashplayer',
+						'align', 'middle',
+						'play', 'true',
+						'loop', 'true',
+						'scale', 'showall',
+						'wmode', 'window',
+						'devicefont', 'false',
+						'id', 'hcmap',
+						'bgcolor', '#ffffff',
+						'name', 'hcmap',
+						'menu', 'true',
+						'allowFullScreen', 'false',
+						'allowScriptAccess','sameDomain',
+						'movie', '/template/flash/hcmap',
+						'salign', '',
+						'FlashVars', 'pathRoot=/<?= $TARGET->action_orig ?>'
+					); //end AC code
+				}
+			</script>
+			<noscript>
+				<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" width="460" height="320" id="hcmap" align="middle">
+				<param name="allowScriptAccess" value="sameDomain" />
+				<param name="allowFullScreen" value="false" />
+				<param name="FlashVars" VALUE="pathRoot=/<?= $TARGET->action_orig ?>">
+				<param name="movie" value="/template/flash/hcmap.swf" /><param name="quality" value="high" /><param name="bgcolor" value="#ffffff" />	
+				<embed FlashVars="pathRoot=/<?= $TARGET->action_orig ?>" src="/template/flash/hcmap.swf" quality="high" bgcolor="#ffffff" width="460" height="320" name="hcmap" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+				</object>
+			</noscript>
+			<!-- flash map end -->
+		<!-- End Box Content -->
+	</div>
+	
+</div>
+
+
+
+<br clear="all" />
+
+<div style="clear:both;"></div>
+
+<div style="color:#444444; padding-bottom:4px; font-size:18px; font-weight:bold;">Find By State</div>
+<table cellspacing="0" cellpadding="0" style="font-size: 12px;">
+	<tbody>
+		<tr>
+		<td style="vertical-align: top; padding-right:30px;">
+		
+		<a href="/<?= $TARGET->action_orig ?>/Alabama" title="Alabama <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Alabama</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Alaska" title="Alaska <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Alaska</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Arizona" title="Arizona <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Arizona</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Arkansas" title="Arkansas <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Arkansas</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/California" title="California <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">California</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Colorado" title="Colorado <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Colorado</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Connecticut" title="Connecticut <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Connecticut</a><br/>
+		</td>
+	
+		
+		<td style="vertical-align: top; padding-right:30px;">
+		<a href="/<?= $TARGET->action_orig ?>/Delaware" title="Delaware <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Delaware</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/District-Of-Columbia" title="District Of Columbia <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">DC</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Florida" title="Florida <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Florida</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Georgia" title="Georgia <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Georgia</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Hawaii" title="Hawaii <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Hawaii</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Idaho" title="Idaho <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Idaho</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Illinois" title="Illinois <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Illinois</a><br/>
+		</td>
+		
+		<td style="vertical-align: top; padding-right:30px;">
+		<a href="/<?= $TARGET->action_orig ?>/Indiana" title="Indiana <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Indiana</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Iowa" title="Iowa <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Iowa</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Kansas" title="Kansas <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Kansas</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Kentucky" title="Kentucky <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Kentucky</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Louisiana" title="Louisiana <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Louisiana</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Maine" title="Maine <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Maine</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Maryland" title="Maryland <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Maryland</a><br/>
+		</td>
+		
+		<td style="vertical-align: top; padding-right:30px;">
+		<a href="/<?= $TARGET->action_orig ?>/Massachusetts" title="Massachusetts <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Massachusetts</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Michigan" title="Michigan <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Michigan</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Minnesota" title="Minnesota <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Minnesota</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Mississippi" title="Mississippi <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Mississippi</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Missouri" title="Missouri <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Missouri</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Montana" title="Montana <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Montana</a><br/>
+
+		</td>
+		
+		<td style="vertical-align: top; padding-right:30px;">
+		<a href="/<?= $TARGET->action_orig ?>/Nebraska" title="Nebraska <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Nebraska</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Nevada" title="Nevada <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Nevada</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/New-Hampshire" title="New Hampshire <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">New Hampshire</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/New-Jersey" title="New Jersey <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">New Jersey</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/New-Mexico" title="New Mexico <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">New Mexico</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/New-York" title="New York <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">New York</a><br/>
+		</td>
+		
+		<td style="vertical-align: top; padding-right:30px;">
+		<a href="/<?= $TARGET->action_orig ?>/North-Carolina" title="North Carolina <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">North Carolina</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/North-Dakota" title="North Dakota <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">North Dakota</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Ohio" title="Ohio <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Ohio</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Oklahoma" title="Oklahoma <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Oklahoma</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Oregon" title="Oregon <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Oregon</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Pennsylvania" title="Pennsylvania <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Pennsylvania</a><br/>
+   		</td>
+		
+		<td style="vertical-align: top; padding-right:30px;">
+		<a href="/<?= $TARGET->action_orig ?>/Rhode-Island" title="Rhode Island <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Rhode Island</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/South-Carolina" title="South Carolina <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">South Carolina</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/South-Dakota" title="South Dakota <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">South Dakota</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Tennessee" title="Tennessee <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Tennessee</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Texas" title="Texas <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Texas</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Utah" title="Utah <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Utah</a><br/>
+		</td>
+		
+		<td style="vertical-align: top; padding-right:30px;">
+		<a href="/<?= $TARGET->action_orig ?>/Vermont" title="Vermont <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Vermont</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Virginia" title="Virginia <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Virginia</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Washington" title="Washington <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Washington</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/West-Virginia" title="West Virginia <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">West Virginia</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Wisconsin" title="Wisconsin <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Wisconsin</a><br/>
+		<a href="/<?= $TARGET->action_orig ?>/Wyoming" title="Wyoming <?= ucwords(str_replace('-',' ',$TARGET->action_orig)) ?> ">Wyoming</a><br/>
+		</td>
+		</tr>
+	</tbody>
+</table>
+

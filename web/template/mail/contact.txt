@@ -1,0 +1,18 @@
+From: Healthclubs.net <{from}>
+Subject: Contact Inquiry
+
+{contact_reason}
+------------------
+{club_link}
+{senders_first_name} {senders_last_name} 
+{senders_email}
+{senders_phone}
+
+Question:
+---------
+{question}
+
+
+IP Address:
+-----------
+{ip_address}

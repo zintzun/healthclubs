@@ -1,0 +1,25 @@
+<h1>Unit Tests</h1>
+<br />
+<?php
+
+	if ( $__tests->existing_tests )
+	{
+		print "<h2>Have tests for...</h2>";
+		foreach ( $__tests->existing_tests as $test )
+		{
+			print "$test<br />";	
+		}
+	}
+?>
+<br />
+<?
+	if ( $__tests->missing_tests )
+	{
+		print "<h2>Missing tests for...</h2>";
+		foreach ( $__tests->missing_tests as $test )
+		{
+			print "$test<br />";	
+		}
+	}
+
+?>

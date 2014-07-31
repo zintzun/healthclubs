@@ -1,0 +1,89 @@
+<div id="new-review-panel" onClick="ezAjax.review.cancelEdit()">
+<br />
+<a name="writereview"></a><h2>Write your own review</h2>
+
+	<form id="new-review-form" method="POST" action="/<?= $TARGET->action_orig; ?>" onsubmit="return ezAjax.review.validateForm('test')">
+
+	<!-- Maybe move this to onload -->
+	<div style="padding-top:10px;" class="new-rating">
+		
+		
+		<div style="float:left;padding-right:10px;">Select a Rating</div>
+		
+		<div style="float:left" id="stars-new">
+			<input type="hidden" name="star-new-rating" id="value-stars-new" value="0" />
+			<div id="stars-new-1" class="my-stars star-grey"></div>
+			<div id="stars-new-2" class="my-stars star-grey"></div>
+			<div id="stars-new-3" class="my-stars star-grey"></div>
+			<div id="stars-new-4" class="my-stars star-grey"></div>
+			<div id="stars-new-5" class="my-stars star-grey"></div>
+		</div>
+		
+		
+		<br clear="all" />
+		
+		
+	</div>
+	<script>bindStarsActions('stars-new');</script>
+
+	<br clear="left" />
+
+	<?
+	
+		// Try to pick up thier details if they already have it
+		if ( session_is_active() )
+		{
+			$_POST['new-name']  = $_SESSION['USER']['login'];
+			$_POST['new-email'] = $_SESSION['USER']['email'];
+		}
+	
+		$fields = array
+		(
+			'new-name'	 => 'Name',
+			'new-email'	 => 'Email',
+			'new-review' => 'Review',
+		);
+
+		foreach ( $fields as $var_name => $display_text )
+		{
+			?>	
+			
+				<div class="<?= $var_name ?>">
+					<div class="label">
+						<?= $display_text ?>
+					</div>
+					<div class="field">
+						<? if ( $var_name == 'new-review' ) { ?>
+							<textarea name="<?= $var_name ?>" id="<?= $var_name ?>" ><?= get_var($var_name) ?></textarea>
+						<? } else { ?>
+							<input type="text" name="<?= $var_name ?>" id="<?= $var_name ?>" value="<?= get_var($var_name) ?>"/>
+						<? } ?>
+					</div>
+				</div>
+			
+			<?
+		}
+
+	?>
+
+	<div class="recaptcha" style="margin:14px 0">
+		<?
+
+		if ( USE_CAPTCHA )
+		{
+			include_once "third_party/recaptcha/recaptchalib.php";
+			echo recaptcha_get_html(RECAPTCHA_PUBLIC_KEY,null,true);
+		}
+
+		?>
+	</div>
+
+
+
+	<? /* <input type="image" src="/template/gfx/add-review-button.png" name="do_add_review" value="Add Review" /> */ ?>
+	
+	<input type="submit" name="do_add_review" value="Add Review" />
+
+	</form>
+
+</div>
